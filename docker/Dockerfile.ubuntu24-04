@@ -1,0 +1,32 @@
+FROM ubuntu:24.04
+
+# 设置非交互式安装
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 安装基础依赖包
+RUN apt-get update && apt-get install -y \
+    sudo \
+    ca-certificates \
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
+
+# 创建测试用户
+RUN useradd -m -s /bin/bash testuser && \
+    echo "testuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制项目文件
+COPY . /app/
+
+# 确保脚本可执行
+RUN chmod +x /app/dist/*.sh
+RUN chmod +x /app/tests/**/*.sh
+RUN chmod +x /app/tools/test-runner.sh
+
+# 切换到测试用户
+USER testuser
+
+# 设置默认命令
+CMD ["/app/tools/test-runner.sh"]

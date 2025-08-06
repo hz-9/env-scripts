@@ -1,0 +1,68 @@
+name: Test Environment Scripts
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-20.04]
+        include:
+          - os: ubuntu-22.04
+            dockerfile: Dockerfile.ubuntu22-04
+          - os: ubuntu-20.04
+            dockerfile: Dockerfile.ubuntu20-04
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Build scripts
+      run: |
+        bash ./build.sh
+    
+    - name: Build Docker image
+      run: |
+        docker build -f ${{ matrix.dockerfile }} -t env-script-test:${{ matrix.os }} .
+    
+    - name: Run tests
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/app \
+          env-script-test:${{ matrix.os }} \
+          /app/test-runner.sh --all
+    
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results-${{ matrix.os }}
+        path: test-results/
+
+  # 可选：在真实的Ubuntu环境中运行测试
+  native-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Install test dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y bats
+    
+    - name: Build scripts
+      run: |
+        bash ./build.sh
+    
+    - name: Run basic tests
+      run: |
+        chmod +x ./test-runner.sh
+        ./test-runner.sh --test tests/install-git/01-ok.sh

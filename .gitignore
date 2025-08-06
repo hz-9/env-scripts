@@ -1,0 +1,9 @@
+# OS X temporary files
+.DS_Store
+
+dist/*.test.sh
+src/*.test.sh
+
+test/node_modules
+test/dist
+

@@ -1,0 +1,10 @@
+{
+  "MD013": false,
+  "MD024": {
+    "siblings_only": true
+  },
+  "MD033": {
+    "allowed_elements": ["Badge", "br", "table", "thead", "tbody", "tr", "td", "th", "a", "img", "auto-catalog"]
+  },
+  "MD036": false
+}

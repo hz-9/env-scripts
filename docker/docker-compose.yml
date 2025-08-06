@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # Ubuntu 22.04 测试环境
+  ubuntu22-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ubuntu22-04
+    container_name: env-script-ubuntu22-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+      - DEBIAN_FRONTEND=noninteractive
+    command: ["/app/tools/test-runner.sh", "--all"]
+    
+  # Ubuntu 20.04 测试环境
+  ubuntu20-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ubuntu20-04
+    container_name: env-script-ubuntu20-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+      - DEBIAN_FRONTEND=noninteractive
+    command: ["/app/tools/test-runner.sh", "--all"]
+
+  # Ubuntu 24.04 测试环境
+  ubuntu24-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ubuntu24-04
+    container_name: env-script-ubuntu24-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+      - DEBIAN_FRONTEND=noninteractive
+    command: ["/app/tools/test-runner.sh", "--all"]
+
+  # Debian 11.9 Bullseye 测试环境
+  debian11-9-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.debian11-9
+    container_name: env-script-debian11-9-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+      - DEBIAN_FRONTEND=noninteractive
+    command: ["/app/tools/test-runner.sh", "--all"]
+
+  # Debian 12.2 Bookworm 测试环境
+  debian12-2-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.debian12-2
+    container_name: env-script-debian12-2-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+      - DEBIAN_FRONTEND=noninteractive
+    command: ["/app/tools/test-runner.sh", "--all"]
+
+  # Fedora 41 测试环境
+  fedora41-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.fedora41
+    container_name: env-script-fedora41-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+    command: ["/app/tools/test-runner.sh", "--all"]
+
+  # RedHat Enterprise Linux 8.10 (UBI8) 测试环境
+  redhat8-10-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.redhat8-10
+    container_name: env-script-redhat8-10-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+    command: ["/app/tools/test-runner.sh", "--all"]
+
+  # RedHat Enterprise Linux 9.6 (UBI9) 测试环境
+  redhat9-6-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.redhat9-6
+    container_name: env-script-redhat9-6-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+    command: ["/app/tools/test-runner.sh", "--all"]
+
+  # 交互式测试环境
+  interactive:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ubuntu22-04
+    container_name: env-script-interactive
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+      - DEBIAN_FRONTEND=noninteractive
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+
+volumes:
+  test-results:
