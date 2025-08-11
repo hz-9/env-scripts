@@ -25,13 +25,12 @@
 
 ```bash
 # 安装Git
-curl -fsSL https://raw.githubusercontent.com/hz-9/env-scripts/main/dist/install-git.sh | bash
+curl -o-   https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-git.sh | bash
 
-# 或者先下载再运行
-wget https://raw.githubusercontent.com/hz-9/env-scripts/main/dist/install-git.sh
-chmod +x install-git.sh
-./install-git.sh
+wget -qO-  https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-git.sh | bash
 ```
+
+点击这里查看所有支持的 [脚本](./overview/scripts.md)。
 
 ### 本地使用
 
@@ -45,32 +44,14 @@ cd env-script
 ./dist/install-git.sh --network=in-china
 ```
 
-## 📦 可用脚本
-
-### Git安装器 (`dist/install-git.sh`)
-
-跨多个Linux发行版安装Git，支持中国镜像源。
-
-```bash
-# 基础安装
-./dist/install-git.sh
-
-# 使用中国镜像源安装（在中国更快）
-./dist/install-git.sh --network=in-china
-
-# 安装指定版本
-./dist/install-git.sh --git-version=2.40.0
-
-# 查看帮助
-./dist/install-git.sh --help
-```
-
-**支持的系统：**
+## 支持的系统
 
 - Ubuntu 20.04/22.04/24.04 AMD64
 - Debian 11.9/12.2 AMD64
 - Fedora 41 AMD64
 - Red Hat Enterprise Linux 8.10/9.6 AMD64
+
+> 通常也支持所有的子版本号相同的系统，例如 Debian 11.8/12.1 等。
 
 ## 🛠️ 开发
 
@@ -104,6 +85,8 @@ make test-single ENV=ubuntu22-test TEST=tests/install-git/01-ok.sh
 make interactive
 ```
 
+更多测试使用说明请参见 [测试指南](./overview/testing.md)。
+
 **可用测试环境：**
 
 - Ubuntu 20.04/22.04/24.04
@@ -120,14 +103,14 @@ make interactive
 
 ## 📖 文档
 
-- [测试指南](docs/testing.md) - 综合测试文档
-- [目录结构](docs/directory-structure.md) - 详细项目结构
+- [测试指南](overview/testing.md) - 综合测试文档
+- [目录结构](overview/directory-structure.md) - 详细项目结构
 
 ## 🌏 网络配置
 
 所有脚本都支持 `--network=in-china` 参数，适用于中国用户：
 
-- 使用中科大镜像源
+- 使用华为云镜像源
 - 优化下载速度
 - 确保中国用户的可靠性
 

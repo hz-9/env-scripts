@@ -761,12 +761,12 @@ _m_='♥'
     # Completely replace /etc/apt/sources.list to ensure only USTC mirrors are used
     sudo tee /etc/apt/sources.list > /dev/null <<EOF
 # USTC Ubuntu mirror source - complete replacement of all official sources
-deb http://mirrors.ustc.edu.cn/ubuntu/ ${ubuntu_codename} main restricted universe multiverse
-deb http://mirrors.ustc.edu.cn/ubuntu/ ${ubuntu_codename}-updates main restricted universe multiverse
-deb http://mirrors.ustc.edu.cn/ubuntu/ ${ubuntu_codename}-backports main restricted universe multiverse
+deb http://mirrors.huaweicloud.com/ubuntu/ ${ubuntu_codename} main restricted universe multiverse
+deb http://mirrors.huaweicloud.com/ubuntu/ ${ubuntu_codename}-updates main restricted universe multiverse
+deb http://mirrors.huaweicloud.com/ubuntu/ ${ubuntu_codename}-backports main restricted universe multiverse
 
 # Security updates also use USTC mirrors
-deb http://mirrors.ustc.edu.cn/ubuntu/ ${ubuntu_codename}-security main restricted universe multiverse
+deb http://mirrors.huaweicloud.com/ubuntu/ ${ubuntu_codename}-security main restricted universe multiverse
 EOF
     
     # Remove potentially existing default source configurations
@@ -782,34 +782,34 @@ EOF
       # Debian 12 supports non-free-firmware component
     sudo tee /etc/apt/sources.list > /dev/null <<EOF
 # USTC mirror source - complete replacement of all official sources (Debian 12)
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename} main contrib non-free non-free-firmware
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename}-updates main contrib non-free non-free-firmware
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename}-backports main contrib non-free non-free-firmware
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename} main contrib non-free non-free-firmware
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename}-updates main contrib non-free non-free-firmware
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename}-backports main contrib non-free non-free-firmware
 
 # Security updates also use USTC mirrors
-deb http://mirrors.ustc.edu.cn/debian-security/ ${debian_codename}-security main contrib non-free non-free-firmware
+deb http://mirrors.huaweicloud.com/debian-security/ ${debian_codename}-security main contrib non-free non-free-firmware
 EOF
     elif [[ "$OS_VERS" == "11" ]]; then
       # Debian 11 does not support non-free-firmware component
     sudo tee /etc/apt/sources.list > /dev/null <<EOF
 # USTC mirror source - complete replacement of all official sources (Debian 11)
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename} main contrib non-free
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename}-updates main contrib non-free
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename}-backports main contrib non-free
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename} main contrib non-free
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename}-updates main contrib non-free
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename}-backports main contrib non-free
 
 # Security updates also use USTC mirrors
-deb http://mirrors.ustc.edu.cn/debian-security/ ${debian_codename}-security main contrib non-free
+deb http://mirrors.huaweicloud.com/debian-security/ ${debian_codename}-security main contrib non-free
 EOF
     else
       # 其他Debian版本默认使用传统组件 (不含 non-free-firmware)
     sudo tee /etc/apt/sources.list > /dev/null <<EOF
 # USTC mirror source - complete replacement of all official sources (other Debian versions)
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename} main contrib non-free
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename}-updates main contrib non-free
-deb http://mirrors.ustc.edu.cn/debian/ ${debian_codename}-backports main contrib non-free
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename} main contrib non-free
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename}-updates main contrib non-free
+deb http://mirrors.huaweicloud.com/debian/ ${debian_codename}-backports main contrib non-free
 
 # Security updates also use USTC mirrors
-deb http://mirrors.ustc.edu.cn/debian-security/ ${debian_codename}-security main contrib non-free
+deb http://mirrors.huaweicloud.com/debian-security/ ${debian_codename}-security main contrib non-free
 EOF
     fi
     
@@ -893,12 +893,23 @@ EOF
     console_content_complete
   }
 
+  apt_get_install_tzdata() {
+    local tzLocal="$1"
+
+    console_content_starting "tzdata is installing..."
+
+    if [[ -z "$version" ]] || [[ "$version" == "default" ]]; then
+      eval "echo $tzLocal | sudo apt-get -y install tzdata $(console_redirect_output)"
+    fi
+    console_content_complete
+  }
+
   dnf_setup_fedora_mirrors_set_china_mirrors() {
     # Configure Fedora USTC mirror sources
     sudo tee /etc/yum.repos.d/fedora.repo > /dev/null <<EOF
 [fedora]
 name=Fedora \$releasever - \$basearch
-baseurl=http://mirrors.ustc.edu.cn/fedora/releases/\$releasever/Everything/\$basearch/os/
+baseurl=http://mirrors.huaweicloud.com/fedora/releases/\$releasever/Everything/\$basearch/os/
 enabled=1
 metadata_expire=7d
 repo_gpgcheck=0
@@ -909,7 +920,7 @@ skip_if_unavailable=False
 
 [fedora-debuginfo]
 name=Fedora \$releasever - \$basearch - Debug
-baseurl=http://mirrors.ustc.edu.cn/fedora/releases/\$releasever/Everything/\$basearch/debug/tree/
+baseurl=http://mirrors.huaweicloud.com/fedora/releases/\$releasever/Everything/\$basearch/debug/tree/
 enabled=0
 metadata_expire=7d
 repo_gpgcheck=0
@@ -920,7 +931,7 @@ skip_if_unavailable=False
 
 [fedora-source]
 name=Fedora \$releasever - Source
-baseurl=http://mirrors.ustc.edu.cn/fedora/releases/\$releasever/Everything/source/tree/
+baseurl=http://mirrors.huaweicloud.com/fedora/releases/\$releasever/Everything/source/tree/
 enabled=0
 metadata_expire=7d
 repo_gpgcheck=0
@@ -933,7 +944,7 @@ EOF
         sudo tee /etc/yum.repos.d/fedora-updates.repo > /dev/null <<EOF
 [updates]
 name=Fedora \$releasever - \$basearch - Updates
-baseurl=http://mirrors.ustc.edu.cn/fedora/updates/\$releasever/Everything/\$basearch/
+baseurl=http://mirrors.huaweicloud.com/fedora/updates/\$releasever/Everything/\$basearch/
 enabled=1
 repo_gpgcheck=0
 type=rpm
@@ -944,7 +955,7 @@ skip_if_unavailable=False
 
 [updates-debuginfo]
 name=Fedora \$releasever - \$basearch - Updates - Debug
-baseurl=http://mirrors.ustc.edu.cn/fedora/updates/\$releasever/Everything/\$basearch/debug/tree/
+baseurl=http://mirrors.huaweicloud.com/fedora/updates/\$releasever/Everything/\$basearch/debug/tree/
 enabled=0
 repo_gpgcheck=0
 type=rpm
@@ -955,7 +966,7 @@ skip_if_unavailable=False
 
 [updates-source]
 name=Fedora \$releasever - Updates Source
-baseurl=http://mirrors.ustc.edu.cn/fedora/updates/\$releasever/Everything/source/tree/
+baseurl=http://mirrors.huaweicloud.com/fedora/updates/\$releasever/Everything/source/tree/
 enabled=0
 repo_gpgcheck=0
 type=rpm
@@ -966,21 +977,51 @@ skip_if_unavailable=False
 EOF
   }
 
-  dnf_setup_redhat_mirrors_set_china_mirrors() {
+  dnf_setup_redhat_mirrors() {
     local network="$1"
-    
-    if [[ "$network" == "in-china" ]]; then
-      console_content "dnf registry use the Chinese mirror."
+    local version="$(echo "$OS_VERS" | cut -d '.' -f 1)"
 
-      repoUrl="https://mirrors.aliyun.com/epel/epel-release-latest-$version.noarch.rpm"
+    local repoUrl
+    if [[ "$network" == "in-china" ]]; then      
+      console_content_starting "Epel repo is installing from China mirrors..."
+      repoUrl="https://mirrors.huaweicloud.com/epel/epel-release-latest-$version.noarch.rpm"
     else
-      console_content "dnf registry use the Fedora Offical mirror."
+      console_content_starting "Epel repo is installing from Fedora Offical mirrors..."
       repoUrl="https://dl.fedoraproject.org/pub/epel/epel-release-latest-$version.noarch.rpm"
     fi
 
-    console_content_starting "Epel repo is installing..."
-    # sudo dnf install -y https://mirrors.aliyun.com/epel/epel-release-latest-8.noarch.rpm
     eval "sudo dnf install -y $repoUrl $(console_redirect_output)"
+    console_content_complete
+
+    if [[ "$network" == "in-china" ]]; then      
+      console_content_starting "Setting up China EPEL mirrors..."
+
+      sudo tee /etc/yum.repos.d/epel.repo > /dev/null <<EOF
+[epel]
+name=Extra Packages for Enterprise Linux \$releasever - \$basearch
+baseurl=https://mirrors.huaweicloud.com/epel/\$releasever/Everything/\$basearch/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-\$releasever
+skip_if_unavailable=False
+EOF
+
+    else
+      console_content_starting "Setting up Fedora Offical EPEL mirrors..."
+
+      sudo tee /etc/yum.repos.d/epel.repo > /dev/null <<EOF
+[epel]
+name=Extra Packages for Enterprise Linux \$releasever - \$basearch
+baseurl=https://dl.fedoraproject.org/pub/epel/\$releasever/Everything/\$basearch/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-\$releasever
+skip_if_unavailable=False
+EOF
+
+    fi
     console_content_complete
   }
 
@@ -1001,23 +1042,60 @@ EOF
       fi
       console_content_complete
     elif [[ "$OS_NAME" == "RedHat" ]]; then
-      if [[ "$network" == "in-china" ]]; then      
-        console_content_starting "Setting up China DNF mirrors..."
-      else
-        console_content_starting "Using the Fedora Offical mirrors..."
-      fi
-      console_content_complete
-
-      dnf_setup_redhat_mirrors_set_china_mirrors "$network"
+      dnf_setup_redhat_mirrors "$network"
     elif [[ "$OS_NAME" == "AlibabaCloudLinux" ]]; then
       # Alibaba Cloud Linux typically has appropriate mirror sources pre-configured
       console_content "Alibaba Cloud Linux mirrors are pre-configured."
     fi
   }
 
+  dnf_config_manager_add_repo() {
+    local repo_name="$1"
+    local repo_file="$2"
+    local repo_url="$3"
+
+    # console_content_starting "Adding DNF repository: $repo_name..."
+
+    # eval "sudo dnf config-manager --add-repo $repo_url $(console_redirect_output)"
+
+     # Try multiple methods to add Docker repository
+    local repo_added=false
+    # Method 1: Try with dnf-plugins-core and config-manager
+    if ! $repo_added; then
+      if sudo dnf install -y dnf-plugins-core &>/dev/null; then
+        if sudo dnf config-manager --add-repo "$repo_url" &>/dev/null; then
+          repo_added=true
+          console_content "$repo_name repository added successfully."
+        fi
+      fi
+    fi
+    # Method 2: Try with newer dnf config-manager syntax
+    if ! $repo_added; then
+      if sudo dnf config-manager addrepo --from-repofile "$repo_url" &>/dev/null; then
+        repo_added=true
+        console_content "$repo_name repository added successfully. (newer syntax)"
+      fi
+    fi
+    # Method 3: Download and install repo file manually
+    if ! $repo_added; then
+      if eval "curl -fsSL \"$repo_url\" -o /tmp/$repo_file $(console_redirect_output)" && \
+         sudo mv /tmp/$repo_file /etc/yum.repos.d/ &>/dev/null; then
+        repo_added=true
+        console_content "$repo_name repository added successfully. (manual download)"
+      fi
+    fi
+    
+    # console_content_complete
+
+    if ! $repo_added; then
+      console_content_error "$repo_name repository added failed."
+      exit 1
+    fi
+  }
+
   dnf_update() {
     console_content_starting "Package list is updating..."
-    
+
     eval "sudo dnf makecache $(console_redirect_output)"
 
     console_content_complete

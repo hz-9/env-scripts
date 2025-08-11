@@ -8,12 +8,20 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Test status
 TEST_COUNT=0
 PASSED_COUNT=0
 FAILED_COUNT=0
+
+# Debug function
+test_debug() {
+    if [ "${TEST_DEBUG:-false}" = "true" ]; then
+        echo -e "${PURPLE}[DEBUG]${NC} $1"
+    fi
+}
 
 # Log functions
 test_log() {
@@ -34,6 +42,13 @@ test_fail() {
 
 test_warning() {
     echo -e "${YELLOW}[WARN]${NC} $1"
+}
+
+# Skip entire test with summary
+skip_test_with_summary() {
+    local reason="$1"
+    echo -e "${YELLOW}[SKIP]${NC} $reason"
+    exit 2
 }
 
 # 断言函数
@@ -245,7 +260,7 @@ show_test_summary() {
     echo "Failed: $FAILED_COUNT"
     
     if [ $FAILED_COUNT -eq 0 ]; then
-        test_success "All tests passed!"
+        test_info "All tests completed (some were skipped)."
         return 0
     else
         test_fail "$FAILED_COUNT tests failed"
@@ -265,25 +280,25 @@ is_installed() {
     command -v "$software" >/dev/null 2>&1
 }
 
-# 检查系统类型
-get_os_type() {
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        echo "linux"
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "macos"
-    elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
-        echo "windows"
-    else
-        echo "unknown"
+# Check if the current OS is supported for installation
+# Returns 0 if supported, 1 if not supported
+# Usage: is_os_supported script_path
+is_os_supported() {
+    local script_path="$1"
+    
+    if [ -z "$script_path" ] || [ ! -f "$script_path" ]; then
+        # If no script path provided or script doesn't exist, assume not supported
+        return 1
     fi
-}
-
-# 获取发行版信息（仅Linux）
-get_linux_distro() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        echo "$ID"
+    
+    # Run the script with --help and check for unsupported OS message
+    local help_output
+    help_output=$(bash "$script_path" --help 2>&1)
+    
+    # Check if the help output contains the unsupported OS message
+    if echo "$help_output" | grep -q "This shell script does not support the current operating system."; then
+        return 1  # Not supported
     else
-        echo "unknown"
+        return 0  # Supported
     fi
 }
