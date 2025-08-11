@@ -1,21 +1,4 @@
-version: '3.8'
-
 services:
-  # Ubuntu 22.04 测试环境
-  ubuntu22-test:
-    platform: linux/amd64
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.ubuntu22-04
-    container_name: env-script-ubuntu22-test
-    volumes:
-      - ..:/app
-      - test-results:/app/test-results
-    environment:
-      - TEST_ENV=docker
-      - DEBIAN_FRONTEND=noninteractive
-    command: ["/app/tools/test-runner.sh", "--all"]
-    
   # Ubuntu 20.04 测试环境
   ubuntu20-test:
     platform: linux/amd64
@@ -23,6 +6,21 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.ubuntu20-04
     container_name: env-script-ubuntu20-test
+    volumes:
+      - ..:/app
+      - test-results:/app/test-results
+    environment:
+      - TEST_ENV=docker
+      - DEBIAN_FRONTEND=noninteractive
+    command: ["/app/tools/test-runner.sh", "--all"]
+
+  # Ubuntu 22.04 测试环境
+  ubuntu22-test:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ubuntu22-04
+    container_name: env-script-ubuntu22-test
     volumes:
       - ..:/app
       - test-results:/app/test-results

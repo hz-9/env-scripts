@@ -4,6 +4,11 @@
 dist/*.test.sh
 src/*.test.sh
 
+docs/.vuepress
+
 test/node_modules
 test/dist
 
+temp/
+
+logs/*.log

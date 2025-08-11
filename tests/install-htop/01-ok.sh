@@ -1,33 +1,33 @@
 #!/bin/bash
 
-# Test script - for verifying basic functionality of install-git.sh script
+# Test script - for verifying basic functionality of install-htop.sh script
 
 # Import test utility functions
 source "$(dirname "$0")/../test-utils.sh"
 
 # Test constants
-SCRIPT_PATH="$(dirname "$0")/../../dist/install-git.sh"
+SCRIPT_PATH="$(dirname "$0")/../../dist/install-htop.sh"
 
 # Setup test environment
 setup_test_env
 
-test_info "Starting tests for install-git.sh script"
+test_info "Starting tests for install-htop.sh script"
 
 # Checkpoint 0: Check if OS is supported
 test_info "Checkpoint 0: Check if current OS is supported"
 if ! is_os_supported "$SCRIPT_PATH"; then
-    skip_test_with_summary "Current OS is not supported for Git installation"
+    skip_test_with_summary "Current OS is not supported for htop installation"
 fi
-test_success "Current OS is supported for Git installation"
+test_success "Current OS is supported for htop installation"
 
 # Checkpoint 1: Check if script file exists
-assert_file_exists "$SCRIPT_PATH" "install-git.sh script file exists"
+assert_file_exists "$SCRIPT_PATH" "install-htop.sh script file exists"
 
 # Checkpoint 2: Check if script is executable
-assert_success "test -x '$SCRIPT_PATH'" "install-git.sh script has execute permission"
+assert_success "test -x '$SCRIPT_PATH'" "install-htop.sh script has execute permission"
 
 # Checkpoint 3: Check script syntax
-assert_success "bash -n '$SCRIPT_PATH'" "install-git.sh script syntax is correct"
+assert_success "bash -n '$SCRIPT_PATH'" "install-htop.sh script syntax is correct"
 
 # Checkpoint 4: Test --help can output normally
 test_info "Testing script output format..."
@@ -35,7 +35,7 @@ test_info "Testing script output format..."
 script_output=$(bash "$SCRIPT_PATH" --help 2>&1 || echo "No help option")
 # Check if output contains expected content
 if [[ "$script_output" != "No help option" ]]; then
-    assert_contains "$script_output" "git" "Script output contains git-related information"
+    assert_contains "$script_output" "htop" "Script output contains htop-related information"
 fi
 
 # Checkpoint 5: Output --help information

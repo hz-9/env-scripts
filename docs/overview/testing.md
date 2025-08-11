@@ -1,24 +1,24 @@
-# 测试命令速查表
+# Testing Guide
 
-## 🚀 快速测试
+## 🚀 Quick Test
 
 ```bash
-# 构建脚本
+# Build scripts
 make build-scripts
 
-# 在所有环境运行所有测试
+# Run all tests in all environments
 make test-all
 
-# 在所有环境运行所有测试（中国网络）
+# Run all tests in all environments (China network)
 make test-all NETWORK=in-china
 ```
 
-## 🎯 精确测试
+## 🎯 Precise Test
 
-### 单环境测试
+### Single Environment Test
 
 ```bash
-# 在指定环境运行所有测试
+# Run all tests in the specified environment
 make test-all-single ENV=debian11-9-test
 make test-all-single ENV=debian12-2-test
 make test-all-single ENV=fedora41-test
@@ -28,7 +28,7 @@ make test-all-single ENV=ubuntu20-test
 make test-all-single ENV=ubuntu22-test
 make test-all-single ENV=ubuntu24-test
 
-# 使用中国网络
+# Use China network
 make test-all-single ENV=debian11-9-test  NETWORK=in-china
 make test-all-single ENV=debian12-2-test  NETWORK=in-china
 make test-all-single ENV=fedora41-test    NETWORK=in-china
@@ -39,14 +39,14 @@ make test-all-single ENV=ubuntu22-test    NETWORK=in-china
 make test-all-single ENV=ubuntu24-test    NETWORK=in-china
 ```
 
-### 单测试文件
+### Single Test File
 
 ```bash
-# 在所有环境运行指定测试
+# Run the specified test in all environments
 make test-single-all TEST=tests/install-git/01-ok.sh
 make test-single-all TEST=tests/install-git/02-install.sh NETWORK=in-china
 
-# 在指定环境运行指定测试 (使用中国网络)
+# Run the specified test in the specified environment (using China network)
 make test-single ENV=debian11-9-test  NETWORK=in-china TEST=tests/install-git/01-ok.sh
 make test-single ENV=debian12-2-test  NETWORK=in-china TEST=tests/install-git/01-ok.sh
 make test-single ENV=fedora41-test    NETWORK=in-china TEST=tests/install-git/01-ok.sh
@@ -66,12 +66,12 @@ make test-single ENV=ubuntu22-test    NETWORK=in-china TEST=tests/install-git/02
 make test-single ENV=ubuntu24-test    NETWORK=in-china TEST=tests/install-git/02-install.sh
 ```
 
-## 🔧 手动调试
+## 🔧 Manual Debugging
 
-### 构建环境
+### Build Environment
 
 ```bash
-# 构建单个环境
+# Build a single environment
 docker-compose -f docker/docker-compose.yml build debian11-9-test
 docker-compose -f docker/docker-compose.yml build debian12-2-test
 docker-compose -f docker/docker-compose.yml build fedora41-test
@@ -82,46 +82,48 @@ docker-compose -f docker/docker-compose.yml build ubuntu22-test
 docker-compose -f docker/docker-compose.yml build ubuntu24-test
 ```
 
-### 脚本调试
+### Script Debugging
 
 ```bash
-# 快速调试脚本
+# Quickly debug scripts
 bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test   bash -c "bash dist/install-git.sh --help"
 bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test   bash -c "bash dist/install-git.sh --debug"
 bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test   bash -c "bash dist/install-git.sh --network=in-china --debug"
 
-# 其他环境调试
+# Debug in other environments
 bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm fedora41-test   bash -c "bash dist/install-git.sh --network=in-china --debug"
 bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm debian12-2-test bash -c "bash dist/install-git.sh --network=in-china --debug"
+
+bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm redhat8-10-test   bash -c "bash dist/install-htop.sh --network=in-china --debug"
 ```
 
-### 交互式调试
+### Interactive Debugging
 
 ```bash
-# 启动交互式环境
+# Start interactive environment
 make interactive
 
-# 在容器中手动测试
+# Manually test in the container
 docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test bash
 ```
 
-## 🛠️ 常用操作
+## 🛠️ Common Operations
 
-### 清理环境
+### Clean Environment
 
 ```bash
 make clean
 ```
 
-### 获取帮助
+### Get Help
 
 ```bash
 make help
 ```
 
-### 直接运行测试
+### Run Tests Directly
 
 ```bash
-# 直接运行特定测试
+# Run a specific test directly
 docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test /app/tools/test-runner.sh --test tests/install-git/01-ok.sh
 ```
