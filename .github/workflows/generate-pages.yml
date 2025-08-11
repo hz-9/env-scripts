@@ -40,9 +40,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      - name: RushJS Helper
-        uses: advancedcsg-open/actions-rush@v1.6.2
+          node-version: '20'
       - name: Install @hz-9/docs-build
         run: npm install -g @hz-9/docs-build
       - name: Build docs
