@@ -37,7 +37,7 @@ wget -qO-  https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/instal
 ```bash
 # 克隆仓库
 git clone https://github.com/hz-9/env-scripts.git
-cd env-script
+cd env-scripts
 
 # 直接使用脚本
 ./dist/install-git.sh --help

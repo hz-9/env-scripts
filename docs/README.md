@@ -37,7 +37,7 @@ Click here to view all supported [scripts](./overview/scripts.md).
 ```bash
 # Clone repository
 git clone https://github.com/hz-9/env-scripts.git
-cd env-script
+cd env-scripts
 
 # Use scripts directly
 ./dist/install-git.sh --help

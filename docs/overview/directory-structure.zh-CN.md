@@ -39,8 +39,11 @@ env-script/
 │   ├── README.zh-CN.md               # 项目文档（中文）
 │   └── overview/                     # 详细文档
 │       ├── directory-structure.md    # 目录结构说明（英文）
+│       ├── directory-structure.zh-CN.md # 目录结构说明（中文）
 │       ├── scripts.md                # 脚本清单（英文）
-│       └── testing.md                # 测试指南（英文）
+│       ├── scripts.zh-CN.md          # 脚本清单（中文）
+│       ├── testing.md                # 测试指南（英文）
+│       └── testing.zh-CN.md          # 测试指南（中文）
 ├── logs/                             # 日志目录
 │   ├── all.log                       # 综合日志文件
 │   └── test-single-all.nginx.log     # nginx 测试日志
