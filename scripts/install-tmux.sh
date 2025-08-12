@@ -1,12 +1,9 @@
 #!/bin/bash
 _m_='♥'
 
-# shellcheck disable=SC2034
 SHELL_NAME="tmux Installer"
-# shellcheck disable=SC2034
 SHELL_DESC="Install 'tmux' terminal multiplexer."
 
-# shellcheck disable=SC2034
 PARAMTERS=(
   "--help${_m_}-h${_m_}Print help message.${_m_}false"
   "--debug${_m_}${_m_}Print debug message.${_m_}false"
@@ -16,7 +13,6 @@ PARAMTERS=(
   "--tmux-version${_m_}${_m_}tmux version. Default is latest available.${_m_}default"
 )
 
-# shellcheck disable=SC2034
 SUPPORT_OS_LIST=(
   "Ubuntu 20.04 AMD64"
   "Ubuntu 22.04 AMD64"
@@ -31,7 +27,6 @@ SUPPORT_OS_LIST=(
   # "RedHat 9.6 AMD64"
 )
 
-# shellcheck disable=SC1091
 source ./__base.sh
 
 print_help_or_param

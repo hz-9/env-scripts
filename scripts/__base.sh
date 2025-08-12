@@ -97,7 +97,6 @@ _m_='♥'
     local __BASE_OS_ARCH__
 
     if [ -f /etc/os-release ]; then
-      # shellcheck disable=SC1091
       . /etc/os-release
       # shellcheck disable=SC2153
       __BASE_OS_NAME__=$NAME
@@ -162,15 +161,12 @@ _m_='♥'
 
     if is_window_system; then
       OS_NAME=$_OS_NAME
-      # shellcheck disable=SC2034
       OS_IS_WINDOWS=true
     elif is_linux_system; then
       OS_NAME=$_OS_NAME
-      # shellcheck disable=SC2034
       OS_IS_LINUX=true
     elif is_macos_system; then
       OS_NAME=$_OS_NAME
-      # shellcheck disable=SC2034
       OS_IS_MACOS=true
     else
       OS_NAME='Unknown'
@@ -184,7 +180,6 @@ _m_='♥'
       elif [[ "$OS_NAME" == "Debian" ]]; then
         cat /etc/debian_version
       elif [[ "$OS_NAME" == "AlibabaCloudLinux" ]]; then
-        # shellcheck disable=SC1091
         . /etc/os-release
         echo "$PRETTY_NAME" | awk '{print $4}'
       elif [[ "$OS_NAME" == "WindowsServer" ]]; then
@@ -259,10 +254,8 @@ _m_='♥'
   USE_DNF_INSTALL=false
 
   if [[ "$OS_NAME" == "Ubuntu" ]] || [[ "$OS_NAME" == "Debian" ]]; then
-    # shellcheck disable=SC2034
     USE_APT_GET_INSTALL=true
   elif [[ "$OS_NAME" == "Fedora" ]] || [[ "$OS_NAME" == "RedHat" ]] || [[ "$OS_NAME" == "AlibabaCloudLinux" ]]; then
-    # shellcheck disable=SC2034
     USE_DNF_INSTALL=true
   fi
 }
@@ -272,11 +265,9 @@ _m_='♥'
   RED='\033[0;31m'
   GREEN='\033[0;32m'
   YELLOW='\033[0;33m'
-  # shellcheck disable=SC2034
   BLUE='\033[0;34m'
   PURPLE='\033[0;35m'
   CYAN='\033[0;36m'
-  # shellcheck disable=SC2034
   WHITE='\033[0;37m'
   NC='\033[0m' # no color
 
