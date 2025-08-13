@@ -1067,6 +1067,40 @@ EOF
     
     console_content_complete
   }
+
+  download_file() {
+    local url="$1"
+    local target="$2"
+    local dir
+    dir=$(dirname "$target")
+    local filename
+    filename=$(basename "$target")
+
+    if command -v curl &>/dev/null; then
+      console_content "Curl is already installed."
+    else
+      console_content "Curl is not installed. Please install curl first."
+      exit 1
+    fi
+
+    sudo mkdir -p "$dir"
+
+    console_content "The file '$filename' is downloading..."
+    console_content "  from : $url"
+    console_content "  to   : $target"
+    console_content_starting "..."
+
+    eval "curl -L '$url' -o '$target' $(console_redirect_output)"
+
+    if [ "$(get_param '--debug')" == 'true' ]; then
+      console_content "The file '$filename' is downloading..."
+      console_content "  from : $url"
+      console_content "  to   : $target"
+      console_content_starting "..."
+    fi
+
+    console_content_complete
+  }
 }
 
 # Debugger

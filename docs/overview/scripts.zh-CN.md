@@ -93,6 +93,23 @@ wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install
 curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-docker.sh | bash -s -- --network=in-china
 ```
 
+#### **install-gdal.sh** - GDAL 安装
+
+GDAL（地理空间数据抽象库）是一个用于栅格和矢量地理空间数据格式的转换库。
+
+**命令行使用方法：**
+
+```bash
+# 使用 curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-gdal.sh | bash
+
+# 使用 wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-gdal.sh | bash
+
+# 带参数使用
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-gdal.sh | bash -s -- --network=in-china
+```
+
 ### 系统工具
 
 #### **install-htop.sh** - htop 安装
@@ -127,6 +144,40 @@ wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install
 
 # 带参数使用
 curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-tmux.sh | bash -s -- --network=in-china
+```
+
+#### **install-7zip.sh** - 7Zip 安装
+
+7Zip 是一个具有高压缩率的文件归档工具。
+
+**命令行使用方法：**
+
+```bash
+# 使用 curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-7zip.sh | bash
+
+# 使用 wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-7zip.sh | bash
+
+# 带参数使用
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-7zip.sh | bash -s -- --network=in-china --7zip-version=23.01
+```
+
+#### **install-xz.sh** - XZ 安装
+
+XZ 是一个具有高压缩率的压缩工具，用于压缩和解压缩 .xz 文件。
+
+**命令行使用方法：**
+
+```bash
+# 使用 curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-xz.sh | bash
+
+# 使用 wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-xz.sh | bash
+
+# 带参数使用
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-xz.sh | bash -s -- --network=in-china
 ```
 
 #### **install-tree.sh** - tree 安装

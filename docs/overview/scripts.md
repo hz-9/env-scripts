@@ -93,6 +93,23 @@ wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install
 curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-docker.sh | bash -s -- --network=in-china
 ```
 
+#### **install-gdal.sh** - GDAL Installation
+
+GDAL (Geospatial Data Abstraction Library) is a translator library for raster and vector geospatial data formats.
+
+**Command line usage:**
+
+```bash
+# Using curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-gdal.sh | bash
+
+# Using wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-gdal.sh | bash
+
+# With options
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-gdal.sh | bash -s -- --network=in-china
+```
+
 ### System Utilities
 
 #### **install-htop.sh** - htop Installation
@@ -127,6 +144,40 @@ wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install
 
 # With options
 curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-tmux.sh | bash -s -- --network=in-china
+```
+
+#### **install-7zip.sh** - 7Zip Installation
+
+7Zip is a file archiver with high compression ratio.
+
+**Command line usage:**
+
+```bash
+# Using curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-7zip.sh | bash
+
+# Using wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-7zip.sh | bash
+
+# With options
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-7zip.sh | bash -s -- --network=in-china --7zip-version=23.01
+```
+
+#### **install-xz.sh** - XZ Installation
+
+XZ is a compression utility with high compression ratio, useful for compressing and decompressing .xz files.
+
+**Command line usage:**
+
+```bash
+# Using curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-xz.sh | bash
+
+# Using wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-xz.sh | bash
+
+# With options
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-xz.sh | bash -s -- --network=in-china
 ```
 
 #### **install-tree.sh** - tree Installation
