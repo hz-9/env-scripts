@@ -59,12 +59,12 @@ else
     dnf_install "Nginx" "nginx" "$nginxVersion"
   }
 
-  if [[ "$OS_NAME" == "Ubuntu" ]] || [[ "$OS_NAME" == "Debian" ]]; then
+  if [[ "$USE_APT_GET_INSTALL" == true ]]; then
     install_by_apt_get
-  elif [[ "$OS_NAME" == "Fedora" ]] || [[ "$OS_NAME" == "RedHat" ]]; then
+  elif [[ "$USE_DNF_INSTALL" == true ]]; then
     install_by_dnf
   else
-    console_error "Unsupported operating system: $OS_NAME"
+    console_content_error "Unsupported operating system: $OS_NAME"
     exit 1
   fi
 fi

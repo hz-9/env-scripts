@@ -1,0 +1,325 @@
+#!/bin/bash
+_m_='♥'
+
+source "$(dirname "$0")/../../tools/__base.sh"
+
+TEST_COUNT=0
+PASSED_COUNT=0
+FAILED_COUNT=0
+
+{
+  # # Assert command executes successfully
+  assert_success() {
+      local command="$1"
+            
+      if eval "$command" >/dev/null 2>&1; then
+          return 0
+      else
+          return 1
+      fi
+  }
+
+  # # Assert command execution fails
+  # assert_failure() {
+  #     local command="$1"
+  #     local description="${2:-Command execution failed}"
+      
+  #     TEST_COUNT=$((TEST_COUNT + 1))
+  #     test_log "Executing: $command"
+      
+  #     if ! eval "$command" >/dev/null 2>&1; then
+  #         test_success "$description"
+  #         PASSED_COUNT=$((PASSED_COUNT + 1))
+  #         return 0
+  #     else
+  #         test_fail "$description - Expected command to fail but it succeeded"
+  #         FAILED_COUNT=$((FAILED_COUNT + 1))
+  #         return 1
+  #     fi
+  # }
+
+  # # Assert strings are equal
+  # assert_equals() {
+  #     local expected="$1"
+  #     local actual="$2"
+  #     local description="${3:-字符串相等}"
+      
+  #     TEST_COUNT=$((TEST_COUNT + 1))
+      
+  #     if [ "$expected" = "$actual" ]; then
+  #         test_success "$description"
+  #         PASSED_COUNT=$((PASSED_COUNT + 1))
+  #         return 0
+  #     else
+  #         test_fail "$description - 期望: '$expected', 实际: '$actual'"
+  #         FAILED_COUNT=$((FAILED_COUNT + 1))
+  #         return 1
+  #     fi
+  # }
+
+  # # 断言字符串不相等
+  # assert_not_equals() {
+  #     local expected="$1"
+  #     local actual="$2"
+  #     local description="${3:-字符串不相等}"
+      
+  #     TEST_COUNT=$((TEST_COUNT + 1))
+      
+  #     if [ "$expected" != "$actual" ]; then
+  #         test_success "$description"
+  #         PASSED_COUNT=$((PASSED_COUNT + 1))
+  #         return 0
+  #     else
+  #         test_fail "$description - 期望不等于: '$expected', 但实际相等"
+  #         FAILED_COUNT=$((FAILED_COUNT + 1))
+  #         return 1
+  #     fi
+  # }
+
+  # 断言文件存在
+  assert_file_exists() {
+      local filepath="$1"
+      local description="${2:-文件存在: $filepath}"
+            
+      if [ -f "$filepath" ]; then
+          return 0
+      else
+          return 1
+      fi
+  }
+
+  # 断言文件不存在
+  assert_file_not_exists() {
+      local filepath="$1"
+            
+      if [ ! -f "$filepath" ]; then
+          return 0
+      else
+          return 1
+      fi
+  }
+
+  # 断言目录存在
+  assert_dir_exists() {
+      local dirpath="$1"
+            
+      if [ -d "$dirpath" ]; then
+          return 0
+      else
+          return 1
+      fi
+  }
+
+  # 断言字符串包含
+  assert_contains() {
+      local haystack="$1"
+      local needle="$2"
+            
+      if [[ "$haystack" == *"$needle"* ]]; then
+          return 0
+      else
+          return 1
+      fi
+  }
+
+  # 断言进程正在运行
+  assert_process_running() {
+      local process_name="$1"
+            
+      if pgrep -f "$process_name" >/dev/null; then
+          return 0
+      else
+          return 1
+      fi
+  }
+}
+
+{
+  # Clean up test environment
+  cleanup_test_env() {
+      if [ -n "${TEST_TMP_DIR:-}" ] && [ -d "$TEST_TMP_DIR" ]; then
+          log_debug "Cleaning up test environment: $TEST_TMP_DIR"
+          rm -rf "$TEST_TMP_DIR"
+      fi
+  }
+
+  # Set up test environment
+  unit_test_initing() {
+    parse_user_param "$@"
+
+    # local name="$1"
+
+    # Create temporary test directory
+    TEST_TMP_DIR=$(mktemp -d -t env-script-test-XXXXXX)
+    export TEST_TMP_DIR
+    
+    # Set trap to clean up temporary directory
+    trap cleanup_test_env EXIT
+
+    local name=""
+    local env=""
+    local network="default"
+    local debug="false"
+
+    if [ -z "$(get_user_param '--name')" ]; then
+        log_error "Test name (--name) is required"
+        show_help
+        exit 1
+    else
+        name="$(get_user_param --name)"
+    fi
+
+    if [ -z "$(get_user_param '--env')" ]; then
+        log_error "Test env (--env) is required"
+        show_help
+        exit 1
+    else
+        env="$(get_user_param --env)"
+    fi
+
+    if [ -n "$(get_user_param '--network')" ]; then
+        network="$(get_user_param '--network')"
+    fi
+
+    if [ -n "$(get_user_param '--debug')" ]; then
+        debug="$(get_user_param '--debug')"
+    fi
+
+    # echo -e "\033[0;34m"
+    printf '+%s+\n' "$(printf '%0.s-' {1..78})"
+    printf "| %-76s |\n" "The unit test is initing..."
+    printf "| %-76s |\n" "NAME      : ${name}"
+    printf "| %-76s |\n" "TEMP DIR  : ${TEST_TMP_DIR}"
+    printf "| %-76s |\n" "ENV       : ${env}"
+    printf "| %-76s |\n" "--network : ${network}"
+    printf "| %-76s |\n" "--debug   : ${debug}"
+    printf '+%s+\n' "$(printf '%0.s-' {1..78})"
+    # echo -e "\033[0m"
+    # echo ""
+  }
+
+  unit_test_common_suffix_args() {
+    local args=""
+
+    if [ -n "$(get_user_param '--network')" ]; then
+        args="$args --network=$(get_user_param --network)"
+    fi
+
+    if [ -n "$(get_user_param '--debug')" ]; then
+        args="$args --debug"
+    fi
+
+    echo "$args"
+  }
+
+  unit_test_is_support_current_os() {
+    local script_path="$1"
+    
+    # Run the script with --help and check for unsupported OS message
+    local help_output
+    help_output=$(bash "$script_path" --help 2>&1)
+    
+    # Check if the help output contains the unsupported OS message
+    if echo "$help_output" | grep -q "This shell script does not support the current operating system."; then
+        return 1  # Not supported
+    else
+        return 0  # Supported
+    fi
+  }
+
+  unit_test_console_help_message() {
+    local help_content="$1"
+
+    printf '\n%s\n' "$(printf '%0.s-' {1..80})"
+    echo "$script_help_output"
+    printf '%s\n' "$(printf '%0.s-' {1..80})"
+  }
+
+  unit_test_console_summary() {
+    printf '\n%s\n' "$(printf '%0.s-' {1..80})"
+    printf "| %-78s |\n" "📊 Test Unit Summary Report"
+    printf '|%s|\n' "$(printf '%0.s-' {1..78})"
+    printf "| %-76s |\n" "Total Tests : $TEST_COUNT"
+    printf "| %-76s |\n" "Passed      : $PASSED_COUNT"
+    printf "| %-76s |\n" "Failed      : $FAILED_COUNT"
+    printf '%s\n\n' "$(printf '%0.s-' {1..80})"
+
+    if [ "$FAILED_COUNT" -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+  }
+
+  checkpoint_staring() {
+    local checkpoint_index="$1"
+    local checkpoint_desc="$2"
+
+    TEST_COUNT=$((TEST_COUNT + 1))
+    
+    printf '+%s+\n' "$(printf '%0.s-' {1..78})"
+    printf "| %-76s |\n" "Check     : ${checkpoint_index} - ${checkpoint_desc}"
+  }
+
+  checkpoint_complete() {
+    # local checkpoint_index="$1"
+    # local checkpoint_desc="$2"
+
+    PASSED_COUNT=$((PASSED_COUNT + 1))
+
+    printf "| Result    : "
+    # shellcheck disable=SC2059
+    printf "${GREEN}"
+    printf "%-65s" "Success"
+    # shellcheck disable=SC2059
+    printf "${NC}"
+    printf "|\n"
+    printf '+%s+\n' "$(printf '%0.s-' {1..78})"
+  }
+
+  checkpoint_skip() {
+    # local checkpoint_index="$1"
+    # local checkpoint_desc="$2"
+
+    printf "| Result    : "
+    # shellcheck disable=SC2059
+    printf "${YELLOW}"
+    printf "%-65s" "Skipped"
+    # shellcheck disable=SC2059
+    printf "${NC}"
+    printf "|\n"
+    printf '+%s+\n' "$(printf '%0.s-' {1..78})"
+  }
+
+  checkpoint_error() {
+    # local checkpoint_index="$1"
+    # local checkpoint_desc="$2"
+
+    FAILED_COUNT=$((FAILED_COUNT + 1))
+
+    printf "| Result    : "
+    # shellcheck disable=SC2059
+    printf "${RED}"
+    printf "%-65s" "Failed"
+    # shellcheck disable=SC2059
+    printf "${NC}"
+    printf "|\n"
+    printf '+%s+\n' "$(printf '%0.s-' {1..78})"
+  }
+
+  # Set up test environment
+  setup_test_env() {
+    parse_user_param
+
+    test_info "Setting up test environment..."
+
+    # Create temporary test directory
+    TEST_TMP_DIR=$(mktemp -d -t env-script-test-XXXXXX)
+    export TEST_TMP_DIR
+    
+    # Set trap to clean up temporary directory
+    trap cleanup_test_env EXIT
+    
+    test_info "Test temporary directory: $TEST_TMP_DIR"
+  }
+}

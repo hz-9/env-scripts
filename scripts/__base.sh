@@ -958,6 +958,17 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-\$releasever
 skip_if_unavailable=False
 EOF
 
+#       sudo tee /etc/yum.repos.d/epel.repo > /dev/null <<EOF
+# [epel]
+# name=Extra Packages for Enterprise Linux \$releasever - \$basearch
+# baseurl=https://mirrors.ustc.edu.cn/epel/\$releasever/Everything/\$basearch/
+# enabled=1
+# gpgcheck=1
+# repo_gpgcheck=0
+# gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-\$releasever
+# skip_if_unavailable=False
+# EOF
+
     else
       console_content_starting "Setting up Fedora Offical EPEL mirrors..."
 

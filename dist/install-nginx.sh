@@ -993,6 +993,17 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-\$releasever
 skip_if_unavailable=False
 EOF
 
+#       sudo tee /etc/yum.repos.d/epel.repo > /dev/null <<EOF
+# [epel]
+# name=Extra Packages for Enterprise Linux \$releasever - \$basearch
+# baseurl=https://mirrors.ustc.edu.cn/epel/\$releasever/Everything/\$basearch/
+# enabled=1
+# gpgcheck=1
+# repo_gpgcheck=0
+# gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-\$releasever
+# skip_if_unavailable=False
+# EOF
+
     else
       console_content_starting "Setting up Fedora Offical EPEL mirrors..."
 
@@ -1182,12 +1193,12 @@ else
     dnf_install "Nginx" "nginx" "$nginxVersion"
   }
 
-  if [[ "$OS_NAME" == "Ubuntu" ]] || [[ "$OS_NAME" == "Debian" ]]; then
+  if [[ "$USE_APT_GET_INSTALL" == true ]]; then
     install_by_apt_get
-  elif [[ "$OS_NAME" == "Fedora" ]] || [[ "$OS_NAME" == "RedHat" ]]; then
+  elif [[ "$USE_DNF_INSTALL" == true ]]; then
     install_by_dnf
   else
-    console_error "Unsupported operating system: $OS_NAME"
+    console_content_error "Unsupported operating system: $OS_NAME"
     exit 1
   fi
 fi

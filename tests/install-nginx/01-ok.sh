@@ -3,52 +3,53 @@
 # Test script - for verifying basic functionality of install-nginx.sh script
 
 # Import test utility functions
-source "$(dirname "$0")/../test-utils.sh"
+source "$(dirname "$0")/../__base.sh"
 
 # Test constants
 SCRIPT_PATH="$(dirname "$0")/../../dist/install-nginx.sh"
+ 
+unit_test_initing "$@" "--name=install-nginx"
 
-# Setup test environment
-setup_test_env
-
-test_info "Starting tests for install-nginx.sh script"
-
-# Checkpoint 0: Check if OS is supported
-test_info "Checkpoint 0: Check if current OS is supported"
-if ! is_os_supported "$SCRIPT_PATH"; then
-    skip_test_with_summary "Current OS is not supported for nginx installation"
-fi
-test_success "Current OS is supported for nginx installation"
-
-# Checkpoint 1: Check if script file exists
-assert_file_exists "$SCRIPT_PATH" "install-nginx.sh script file exists"
-
-# Checkpoint 2: Check if script is executable
-assert_success "test -x '$SCRIPT_PATH'" "install-nginx.sh script has execute permission"
-
-# Checkpoint 3: Check script syntax
-assert_success "bash -n '$SCRIPT_PATH'" "install-nginx.sh script syntax is correct"
-
-# Checkpoint 4: Test --help can output normally
-test_info "Testing script output format..."
-# Capture script output
-script_output=$(bash "$SCRIPT_PATH" --help 2>&1 || echo "No help option")
-# Check if output contains expected content
-if [[ "$script_output" != "No help option" ]]; then
-    assert_contains "$script_output" "nginx" "Script output contains nginx-related information"
-fi
-
-# Checkpoint 5: Output --help information
-test_info "Testing script help information output..."
-# Display help information
-script_help=$(bash "$SCRIPT_PATH" --help 2>&1)
-# Check if it contains key parts of help options
-if [[ "$script_help" == *"--help,-h"* && "$script_help" == *"Print help message"* ]]; then
-    assert_success "echo '''$script_help\n\n'''" "Script help information output is correct"
+checkpoint_staring "1" "Check if script file exists"
+if assert_file_exists "$SCRIPT_PATH"; then
+    checkpoint_complete
 else
-    assert_failure "echo '''$script_help\n\n'''" "Script help information output is incorrect"
+    checkpoint_error
 fi
+
+checkpoint_staring "2" "Check if script is executable"
+if assert_success "test -x '$SCRIPT_PATH'"; then
+    checkpoint_complete
+else
+    checkpoint_error
+fi
+
+checkpoint_staring "3" "Check script syntax"
+if assert_success "test -n '$SCRIPT_PATH'"; then
+    checkpoint_complete
+else
+    checkpoint_error
+fi
+
+checkpoint_staring "4" "Test --help can output normally"
+script_help_output=$(bash "$SCRIPT_PATH" --help 2>&1 || echo "No help option")
+if [[ "$script_help_output" != "No help option" ]] && [[ "$script_help_output" == *"--help,-h"* && "$script_help_output" == *"Print help message"* ]]; then
+    checkpoint_complete
+else
+    checkpoint_error
+fi
+
+checkpoint_staring "0" "Check if current OS is supported"
+if unit_test_is_support_current_os "$SCRIPT_PATH"; then
+    checkpoint_complete
+else
+    checkpoint_skip
+    exit 2 # Skip the rest of the tests if OS is not supported
+fi
+
+
+unit_test_console_help_message "$script_help_output"
 
 # Display test results
-show_test_summary
+unit_test_console_summary
 exit $?

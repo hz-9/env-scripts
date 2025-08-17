@@ -2,7 +2,25 @@
 
 ## 🚀 Quick Test
 
-```bash
+``` bash
+make test-all-single ENV=debian11-9
+make test-all-single ENV=debian12-2
+make test-all-single ENV=fedora41
+make test-all-single ENV=redhat8-10
+make test-all-single ENV=redhat9-6
+make test-all-single ENV=ubuntu20
+make test-all-single ENV=ubuntu22
+make test-all-single ENV=ubuntu24
+
+# Using China Network
+make test-all-single ENV=debian11-9  NETWORK=in-china
+make test-all-single ENV=debian12-2  NETWORK=in-china
+make test-all-single ENV=fedora41    NETWORK=in-china
+make test-all-single ENV=redhat8-10  NETWORK=in-china
+make test-all-single ENV=redhat9-6   NETWORK=in-china
+make test-all-single ENV=ubuntu20    NETWORK=in-china
+make test-all-single ENV=ubuntu22    NETWORK=in-china
+make test-all-single ENV=ubuntu24    NETWORK=in-chinaash
 # Build scripts
 make build-scripts
 
@@ -47,23 +65,23 @@ make test-single-all TEST=tests/install-git/01-ok.sh
 make test-single-all TEST=tests/install-git/02-install.sh NETWORK=in-china
 
 # Run the specified test in the specified environment (using China network)
-make test-single ENV=debian11-9-test  NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=debian12-2-test  NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=fedora41-test    NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=redhat8-10-test  NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=redhat9-6-test   NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=ubuntu20-test    NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=ubuntu22-test    NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=ubuntu24-test    NETWORK=in-china TEST=tests/install-git/01-ok.sh
+make test-single ENV=debian11-9  NETWORK=in-china TEST=tests/install-git/01-ok.sh
+make test-single ENV=debian12-2  NETWORK=in-china TEST=tests/install-git/01-ok.sh
+make test-single ENV=fedora41    NETWORK=in-china TEST=tests/install-git/01-ok.sh
+make test-single ENV=redhat8-10  NETWORK=in-china TEST=tests/install-git/01-ok.sh
+make test-single ENV=redhat9-6   NETWORK=in-china TEST=tests/install-git/01-ok.sh
+make test-single ENV=ubuntu20    NETWORK=in-china TEST=tests/install-git/01-ok.sh
+make test-single ENV=ubuntu22    NETWORK=in-china TEST=tests/install-git/01-ok.sh
+make test-single ENV=ubuntu24    NETWORK=in-china TEST=tests/install-git/01-ok.sh
 
-make test-single ENV=debian11-9-test  NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=debian12-2-test  NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=fedora41-test    NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=redhat8-10-test  NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=redhat9-6-test   NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=ubuntu20-test    NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=ubuntu22-test    NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=ubuntu24-test    NETWORK=in-china TEST=tests/install-git/02-install.sh
+make test-single ENV=debian11-9  NETWORK=in-china TEST=tests/install-git/02-install.sh
+make test-single ENV=debian12-2  NETWORK=in-china TEST=tests/install-git/02-install.sh
+make test-single ENV=fedora41    NETWORK=in-china TEST=tests/install-git/02-install.sh
+make test-single ENV=redhat8-10  NETWORK=in-china TEST=tests/install-git/02-install.sh
+make test-single ENV=redhat9-6   NETWORK=in-china TEST=tests/install-git/02-install.sh
+make test-single ENV=ubuntu20    NETWORK=in-china TEST=tests/install-git/02-install.sh
+make test-single ENV=ubuntu22    NETWORK=in-china TEST=tests/install-git/02-install.sh
+make test-single ENV=ubuntu24    NETWORK=in-china TEST=tests/install-git/02-install.sh
 ```
 
 ## 🔧 Manual Debugging
@@ -78,7 +96,7 @@ docker-compose -f docker/docker-compose.yml build fedora41-test
 docker-compose -f docker/docker-compose.yml build redhat8-10-test
 docker-compose -f docker/docker-compose.yml build redhat9-6-test
 docker-compose -f docker/docker-compose.yml build ubuntu20-test
-docker-compose -f docker/docker-compose.yml build ubuntu22-test
+docker-compose -f docker/docker-compose.yml build ubuntu22
 docker-compose -f docker/docker-compose.yml build ubuntu24-test
 ```
 

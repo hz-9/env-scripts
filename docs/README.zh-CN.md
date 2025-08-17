@@ -79,7 +79,7 @@ make test-all
 make test-all NETWORK=in-china
 
 # 在指定环境运行指定测试
-make test-single ENV=ubuntu22-test TEST=tests/install-git/01-ok.sh
+make test-single ENV=ubuntu22 TEST=tests/install-git/01-ok.sh
 
 # 启动交互式测试环境
 make interactive

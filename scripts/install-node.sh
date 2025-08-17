@@ -59,47 +59,65 @@ else
   exit 1
 fi
 
-# Install NVM
-if [[ -d "$nvmHome" ]] && [[ -s "$nvmHome/nvm.sh" ]] && [[ -s "$nvmHome/README.md" ]]; then
-  console_content "NVM is already installed at $nvmHome"
+defaultNvmRepoUrl="https://github.com/nvm-sh/nvm.git"
+nvmRepoUrl="$defaultNvmRepoUrl"
+if [[ "$network" == "in-china" ]]; then
+  # Use Gitee mirror for China users
+  nvmRepoUrl="https://gitee.com/mirrors/nvm.git"
 else
-  console_content_starting "Installing NVM ${nvmVersion}..."
-  
-  if [[ "$network" == "in-china" ]]; then
-    # Use Gitee mirror for China users
-    nvmRepoUrl="https://gitee.com/mirrors/nvm.git"
+  nvmRepoUrl="https://github.com/nvm-sh/nvm.git"
+fi
+
+install_nvm() {
+  local currentNvmRepoUrl="$1"
+  # Install NVM
+  if [[ -d "$nvmHome" ]] && [[ -s "$nvmHome/nvm.sh" ]] && [[ -s "$nvmHome/README.md" ]]; then
+    console_content "NVM is already installed at $nvmHome"
   else
-    nvmRepoUrl="https://github.com/nvm-sh/nvm.git"
+    console_content_starting "Installing NVM ${nvmVersion} [$currentNvmRepoUrl]..."
+
+    # Clone NVM repository to specific version
+    eval "git clone --depth 1 --branch \"$nvmVersion\" \"$currentNvmRepoUrl\" \"$nvmHome\" $(console_redirect_output)"
+
+    if [[ ! -d "$nvmHome" ]]; then
+      console_content_error "Failed to install NVM. Use default nvm repo url retry."
+    else
+      console_content_complete
+    fi
   fi
-  
-  # Clone NVM repository to specific version
-  eval "git clone --depth 1 --branch \"$nvmVersion\" \"$nvmRepoUrl\" \"$nvmHome\" $(console_redirect_output)"
-  
+}
+
+install_nvm $nvmRepoUrl
+
+# In Debian 12.2, the nvm installation may fail due to git clone failure.
+if [[ ! -d "$nvmHome" ]]; then
+  install_nvm $defaultNvmRepoUrl
+fi
+
+setting_nvm() {
+  if [[ "$network" == "in-china" ]]; then      
+    console_content_starting "Setting up China NVM mirrors..."
+
+    export NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node/
+    export NVM_IOJS_ORG_MIRROR=https://mirrors.huaweicloud.com/iojs/
+  else
+    console_content_starting "Using default NVM sources..."
+  fi
   console_content_complete
-fi
 
-if [[ "$network" == "in-china" ]]; then      
-  console_content_starting "Setting up China NVM mirrors..."
+  # Source NVM
+  export NVM_DIR="$nvmHome"
+  if [ -s "$NVM_DIR/nvm.sh" ]; then
+      source "$NVM_DIR/nvm.sh"
+  fi
+  if [ -s "$NVM_DIR/bash_completion" ]; then
+      source "$NVM_DIR/bash_completion"
+  fi
+}
+setting_nvm
 
-  export NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node/
-  export NVM_IOJS_ORG_MIRROR=https://mirrors.huaweicloud.com/iojs/
-else
-  console_content_starting "Using default NVM sources..."
-fi
-console_content_complete
-
-
-# Source NVM
-export NVM_DIR="$nvmHome"
-# Source NVM if available
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-    source "$NVM_DIR/nvm.sh"
-fi
-if [ -s "$NVM_DIR/bash_completion" ]; then
-    source "$NVM_DIR/bash_completion"
-fi
-
-console_key_value "nvm" "$(nvm -v)"
+console_key_value "NVM Dir" "${NVM_DIR}"
+console_key_value "NVM Version" "$(nvm -v)"
 console_empty_line
 
 install_node() {

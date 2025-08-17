@@ -10,18 +10,17 @@ applyTo: "tests/install-*/*.sh"
 
 `tests/install-*/01-ok.sh` 需要进行以下测试内容：
 
-- 检查点0: 检测是否支持此操作系统，如果不支持，则跳过测试。最终的测试结果应为 `Skip`。
-- 检查点1: 检查脚本文件是否存在
-- 检查点2: 检查脚本是否可执行
-- 检查点3: 检查脚本语法
-- 检查点4: 检测 `--help` 可以正常输出
-- 检查点5: 输出一个 `--help` 信息
+- 检查点1: Check if script file exists
+- 检查点2: Check if script is executable
+- 检查点3: Check script syntax
+- 检查点4: Test --help can output normally
+- 检查点0: Check if current OS is supported
 
 `tests/install-*/02-install.sh` 需要进行以下测试内容：
 
-- 检查点0: 检测是否支持此操作系统，如果不支持，则跳过测试。最终的测试结果应为 `Skip`。
-- 检查点1: 文件是否有正确运行
-- 检查点2: 是否有正常安装
-- 检查点3: 版本信息是否能正确获取？
+- 检查点0: Check if current OS is supported
+- 检查点1: Install script execution result
+- 检查点2: Check if software is successfully installed
+- 检查点3: Get and verify software version information
 
 **AI 进行单元测试时，优先使用 --network=in-china 参数**
