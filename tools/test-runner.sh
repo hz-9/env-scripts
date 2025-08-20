@@ -117,6 +117,10 @@ main() {
         suffix_args="$suffix_args--debug "
     fi
 
+    if [ -n "$(get_user_param '--internal-ip')" ]; then
+        suffix_args="$suffix_args--internal-ip=$(get_user_param --internal-ip) "
+    fi
+
     # Execute based on parameters
     if [ -n "$test_file" ]; then
         # Run a specific test file

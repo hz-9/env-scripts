@@ -2,146 +2,167 @@
 
 ## 🚀 Quick Test
 
-``` bash
-make test-all-single ENV=debian11-9
-make test-all-single ENV=debian12-2
-make test-all-single ENV=fedora41
-make test-all-single ENV=redhat8-10
-make test-all-single ENV=redhat9-6
-make test-all-single ENV=ubuntu20
-make test-all-single ENV=ubuntu22
-make test-all-single ENV=ubuntu24
-
-# Using China Network
-make test-all-single ENV=debian11-9  NETWORK=in-china
-make test-all-single ENV=debian12-2  NETWORK=in-china
-make test-all-single ENV=fedora41    NETWORK=in-china
-make test-all-single ENV=redhat8-10  NETWORK=in-china
-make test-all-single ENV=redhat9-6   NETWORK=in-china
-make test-all-single ENV=ubuntu20    NETWORK=in-china
-make test-all-single ENV=ubuntu22    NETWORK=in-china
-make test-all-single ENV=ubuntu24    NETWORK=in-chinaash
+```bash
 # Build scripts
 make build-scripts
 
-# Run all tests in all environments
-make test-all
+# Run all installation script tests
+make install-test-all
 
-# Run all tests in all environments (China network)
-make test-all NETWORK=in-china
+# Run all installation script tests in China network environment
+make install-test-all NETWORK=in-china
+
+# Run all database sync script tests
+make syncdb-test-all
+
+# Run all database sync script tests in China network environment
+make syncdb-test-all NETWORK=in-china
 ```
 
 ## 🎯 Precise Test
 
-### Single Environment Test
+### Installation Script Testing
+
+#### Test Specific Script in All Environments
 
 ```bash
-# Run all tests in the specified environment
-make test-all-single ENV=debian11-9-test
-make test-all-single ENV=debian12-2-test
-make test-all-single ENV=fedora41-test
-make test-all-single ENV=redhat8-10-test
-make test-all-single ENV=redhat9-6-test
-make test-all-single ENV=ubuntu20-test
-make test-all-single ENV=ubuntu22-test
-make test-all-single ENV=ubuntu24-test
+# Test specific installation script in all environments
+make install-test-all-env SCRIPT=git
+make install-test-all-env SCRIPT=docker
+make install-test-all-env SCRIPT=node
 
-# Use China network
-make test-all-single ENV=debian11-9-test  NETWORK=in-china
-make test-all-single ENV=debian12-2-test  NETWORK=in-china
-make test-all-single ENV=fedora41-test    NETWORK=in-china
-make test-all-single ENV=redhat8-10-test  NETWORK=in-china
-make test-all-single ENV=redhat9-6-test   NETWORK=in-china
-make test-all-single ENV=ubuntu20-test    NETWORK=in-china
-make test-all-single ENV=ubuntu22-test    NETWORK=in-china
-make test-all-single ENV=ubuntu24-test    NETWORK=in-china
+# Test in China network environment
+make install-test-all-env SCRIPT=git NETWORK=in-china
 ```
 
-### Single Test File
+#### Test All Scripts in Specific Environment
 
 ```bash
-# Run the specified test in all environments
-make test-single-all TEST=tests/install-git/01-ok.sh
-make test-single-all TEST=tests/install-git/02-install.sh NETWORK=in-china
+# Run all installation script tests in specified environment
+make install-test-all-script ENV=debian11-9
+make install-test-all-script ENV=debian12-2
+make install-test-all-script ENV=fedora41
+make install-test-all-script ENV=redhat8-10
+make install-test-all-script ENV=redhat9-6
+make install-test-all-script ENV=ubuntu20
+make install-test-all-script ENV=ubuntu22
+make install-test-all-script ENV=ubuntu24
 
-# Run the specified test in the specified environment (using China network)
-make test-single ENV=debian11-9  NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=debian12-2  NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=fedora41    NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=redhat8-10  NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=redhat9-6   NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=ubuntu20    NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=ubuntu22    NETWORK=in-china TEST=tests/install-git/01-ok.sh
-make test-single ENV=ubuntu24    NETWORK=in-china TEST=tests/install-git/01-ok.sh
-
-make test-single ENV=debian11-9  NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=debian12-2  NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=fedora41    NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=redhat8-10  NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=redhat9-6   NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=ubuntu20    NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=ubuntu22    NETWORK=in-china TEST=tests/install-git/02-install.sh
-make test-single ENV=ubuntu24    NETWORK=in-china TEST=tests/install-git/02-install.sh
+# Using China network
+make install-test-all-script ENV=ubuntu22 NETWORK=in-china
 ```
 
-## 🔧 Manual Debugging
-
-### Build Environment
+#### Test Specific Script in Specific Environment
 
 ```bash
-# Build a single environment
-docker-compose -f docker/docker-compose.yml build debian11-9-test
-docker-compose -f docker/docker-compose.yml build debian12-2-test
-docker-compose -f docker/docker-compose.yml build fedora41-test
-docker-compose -f docker/docker-compose.yml build redhat8-10-test
-docker-compose -f docker/docker-compose.yml build redhat9-6-test
-docker-compose -f docker/docker-compose.yml build ubuntu20-test
-docker-compose -f docker/docker-compose.yml build ubuntu22
-docker-compose -f docker/docker-compose.yml build ubuntu24-test
+# Test specific installation script in specific environment
+make install-test-single ENV=ubuntu22 SCRIPT=git
+make install-test-single ENV=debian12-2 SCRIPT=docker NETWORK=in-china
 ```
 
-### Script Debugging
+#### Run Specific Test File
 
 ```bash
-# Quickly debug scripts
-bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test   bash -c "bash dist/install-git.sh --help"
-bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test   bash -c "bash dist/install-git.sh --debug"
-bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test   bash -c "bash dist/install-git.sh --network=in-china --debug"
-
-# Debug in other environments
-bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm fedora41-test   bash -c "bash dist/install-git.sh --network=in-china --debug"
-bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm debian12-2-test bash -c "bash dist/install-git.sh --network=in-china --debug"
-
-bash ./tools/build.sh && docker-compose -f docker/docker-compose.yml run --rm redhat8-10-test   bash -c "bash dist/install-htop.sh --network=in-china --debug"
+# Run specific test file in specific environment
+make install-test-file ENV=debian11-9 FILE=tests/install-git/01-ok.sh
+make install-test-file ENV=ubuntu22 FILE=tests/install-docker/02-install.sh NETWORK=in-china
 ```
 
-### Interactive Debugging
+### Database Sync Script Testing
+
+#### Test Specific Sync Script in All Environments
 
 ```bash
-# Start interactive environment
+# Test specific database sync script in all environments
+make syncdb-test-all-env SCRIPT=postgresql
+make syncdb-test-all-env SCRIPT=mysql
+make syncdb-test-all-env SCRIPT=mongodb
+
+# Test in China network environment
+make syncdb-test-all-env SCRIPT=postgresql NETWORK=in-china
+```
+
+#### Test All Sync Scripts in Specific Environment
+
+```bash
+# Run all database sync script tests in specified environment
+make syncdb-test-all-script ENV=debian11-9
+make syncdb-test-all-script ENV=ubuntu22
+
+# Using China network
+make syncdb-test-all-script ENV=ubuntu22 NETWORK=in-china
+```
+
+#### Test Specific Sync Script in Specific Environment
+
+```bash
+# Test specific database sync script in specific environment
+make syncdb-test-single ENV=ubuntu22 SCRIPT=postgresql
+make syncdb-test-single ENV=debian12-2 SCRIPT=mysql NETWORK=in-china
+make syncdb-test-single ENV=ubuntu24 SCRIPT=mongodb NETWORK=in-china
+```
+
+#### Run Specific Sync Test File
+
+```bash
+# Run specific sync test file in specific environment
+make syncdb-test-file ENV=ubuntu22 FILE=tests/syncdb-mysql/02-install.sh NETWORK=in-china
+```
+
+## 🛠️ Other Commands
+
+```bash
+# Interactive test environment
 make interactive
 
-# Manually test in the container
-docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test bash
-```
+# Start shell in container
+make shell
 
-## 🛠️ Common Operations
-
-### Clean Environment
-
-```bash
+# Clean Docker images and containers
 make clean
+
+# View Docker logs
+make logs
+
+# Display test results
+make results
 ```
 
-### Get Help
+## 🌐 Test Parameters
 
-```bash
-make help
-```
+All test commands support the following parameters:
 
-### Run Tests Directly
+- `NETWORK=in-china` - Use China network configuration, suitable for users in mainland China
+- `DEBUG=true` - Enable debug mode with detailed output
 
-```bash
-# Run a specific test directly
-docker-compose -f docker/docker-compose.yml run --rm ubuntu20-test /app/tools/test-runner.sh --test tests/install-git/01-ok.sh
-```
+## 🖥️ Supported Test Environments
+
+Tests are supported in the following environments:
+
+- **Ubuntu**: 20.04, 22.04, 24.04 (AMD64)
+- **Debian**: 11.9, 12.2 (AMD64)
+- **Fedora**: 41 (AMD64)
+- **Red Hat Enterprise Linux**: 8.10, 9.6 (AMD64)
+
+## 🧪 Test Architecture
+
+The test framework uses Docker containers to run tests in isolated environments, ensuring consistency and reproducibility of test results. The testing process includes:
+
+1. Building scripts and Docker images
+2. Running tests in specified environments
+3. Collecting test results and logs
+4. Generating test reports
+
+Each script has two basic types of tests:
+
+- **Basic verification test (01-ok.sh)** - Checks script syntax, help information, and OS compatibility
+- **Installation test (02-install.sh)** - Tests actual installation functionality
+
+## 📋 Developing New Tests
+
+To add tests for a new script, follow these steps:
+
+1. Create a subdirectory for the script under the `tests/` directory
+2. Add at least two test files: `01-ok.sh` and `02-install.sh`
+3. Use assertion functions from the test utilities library to verify script behavior
+4. Run tests to ensure they work in all supported environments

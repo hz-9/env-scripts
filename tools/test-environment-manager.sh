@@ -6,6 +6,8 @@ set -e
 
 source tools/__base.sh
 
+startTime=$(console_time_s)
+
 # Get project root directory
 root=$(cd "$(dirname "$0")" || exit; dirname "$(pwd)")
 
@@ -96,7 +98,7 @@ run_tests_in_environment() {
   else
     # 循环遍历目录下的所有文件
     for file in "$scan_dir"/*; do
-      if [ -f "$file" ]; then
+      if [[ -f "$file" ]] && [[ "$(basename "$file")" != _* ]]; then
         local test_file="${test_dir_name}/$(basename "$file")"
         local runner_args="--file=$test_file $suffix_args"
         log_info "Runner ARGS      : $runner_args"
@@ -118,8 +120,8 @@ run_all_tests_in_environment() {
   if [ ! -d "$scan_dir" ]; then
     log_error "Test script directory does not exist: $scan_dir"
   else
-    # 循环遍历目录下的所有文件
     for file in "$scan_dir"/*; do
+    # 循环遍历目录下的所有文件
       if [ -d "$file" ]; then
         run_tests_in_environment "$env" "$(basename "$file")" "$suffix_args"
       fi
@@ -170,6 +172,9 @@ show_help() {
 }
 
 unit_test_console_summary() {
+    currentTime=$(console_time_s)
+    timeDiff=$((currentTime - startTime))
+
     echo -e "\033[0;34m"
     printf '+%s+\n' "$(printf '%0.s-' {1..78})"
     printf "| %-78s |\n" "📊 Final Test Summary Report"
@@ -178,6 +183,7 @@ unit_test_console_summary() {
     printf "| %-76s |\n" "Passed          : $passed_unit_tests"
     printf "| %-76s |\n" "Skipped         : $skipped_unit_tests"
     printf "| %-76s |\n" "Failed          : $failed_unit_tests"
+    printf "| %-76s |\n" "TIME            : $failed_unit_tests"
     printf '+%s+' "$(printf '%0.s-' {1..78})"
     echo -e "\033[0m"
 
@@ -249,6 +255,10 @@ main() {
     if [ -n "$(get_user_param '--script')" ]; then
         test_script="$(get_user_param --script)"
     fi
+
+    # Add internal IP to suffix_args
+    internal_ip=$(ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | head -n 1)
+    suffix_args="$suffix_args --internal-ip=$internal_ip "
 
     log_info "Env Manager ARGS : $suffix_args"
     

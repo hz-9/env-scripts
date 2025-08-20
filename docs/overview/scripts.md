@@ -269,6 +269,68 @@ wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install
 curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-nginx.sh | bash -s -- --network=in-china
 ```
 
+### Database Synchronization Tools
+
+#### **syncdb-postgresql.sh** - PostgreSQL Data Synchronization
+
+A tool for synchronizing data between different PostgreSQL database instances.
+
+**Command line usage:**
+
+```bash
+# Using curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-postgresql.sh | bash
+
+# Using wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-postgresql.sh | bash
+
+# With options (syncing from one database to another)
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-postgresql.sh | bash -s -- \
+  --from-hostname=source-db.example.com --from-port=5432 --from-username=postgres --from-password=password --from-database=source_db \
+  --to-hostname=target-db.example.com --to-port=5432 --to-username=postgres --to-password=password --to-database=target_db \
+  --network=in-china
+```
+
+#### **syncdb-mysql.sh** - MySQL Data Synchronization
+
+A tool for synchronizing data between different MySQL database instances.
+
+**Command line usage:**
+
+```bash
+# Using curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mysql.sh | bash
+
+# Using wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mysql.sh | bash
+
+# With options (syncing from one database to another)
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mysql.sh | bash -s -- \
+  --from-hostname=source-db.example.com --from-port=3306 --from-username=root --from-password=password --from-database=source_db \
+  --to-hostname=target-db.example.com --to-port=3306 --to-username=root --to-password=password --to-database=target_db \
+  --network=in-china
+```
+
+#### **syncdb-mongodb.sh** - MongoDB Data Synchronization
+
+A tool for synchronizing data between different MongoDB database instances.
+
+**Command line usage:**
+
+```bash
+# Using curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash
+
+# Using wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash
+
+# With options (syncing from one database to another)
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash -s -- \
+  --from-hostname=source-db.example.com --from-port=27017 --from-username=root --from-password=password --from-database=source_db \
+  --to-hostname=target-db.example.com --to-port=27017 --to-username=root --to-password=password --to-database=target_db \
+  --db-version=4.4 --network=in-china
+```
+
 ## Common Parameters
 
 All scripts support the following common parameters:
