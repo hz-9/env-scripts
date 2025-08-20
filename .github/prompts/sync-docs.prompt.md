@@ -31,8 +31,9 @@ description: '同步仓库文档'
   - 3.2 读取 `docs/overview/directory-structure.zh-CN.md` 文档内容，如果有疏漏或错误，进行修正；
   - 3.3 忽略 `.gitignore` 文件中的路径，扫描当前项目目录结构；
   - 3.4 因为扫描结果过大，可以分段将当前项目目录结构同步到 `docs/overview/directory-structure.zh-CN.md` 文档中；
-  - 3.5 同步时，请基于 `docs/overview/directory-structure.zh-CN.md` 已存在的内容进行改造；
-  - 3.6 将 `docs/overview/directory-structure.zh-CN.md` 文档内容翻译为英文，保存为 `docs/overview/directory-structure.md` 文档；
+  - 3.5 若变更内容过多，可以直接生成新的文件，然后替换 `docs/overview/directory-structure.zh-CN.md` 文档；
+  - 3.6 同步时，请基于 `docs/overview/directory-structure.zh-CN.md` 已存在的内容进行改造；
+  - 3.7 将 `docs/overview/directory-structure.zh-CN.md` 文档内容翻译为英文，保存为 `docs/overview/directory-structure.md` 文档；
 
 - 4 `docs/overview/scripts.zh-CN.md` 与 `docs/overview/scripts.md` 文档；
   - 4.1 以 `docs/overview/scripts.zh-CN.md` 文档为主；

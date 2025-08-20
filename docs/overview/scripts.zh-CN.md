@@ -269,6 +269,68 @@ wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install
 curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/install-nginx.sh | bash -s -- --network=in-china
 ```
 
+### 数据库同步工具
+
+#### **syncdb-postgresql.sh** - PostgreSQL 数据同步
+
+用于在不同 PostgreSQL 数据库实例之间同步数据的工具。
+
+**命令行使用方法：**
+
+```bash
+# 使用 curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-postgresql.sh | bash
+
+# 使用 wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-postgresql.sh | bash
+
+# 带参数使用（从一个数据库同步到另一个）
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-postgresql.sh | bash -s -- \
+  --from-hostname=source-db.example.com --from-port=5432 --from-username=postgres --from-password=password --from-database=source_db \
+  --to-hostname=target-db.example.com --to-port=5432 --to-username=postgres --to-password=password --to-database=target_db \
+  --network=in-china
+```
+
+#### **syncdb-mysql.sh** - MySQL 数据同步
+
+用于在不同 MySQL 数据库实例之间同步数据的工具。
+
+**命令行使用方法：**
+
+```bash
+# 使用 curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mysql.sh | bash
+
+# 使用 wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mysql.sh | bash
+
+# 带参数使用（从一个数据库同步到另一个）
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mysql.sh | bash -s -- \
+  --from-hostname=source-db.example.com --from-port=3306 --from-username=root --from-password=password --from-database=source_db \
+  --to-hostname=target-db.example.com --to-port=3306 --to-username=root --to-password=password --to-database=target_db \
+  --network=in-china
+```
+
+#### **syncdb-mongodb.sh** - MongoDB 数据同步
+
+用于在不同 MongoDB 数据库实例之间同步数据的工具。
+
+**命令行使用方法：**
+
+```bash
+# 使用 curl
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash
+
+# 使用 wget
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash
+
+# 带参数使用（从一个数据库同步到另一个）
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash -s -- \
+  --from-hostname=source-db.example.com --from-port=27017 --from-username=root --from-password=password --from-database=source_db \
+  --to-hostname=target-db.example.com --to-port=27017 --to-username=root --to-password=password --to-database=target_db \
+  --db-version=4.4 --network=in-china
+```
+
 ## 通用参数
 
 所有脚本都支持以下通用参数：

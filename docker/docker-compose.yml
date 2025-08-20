@@ -7,6 +7,7 @@ services:
       dockerfile: docker/Dockerfile.ubuntu20-04
     container_name: env-script-ubuntu20
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:
@@ -22,6 +23,7 @@ services:
       dockerfile: docker/Dockerfile.ubuntu22-04
     container_name: env-script-ubuntu22
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:
@@ -37,6 +39,7 @@ services:
       dockerfile: docker/Dockerfile.ubuntu24-04
     container_name: env-script-ubuntu24
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:
@@ -52,6 +55,7 @@ services:
       dockerfile: docker/Dockerfile.debian11-9
     container_name: env-script-debian11-9
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:
@@ -67,6 +71,7 @@ services:
       dockerfile: docker/Dockerfile.debian12-2
     container_name: env-script-debian12-2
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:
@@ -82,6 +87,7 @@ services:
       dockerfile: docker/Dockerfile.fedora41
     container_name: env-script-fedora41
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:
@@ -96,6 +102,7 @@ services:
       dockerfile: docker/Dockerfile.redhat8-10
     container_name: env-script-redhat8-10
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:
@@ -110,6 +117,7 @@ services:
       dockerfile: docker/Dockerfile.redhat9-6
     container_name: env-script-redhat9-6
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:
@@ -124,6 +132,7 @@ services:
       dockerfile: docker/Dockerfile.ubuntu22-04
     container_name: env-script-interactive
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
       - test-results:/app/test-results
     environment:

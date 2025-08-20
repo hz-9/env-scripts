@@ -38,6 +38,20 @@ _m_='♥'
     seconds=$(date +%s)
     echo $((seconds * 1))
   }
+
+    # Get redirect output command (based on debug parameter)
+  console_redirect_output() {
+    if ! declare -f get_user_param >/dev/null; then
+      echo "${RED}Error:${NC} function get_user_param is not declared. But console_redirect_output() is called."
+      return 1
+    fi
+
+    if [ "$(get_user_param '--debug')" != 'true' ]; then
+      echo "&> /dev/null"
+    else
+      echo ""
+    fi
+  }
 }
 
 {

@@ -209,6 +209,10 @@ FAILED_COUNT=0
         args="$args --debug"
     fi
 
+    # if [ -n "$(get_user_param '--internal-ip')" ]; then
+    #     args="$args --internal-ip=$(get_user_param --internal-ip)"
+    # fi
+
     echo "$args"
   }
 

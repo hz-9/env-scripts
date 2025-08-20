@@ -1,12 +1,10 @@
 # Makefile for env-script testing
 
-# .PHONY: help build test-all test-sin	@echo "Running all install tests for $(SCR	@	@echo "Running specific syncdb test file $(FILE) in $(ENV) environment..."
-# 	@./tools/test-environment-manager.sh -m single -e $(ENV) -f $(FILE) $(if $(filter in-china,$(NETWORK)),-n in-china) $(if $(filter true,$(DEBUG)),-d)ng specific in	@echo "Running all syncdb tests for $(SCRIPT) script in all environments..."
-# 	@./tools/test-environment-manager.sh -m all-sys -t "tests/syncdb-" -s $(SCRIPT) $(if $(filter in-china,$(NETWORK)),-n in-china) $(if $(filter true,$(DEBUG)),-d)file $(FILE) in $(ENV) environment..."
-# 	@./tools/test-environment-manager.sh -m single -e $(ENV) -f $(FILE) $(if $(filter in-china,$(NETWORK)),-n in-china) $(if $(filter true,$(DEBUG)),-d) in all environments..."
-# 	@./tools/test-environment-manager.sh -m all-sys -t "tests/install-" -s $(SCRIPT) $(if $(filter in-china,$(NETWORK)),-n in-china) $(if $(filter true,$(DEBUG)),-d)ngle-all test-all-single clean interactive shell build-scripts logs results
-# .PHONY: install-test-all install-test-all-sys install-test-all-script install-test-single
-# .PHONY: syncdb-test-all syncdb-test-all-sys syncdb-test-all-script syncdb-test-single
+# .PHONY declarations
+.PHONY: help build build-scripts build-images
+.PHONY: install-test-all install-test-all-env install-test-all-script install-test-single install-test-file
+.PHONY: syncdb-test-all syncdb-test-all-env syncdb-test-all-script syncdb-test-single syncdb-test-file
+.PHONY: clean interactive shell logs results
 
 # Default target
 help:
@@ -15,7 +13,7 @@ help:
 	@echo ""
 	@echo "  Installation script testing:"
 	@echo "  install-test-all                   - Run all install tests in all environments"
-	@echo "  install-test-all-sys SCRIPT=name   - Run install tests for a specific script in all environments"
+	@echo "  install-test-all-env SCRIPT=name   - Run install tests for a specific script in all environments"
 	@echo "  install-test-all-script ENV=env    - Run all install tests in specified environment"
 	@echo "  install-test-single ENV=env SCRIPT=name - Run install tests for specific script in specific environment"
 	@echo "  install-test-file ENV=env FILE=path - Run specific install test file in specific environment"
@@ -26,12 +24,6 @@ help:
 	@echo "  syncdb-test-all-script ENV=env    - Run all syncdb tests in specified environment"
 	@echo "  syncdb-test-single ENV=env SCRIPT=name - Run syncdb tests for specific script in specific environment"
 	@echo "  syncdb-test-file ENV=env FILE=path - Run specific syncdb test file in specific environment"
-	@echo ""
-	@echo "  Legacy commands (deprecated, use the above instead):"
-	@echo "  test-all            - Run all tests in all environments"
-	@echo "  test-single         - Run specified test in specified environment"
-	@echo "  test-single-all     - Run specified test in all environments"
-	@echo "  test-all-single     - Run all tests in specified environment"
 	@echo ""
 	@echo "  Utility commands:"
 	@echo "  interactive         - Start interactive test environment"
