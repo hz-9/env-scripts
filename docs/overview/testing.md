@@ -44,19 +44,19 @@ make install-test-all-script ENV=debian12-2
 make install-test-all-script ENV=fedora41
 make install-test-all-script ENV=redhat8-10
 make install-test-all-script ENV=redhat9-6
-make install-test-all-script ENV=ubuntu20
-make install-test-all-script ENV=ubuntu22
-make install-test-all-script ENV=ubuntu24
+make install-test-all-script ENV=ubuntu20-04
+make install-test-all-script ENV=ubuntu22-04
+make install-test-all-script ENV=ubuntu24-04
 
 # Using China network
-make install-test-all-script ENV=ubuntu22 NETWORK=in-china
+make install-test-all-script ENV=ubuntu22-04 NETWORK=in-china
 ```
 
 #### Test Specific Script in Specific Environment
 
 ```bash
 # Test specific installation script in specific environment
-make install-test-single ENV=ubuntu22 SCRIPT=git
+make install-test-single ENV=ubuntu22-04 SCRIPT=git
 make install-test-single ENV=debian12-2 SCRIPT=docker NETWORK=in-china
 ```
 
@@ -65,7 +65,7 @@ make install-test-single ENV=debian12-2 SCRIPT=docker NETWORK=in-china
 ```bash
 # Run specific test file in specific environment
 make install-test-file ENV=debian11-9 FILE=tests/install-git/01-ok.sh
-make install-test-file ENV=ubuntu22 FILE=tests/install-docker/02-install.sh NETWORK=in-china
+make install-test-file ENV=ubuntu22-04 FILE=tests/install-docker/02-install.sh NETWORK=in-china
 ```
 
 ### Database Sync Script Testing
@@ -87,26 +87,26 @@ make syncdb-test-all-env SCRIPT=postgresql NETWORK=in-china
 ```bash
 # Run all database sync script tests in specified environment
 make syncdb-test-all-script ENV=debian11-9
-make syncdb-test-all-script ENV=ubuntu22
+make syncdb-test-all-script ENV=ubuntu22-04
 
 # Using China network
-make syncdb-test-all-script ENV=ubuntu22 NETWORK=in-china
+make syncdb-test-all-script ENV=ubuntu22-04 NETWORK=in-china
 ```
 
 #### Test Specific Sync Script in Specific Environment
 
 ```bash
 # Test specific database sync script in specific environment
-make syncdb-test-single ENV=ubuntu22 SCRIPT=postgresql
+make syncdb-test-single ENV=ubuntu22-04 SCRIPT=postgresql
 make syncdb-test-single ENV=debian12-2 SCRIPT=mysql NETWORK=in-china
-make syncdb-test-single ENV=ubuntu24 SCRIPT=mongo NETWORK=in-china
+make syncdb-test-single ENV=ubuntu24-04 SCRIPT=mongo NETWORK=in-china
 ```
 
 #### Run Specific Sync Test File
 
 ```bash
 # Run specific sync test file in specific environment
-make syncdb-test-file ENV=ubuntu22 FILE=tests/syncdb-mysql/02-install.sh NETWORK=in-china
+make syncdb-test-file ENV=ubuntu22-04 FILE=tests/syncdb-mysql/02-install.sh NETWORK=in-china
 ```
 
 ## 🛠️ Other Commands

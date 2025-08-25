@@ -36,7 +36,7 @@ help:
 	@echo "  DEBUG=true          - Enable debug mode"
 	@echo ""
 	@echo "Available environments:"
-	@echo "  ubuntu20, ubuntu22, ubuntu24"
+	@echo "  ubuntu20-04, ubuntu22-04, ubuntu24-04"
 	@echo "  debian11-9, debian12-2"
 	@echo "  fedora41"
 	@echo "  redhat8-10, redhat9-6"
@@ -154,8 +154,8 @@ install-test-all-script: build-scripts
 	@if [ -z "$(ENV)" ]; then \
 		echo "\033[0;31m"; \
 		echo "Usage: make install-test-all-script ENV=environment [NETWORK=in-china] [DEBUG=true]"; \
-		echo "Example: make install-test-all-script ENV=ubuntu22"; \
-		echo "Available environments: ubuntu20, ubuntu22, ubuntu24, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
+		echo "Example: make install-test-all-script ENV=ubuntu22-04"; \
+		echo "Available environments: ubuntu20-04, ubuntu22-04, ubuntu24-04, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
 		echo "\033[0m"; \
 		exit 1; \
 	else \
@@ -195,8 +195,8 @@ install-test-single: build-scripts
 	@if [ -z "$(ENV)" ] || [ -z "$(SCRIPT)" ]; then \
 		echo "\033[0;31m"; \
 		echo "Usage: make install-test-single ENV=environment SCRIPT=test-file-path [NETWORK=in-china] [DEBUG=true]"; \
-		echo "Example: make install-test-single ENV=ubuntu22 SCRIPT=git"; \
-		echo "Available environments: ubuntu20, ubuntu22, ubuntu24, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
+		echo "Example: make install-test-single ENV=ubuntu22-04 SCRIPT=git"; \
+		echo "Available environments: ubuntu20-04, ubuntu22-04, ubuntu24-04, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
 		echo "\033[0m"; \
 		exit 1; \
 	else \
@@ -236,8 +236,8 @@ install-test-file: build-scripts
 	@if [ -z "$(ENV)" ] || [ -z "$(FILE)" ]; then \
 		echo "\033[0;31m"; \
 		echo "Usage: make install-test-file ENV=environment FILE=test-file-path [NETWORK=in-china] [DEBUG=true]"; \
-		echo "Example: make install-test-file ENV=ubuntu22 FILE=tests/install-git/01-ok.sh"; \
-		echo "Available environments: ubuntu20, ubuntu22, ubuntu24, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
+		echo "Example: make install-test-file ENV=ubuntu22-04 FILE=tests/install-git/01-ok.sh"; \
+		echo "Available environments: ubuntu20-04, ubuntu22-04, ubuntu24-04, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
 		echo "\033[0m"; \
 		exit 1; \
 	else \
@@ -349,8 +349,8 @@ syncdb-test-all-script: build-scripts
 	@if [ -z "$(ENV)" ]; then \
 		echo "\033[0;31m"; \
 		echo "Usage: make syncdb-test-all-script ENV=environment [NETWORK=in-china] [DEBUG=true]"; \
-		echo "Example: make syncdb-test-all-script ENV=ubuntu22"; \
-		echo "Available environments: ubuntu20, ubuntu22, ubuntu24, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
+		echo "Example: make syncdb-test-all-script ENV=ubuntu22-04"; \
+		echo "Available environments: ubuntu20-04, ubuntu22-04, ubuntu24-04, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
 		echo "\033[0m"; \
 		exit 1; \
 	else \
@@ -390,8 +390,8 @@ syncdb-test-single: build-scripts
 	@if [ -z "$(ENV)" ] || [ -z "$(SCRIPT)" ]; then \
 		echo "\033[0;31m"; \
 		echo "Usage: make syncdb-test-single ENV=environment SCRIPT=script-name [NETWORK=in-china] [DEBUG=true]"; \
-		echo "Example: make syncdb-test-single ENV=ubuntu22 SCRIPT=mysql"; \
-		echo "Available environments: ubuntu20, ubuntu22, ubuntu24, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
+		echo "Example: make syncdb-test-single ENV=ubuntu22-04 SCRIPT=mysql"; \
+		echo "Available environments: ubuntu20-04, ubuntu22-04, ubuntu24-04, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
 		echo "\033[0m"; \
 		exit 1; \
 	else \
@@ -431,8 +431,8 @@ syncdb-test-file: build-scripts
 	@if [ -z "$(ENV)" ] || [ -z "$(FILE)" ]; then \
 		echo "\033[0;31m"; \
 		echo "Usage: make syncdb-test-file ENV=environment FILE=test-file-path [NETWORK=in-china] [DEBUG=true]"; \
-		echo "Example: make syncdb-test-file ENV=ubuntu22 FILE=tests/syncdb-mysql/01-ok.sh"; \
-		echo "Available environments: ubuntu20, ubuntu22, ubuntu24, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
+		echo "Example: make syncdb-test-file ENV=ubuntu22-04 FILE=tests/syncdb-mysql/01-ok.sh"; \
+		echo "Available environments: ubuntu20-04, ubuntu22-04, ubuntu24-04, debian11-9, debian12-2, fedora41, redhat8-10, redhat9-6"; \
 		echo "\033[0m"; \
 		exit 1; \
 	else \
@@ -477,7 +477,7 @@ interactive: build-scripts
 # Start shell in container
 shell: build-scripts
 	@echo "Starting Ubuntu container shell..."
-	docker-compose -f docker/docker-compose.yml run --rm ubuntu22 /bin/bash
+	docker-compose -f docker/docker-compose.yml run --rm ubuntu22-04 /bin/bash
 
 # Clean up
 clean:

@@ -800,7 +800,7 @@ deb http://mirrors.huaweicloud.com/debian/ ${debian_codename}-backports main con
 deb http://mirrors.huaweicloud.com/debian-security/ ${debian_codename}-security main contrib non-free
 EOF
     else
-      # 其他Debian版本默认使用传统组件 (不含 non-free-firmware)
+      # Other Debian versions use traditional components by default (without non-free-firmware)
     sudo tee /etc/apt/sources.list > /dev/null <<EOF
 # USTC mirror source - complete replacement of all official sources (other Debian versions)
 deb http://mirrors.huaweicloud.com/debian/ ${debian_codename} main contrib non-free
@@ -846,7 +846,7 @@ EOF
         apt_setup_debian_mirrors_set_china_mirrors
       fi
       
-      # 清理缓存并重新构建包列表
+      # Clean cache and rebuild package lists
       sudo apt-get clean
       sudo rm -rf /var/lib/apt/lists/*
       

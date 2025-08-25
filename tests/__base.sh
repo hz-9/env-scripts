@@ -42,7 +42,7 @@ FAILED_COUNT=0
   # assert_equals() {
   #     local expected="$1"
   #     local actual="$2"
-  #     local description="${3:-字符串相等}"
+  #     local description="${3:-strings equal}"
       
   #     TEST_COUNT=$((TEST_COUNT + 1))
       
@@ -51,17 +51,17 @@ FAILED_COUNT=0
   #         PASSED_COUNT=$((PASSED_COUNT + 1))
   #         return 0
   #     else
-  #         test_fail "$description - 期望: '$expected', 实际: '$actual'"
+  #         test_fail "$description - expected: '$expected', actual: '$actual'"
   #         FAILED_COUNT=$((FAILED_COUNT + 1))
   #         return 1
   #     fi
   # }
 
-  # # 断言字符串不相等
+  # # Assert strings are not equal
   # assert_not_equals() {
   #     local expected="$1"
   #     local actual="$2"
-  #     local description="${3:-字符串不相等}"
+  #     local description="${3:-strings not equal}"
       
   #     TEST_COUNT=$((TEST_COUNT + 1))
       
@@ -70,16 +70,16 @@ FAILED_COUNT=0
   #         PASSED_COUNT=$((PASSED_COUNT + 1))
   #         return 0
   #     else
-  #         test_fail "$description - 期望不等于: '$expected', 但实际相等"
+  #         test_fail "$description - expected not equal to: '$expected', but actually equal"
   #         FAILED_COUNT=$((FAILED_COUNT + 1))
   #         return 1
   #     fi
   # }
 
-  # 断言文件存在
+  # Assert file exists
   assert_file_exists() {
       local filepath="$1"
-      local description="${2:-文件存在: $filepath}"
+      local description="${2:-file exists: $filepath}"
             
       if [ -f "$filepath" ]; then
           return 0
@@ -88,7 +88,7 @@ FAILED_COUNT=0
       fi
   }
 
-  # 断言文件不存在
+  # Assert file does not exist
   assert_file_not_exists() {
       local filepath="$1"
             
@@ -99,7 +99,7 @@ FAILED_COUNT=0
       fi
   }
 
-  # 断言目录存在
+  # Assert directory exists
   assert_dir_exists() {
       local dirpath="$1"
             
@@ -110,7 +110,7 @@ FAILED_COUNT=0
       fi
   }
 
-  # 断言字符串包含
+  # Assert string contains
   assert_contains() {
       local haystack="$1"
       local needle="$2"
@@ -122,7 +122,7 @@ FAILED_COUNT=0
       fi
   }
 
-  # 断言进程正在运行
+  # Assert process is running
   assert_process_running() {
       local process_name="$1"
             
