@@ -33,8 +33,8 @@ source ./__base.sh
 print_help_or_param
 
 network=$(get_param '--network')
-zipVersion=$(get_param '--zip-version')
-unzipVersion=$(get_param '--unzip-version')
+zip_version=$(get_param '--zip-version')
+unzip_version=$(get_param '--unzip-version')
 
 # ------------------------------------------------------------
 
@@ -63,14 +63,14 @@ if [[ "$zipInstalled" == false ]] || [[ "$unzipInstalled" == false ]]; then
     if [[ "$zipInstalled" == false ]]; then
       local local="Zip"
       local name="zip"
-      local version=$zipVersion
+      local version=$zip_version
       apt_get_install "$local" "$name" "$version"
     fi
     
     if [[ "$unzipInstalled" == false ]]; then
       local local="Unzip"
       local name="unzip"
-      local version=$unzipVersion
+      local version=$unzip_version
       apt_get_install "$local" "$name" "$version"
     fi
   }
@@ -83,14 +83,14 @@ if [[ "$zipInstalled" == false ]] || [[ "$unzipInstalled" == false ]]; then
     if [[ "$zipInstalled" == false ]]; then
       local local="Zip"
       local name="zip"
-      local version=$zipVersion
+      local version=$zip_version
       dnf_install "$local" "$name" "$version"
     fi
     
     if [[ "$unzipInstalled" == false ]]; then
       local local="Unzip"
       local name="unzip"
-      local version=$unzipVersion
+      local version=$unzip_version
       dnf_install "$local" "$name" "$version"
     fi
   }

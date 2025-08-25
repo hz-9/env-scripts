@@ -32,7 +32,7 @@ source ./__base.sh
 print_help_or_param
 
 network=$(get_param '--network')
-treeVersion=$(get_param '--tree-version')
+tree_version=$(get_param '--tree-version')
 
 # ------------------------------------------------------------
 
@@ -48,7 +48,7 @@ else
 
     local local="Tree"
     local name="tree"
-    local version=$treeVersion
+    local version=$tree_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -60,7 +60,7 @@ else
 
     local local="Tree"
     local name="tree"
-    local version=$treeVersion
+    local version=$tree_version
     
     dnf_install "$local" "$name" "$version"
   }

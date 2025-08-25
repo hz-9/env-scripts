@@ -1,8 +1,8 @@
 #!/bin/bash
 _m_='♥'
 
-SHELL_NAME="MySQL Syncer"
-SHELL_DESC="Sync MySQL database."
+SHELL_NAME="MySQL Database Synchronizer"
+SHELL_DESC="Efficiently synchronize MySQL databases between remote and local environments, supporting backup and restore operations."
 
 PARAMTERS=(
   "--help${_m_}-h${_m_}Print help message.${_m_}false"
@@ -46,29 +46,29 @@ print_help_or_param
 
 network=$(get_param '--network')
 
-dbVersion=$(get_param '--db-version')
+db_version=$(get_param '--db-version')
 
-fromHostname=$(get_param '--from-hostname')
-fromPort=$(get_param '--from-port')
-fromUsername=$(get_param '--from-username')
-fromPassword=$(get_param '--from-password')
-fromDatabase=$(get_param '--from-database')
+from_hostname=$(get_param '--from-hostname')
+from_port=$(get_param '--from-port')
+from_username=$(get_param '--from-username')
+from_password=$(get_param '--from-password')
+from_database=$(get_param '--from-database')
 
-toHostname=$(get_param '--to-hostname')
-toPort=$(get_param '--to-port')
-toUsername=$(get_param '--to-username')
-toPassword=$(get_param '--to-password')
-toDatabase=$(get_param '--to-database')
+to_hostname=$(get_param '--to-hostname')
+to_port=$(get_param '--to-port')
+to_username=$(get_param '--to-username')
+to_password=$(get_param '--to-password')
+to_database=$(get_param '--to-database')
 
 # ------------------------------------------------------------
 
 console_module_title "Temp Directory"
 
 temp=$(get_param '--temp')
-syncFile="dump.mysql.$(date +"%Y-%m-%dT%H:%M:%S").sql"
+sync_file="dump.mysql.$(date +"%Y-%m-%dT%H:%M:%S").sql"
 
 console_key_value "Temp Dir" "$temp"
-console_key_value "Sync File" "$syncFile"
+console_key_value "Sync File" "$sync_file"
 
 if [[ ! -d "$temp" ]]; then
   console_content "Create temp directory."
@@ -98,7 +98,7 @@ console_empty_line
 
 console_module_title "Pull Docker Image"
 
-dockerImage="mysql:$dbVersion"
+dockerImage="mysql:$db_version"
 console_key_value "Docker image" "$dockerImage"
 
 console_content_starting "Image $dockerImage is pulling..."
@@ -112,16 +112,16 @@ console_empty_line
 
 console_module_title "Sync by $dockerImage"
 
-console_content_starting "Syncing data from $fromHostname to $toHostname..."
+console_content_starting "Syncing data from $from_hostname to $to_hostname..."
 
 syncCommand="""
 # Export data from source database
-mysqldump -h $fromHostname -P $fromPort -u $fromUsername -p$fromPassword $fromDatabase > '/data-backup/$syncFile'
+mysqldump -h $from_hostname -P $from_port -u $from_username -p$from_password $from_database > '/data-backup/$sync_file'
 
 # Import data to target database
-mysql -h $toHostname -P $toPort -u $toUsername -p$toPassword -e 'DROP DATABASE IF EXISTS $toDatabase;'
-mysql -h $toHostname -P $toPort -u $toUsername -p$toPassword -e 'CREATE DATABASE $toDatabase;'
-mysql -h $toHostname -P $toPort -u $toUsername -p$toPassword $toDatabase < '/data-backup/$syncFile'
+mysql -h $to_hostname -P $to_port -u $to_username -p$to_password -e 'DROP DATABASE IF EXISTS $to_database;'
+mysql -h $to_hostname -P $to_port -u $to_username -p$to_password -e 'CREATE DATABASE $to_database;'
+mysql -h $to_hostname -P $to_port -u $to_username -p$to_password $to_database < '/data-backup/$sync_file'
 """
 
 eval """

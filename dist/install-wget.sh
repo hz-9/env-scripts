@@ -1166,7 +1166,7 @@ EOF
 print_help_or_param
 
 network=$(get_param '--network')
-wgetVersion=$(get_param '--wget-version')
+wget_version=$(get_param '--wget-version')
 
 # ------------------------------------------------------------
 
@@ -1182,7 +1182,7 @@ else
 
     local local="Wget"
     local name="wget"
-    local version=$wgetVersion
+    local version=$wget_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -1194,7 +1194,7 @@ else
 
     local local="Wget"
     local name="wget"
-    local version=$wgetVersion
+    local version=$wget_version
     
     dnf_install "$local" "$name" "$version"
   }

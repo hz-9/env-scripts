@@ -35,12 +35,12 @@ source ./__base.sh
 print_help_or_param
 
 network=$(get_param '--network')
-nvmVersion=$(get_param '--nvm-version')
-nodeVersion=$(get_param '--node-version')
-pm2Version=$(get_param '--pm2-version')
-skipPm2=$(get_param '--skip-pm2')
+nvm_version=$(get_param '--nvm-version')
+node_version=$(get_param '--node-version')
+pm2_version=$(get_param '--pm2-version')
+skip_pm2=$(get_param '--skip-pm2')
 
-nvmHome="${HOME}/.nvm"
+ nvm_home="${HOME}/.nvm"
 
 # ------------------------------------------------------------
 
@@ -59,27 +59,26 @@ else
   exit 1
 fi
 
-defaultNvmRepoUrl="https://github.com/nvm-sh/nvm.git"
-nvmRepoUrl="$defaultNvmRepoUrl"
+default_nvm_repo_url="https://github.com/nvm-sh/nvm.git"
 if [[ "$network" == "in-china" ]]; then
   # Use Gitee mirror for China users
-  nvmRepoUrl="https://gitee.com/mirrors/nvm.git"
+  nvm_repo_url="https://gitee.com/mirrors/nvm.git"
 else
-  nvmRepoUrl="https://github.com/nvm-sh/nvm.git"
+  nvm_repo_url="https://github.com/nvm-sh/nvm.git"
 fi
 
 install_nvm() {
-  local currentNvmRepoUrl="$1"
+  local current_nvm_repo_url="$1"
   # Install NVM
-  if [[ -d "$nvmHome" ]] && [[ -s "$nvmHome/nvm.sh" ]] && [[ -s "$nvmHome/README.md" ]]; then
-    console_content "NVM is already installed at $nvmHome"
+  if [[ -d "$nvm_home" ]] && [[ -s "$nvm_home/nvm.sh" ]] && [[ -s "$nvm_home/README.md" ]]; then
+    console_content "NVM is already installed at $nvm_home"
   else
-    console_content_starting "Installing NVM ${nvmVersion} [$currentNvmRepoUrl]..."
+    console_content_starting "Installing NVM ${nvm_version} [$current_nvm_repo_url]..."
 
     # Clone NVM repository to specific version
-    eval "git clone --depth 1 --branch \"$nvmVersion\" \"$currentNvmRepoUrl\" \"$nvmHome\" $(console_redirect_output)"
+    eval "git clone --depth 1 --branch \"$nvm_version\" \"$current_nvm_repo_url\" \"$nvm_home\" $(console_redirect_output)"
 
-    if [[ ! -d "$nvmHome" ]]; then
+    if [[ ! -d "$nvm_home" ]]; then
       console_content_error "Failed to install NVM. Use default nvm repo url retry."
     else
       console_content_complete
@@ -87,11 +86,11 @@ install_nvm() {
   fi
 }
 
-install_nvm $nvmRepoUrl
+install_nvm "$nvm_repo_url"
 
 # In Debian 12.2, the nvm installation may fail due to git clone failure.
-if [[ ! -d "$nvmHome" ]]; then
-  install_nvm $defaultNvmRepoUrl
+if [[ ! -d "$nvm_home" ]]; then
+  install_nvm "$default_nvm_repo_url"
 fi
 
 setting_nvm() {
@@ -106,7 +105,7 @@ setting_nvm() {
   console_content_complete
 
   # Source NVM
-  export NVM_DIR="$nvmHome"
+  export NVM_DIR="$nvm_home"
   if [ -s "$NVM_DIR/nvm.sh" ]; then
       source "$NVM_DIR/nvm.sh"
   fi
@@ -121,18 +120,18 @@ console_key_value "NVM Version" "$(nvm -v)"
 console_empty_line
 
 install_node() {
-  console_content_starting "Installing Node.js ${nodeVersion}..."
-  eval "nvm install \"$nodeVersion\" $(console_redirect_output)"
-  eval "nvm use \"$nodeVersion\" $(console_redirect_output)"
-  eval "nvm alias default \"$nodeVersion\" $(console_redirect_output)"
+  console_content_starting "Installing Node.js ${node_version}..."
+  eval "nvm install \"$node_version\" $(console_redirect_output)"
+  eval "nvm use \"$node_version\" $(console_redirect_output)"
+  eval "nvm alias default \"$node_version\" $(console_redirect_output)"
   console_content_complete
 }
 
 # Install Node.js
 if command -v node &>/dev/null; then
-  currentNodeVersion=$(node --version)
-  console_content "Node.js is already installed: $currentNodeVersion"
-  if [[ "$currentNodeVersion" != "$nodeVersion" ]]; then
+  current_node_version=$(node --version)
+  console_content "Node.js is already installed: $current_node_version"
+  if [[ "$current_node_version" != "$node_version" ]]; then
     install_node
   fi
 else
@@ -152,12 +151,12 @@ console_key_value "npm" "$(npm -v)"
 console_empty_line
 
 install_pm2() {
-  console_content_starting "pm2 ${pm2Version} is installing..."
-  # npm install -g pm2@"$pm2Version"
-  if [[ "$pm2Version" == "default" ]]; then
+  console_content_starting "pm2 ${pm2_version} is installing..."
+  # npm install -g pm2@"$pm2_version"
+  if [[ "$pm2_version" == "default" ]]; then
     eval "npm install -g pm2                  $(console_redirect_output)"
   else
-    eval "npm install -g pm2@\"$pm2Version\"  $(console_redirect_output)"
+    eval "npm install -g pm2@\"$pm2_version\"  $(console_redirect_output)"
   fi
 
   # pm2 ping
@@ -177,7 +176,7 @@ install_pm2() {
 }
 
 # Install PM2
-if [[ "$skipPm2" != "true" ]]; then
+if [[ "$skip_pm2" != "true" ]]; then
   if command -v pm2 &>/dev/null; then
     console_content "PM2 is already installed: $(pm2 --version)"
   else
@@ -185,7 +184,7 @@ if [[ "$skipPm2" != "true" ]]; then
   fi
 fi
 
-if [[ "$skipPm2" != "true" ]]; then
+if [[ "$skip_pm2" != "true" ]]; then
   console_key_value "pm2" "$(pm2 -v)"
   console_key_value "pm2-logrotate" "$(pm2 info pm2-logrotate | grep 'version' | head -n 1 | awk '{print $4}')"
 fi

@@ -32,7 +32,7 @@ source ./__base.sh
 print_help_or_param
 
 network=$(get_param '--network')
-htopVersion=$(get_param '--htop-version')
+htop_version=$(get_param '--htop-version')
 
 # ------------------------------------------------------------
 
@@ -48,7 +48,7 @@ else
 
     local local="htop"
     local name="htop"
-    local version=$htopVersion
+    local version=$htop_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -60,7 +60,7 @@ else
 
     local local="htop"
     local name="htop"
-    local version=$htopVersion
+    local version=$htop_version
     
     dnf_install "$local" "$name" "$version"
   }

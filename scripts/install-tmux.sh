@@ -32,7 +32,7 @@ source ./__base.sh
 print_help_or_param
 
 network=$(get_param '--network')
-tmuxVersion=$(get_param '--tmux-version')
+tmux_version=$(get_param '--tmux-version')
 
 # ------------------------------------------------------------
 
@@ -48,7 +48,7 @@ else
 
     local local="tmux"
     local name="tmux"
-    local version=$tmuxVersion
+    local version=$tmux_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -60,7 +60,7 @@ else
 
     local local="tmux"
     local name="tmux"
-    local version=$tmuxVersion
+    local version=$tmux_version
     
     dnf_install "$local" "$name" "$version"
   }

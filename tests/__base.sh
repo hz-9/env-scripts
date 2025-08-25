@@ -265,6 +265,15 @@ FAILED_COUNT=0
     printf "| %-76s |\n" "Check     : ${checkpoint_index} - ${checkpoint_desc}"
   }
 
+  checkpoint_content() {
+    local checkpoint_label="$1"
+    local checkpoint_version="$2"
+
+    printf "| %-10s:" "${checkpoint_label}"
+
+    printf " %-64s |\n" "${checkpoint_version}"
+  }
+
   checkpoint_complete() {
     # local checkpoint_index="$1"
     # local checkpoint_desc="$2"

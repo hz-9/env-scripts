@@ -6,14 +6,14 @@
 source "$(dirname "$0")/../__base.sh"
 
 # Test constants
-SCRIPT_PATH_PRE_1="$(dirname "$0")/../../dist/install-curl.sh"
-SCRIPT_PATH_PRE_2="$(dirname "$0")/../../dist/install-git.sh"
-SCRIPT_PATH="$(dirname "$0")/../../dist/install-node.sh"
+script_path_pre_1="$(dirname "$0")/../../dist/install-curl.sh"
+script_path_pre_2="$(dirname "$0")/../../dist/install-git.sh"
+script_path="$(dirname "$0")/../../dist/install-node.sh"
  
 unit_test_initing "$@" "--name=install-node"
 
 checkpoint_staring "0" "Check if current OS is supported"
-if unit_test_is_support_current_os "$SCRIPT_PATH"; then
+if unit_test_is_support_current_os "$script_path"; then
     checkpoint_complete
 else
     checkpoint_skip
@@ -24,9 +24,9 @@ common_suffix_args=$(unit_test_common_suffix_args)
 
 log_debug "Common Suffix Args : $common_suffix_args"
 
-bash "$SCRIPT_PATH_PRE_1" $common_suffix_args
-bash "$SCRIPT_PATH_PRE_2" $common_suffix_args
-bash "$SCRIPT_PATH" $common_suffix_args
+bash "$script_path_pre_1" $common_suffix_args
+bash "$script_path_pre_2" $common_suffix_args
+bash "$script_path" $common_suffix_args
 INSTALL_EXIT_CODE=$?
 
 checkpoint_staring "1" "Install script execution result"

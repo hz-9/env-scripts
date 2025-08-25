@@ -50,6 +50,7 @@ fi
 JQ_VERSION=$(jq --version | sed 's/jq-//')
 checkpoint_staring "3" "Get and verify jq version information"
 if [[ -n "$JQ_VERSION" ]]; then
+    checkpoint_content "Version" "$JQ_VERSION"
     checkpoint_complete
 else
     checkpoint_error

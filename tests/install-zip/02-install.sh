@@ -48,7 +48,8 @@ fi
 
 ZIP_VERSION=$(zip -v 2>/dev/null | head -2 | tail -1 | awk '{print $4}')
 checkpoint_staring "3" "Get and verify zip version information"
-if [[ -n "$ZIP_VERSION" ]] && [[ "$ZIP_VERSION" == *"Zip"* ]]; then
+if [[ -n "$ZIP_VERSION" ]]; then
+    checkpoint_content "Version" "$ZIP_VERSION"
     checkpoint_complete
 else
     checkpoint_error
@@ -56,7 +57,8 @@ fi
 
 UNZIP_VERSION=$(unzip -v 2>/dev/null | head -1 | awk '{print $2}')
 checkpoint_staring "3" "Get and verify unzip version information"
-if [[ -n "$UNZIP_VERSION" ]] && [[ "$UNZIP_VERSION" == *"UnZip"* ]]; then
+if [[ -n "$UNZIP_VERSION" ]]; then
+    checkpoint_content "Version" "$UNZIP_VERSION"
     checkpoint_complete
 else
     checkpoint_error

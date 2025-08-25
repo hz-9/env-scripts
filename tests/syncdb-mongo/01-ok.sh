@@ -6,9 +6,9 @@
 source "$(dirname "$0")/../__base.sh"
 
 # Test constants
-SCRIPT_PATH="$(dirname "$0")/../../dist/syncdb-mongodb.sh"
+SCRIPT_PATH="$(dirname "$0")/../../dist/syncdb-mongo.sh"
  
-unit_test_initing "$@" "--name=syncdb-mongodb"
+unit_test_initing "$@" "--name=syncdb-mongo"
 
 checkpoint_staring "1" "Check if script file exists"
 if assert_file_exists "$SCRIPT_PATH"; then

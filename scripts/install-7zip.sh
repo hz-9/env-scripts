@@ -32,7 +32,7 @@ source ./__base.sh
 print_help_or_param
 
 network=$(get_param '--network')
-z7Version=$(get_param '--7zip-version')
+z7_version=$(get_param '--7zip-version')
 
 # ------------------------------------------------------------
 
@@ -49,10 +49,10 @@ else
   fi
 
   install_7zip_from_github() {
-    console_content "Installing 7Zip version ${z7Version} from GitHub..."
+    console_content "Installing 7Zip version ${z7_version} from GitHub..."
     
     # Remove dots from version to create the filename format
-    converted_version=$(echo "$z7Version" | tr -d '.')
+    converted_version=$(echo "$z7_version" | tr -d '.')
     # local url="https://github.com/ip7z/7zip/releases/download/$z7Version/7z${converted_version}-linux-x64.tar.xz"
     local url="https://7-zip.org/a/7z${converted_version}-linux-x64.tar.xz"
 
@@ -60,11 +60,11 @@ else
     download_file "$url" "/tmp/7z${converted_version}-linux-x64.tar.xz" "false"
 
     console_content_starting "Creating installation directory..."
-    eval "sudo mkdir -p \"/usr/local/7z/${z7Version}\" $(console_redirect_output)"
+    eval "sudo mkdir -p \"/usr/local/7z/${z7_version}\" $(console_redirect_output)"
     console_content_complete
 
     console_content_starting "7z${converted_version}-linux-x64.tar.xz is decompressing..."
-    eval "sudo tar -xf /tmp/7z${converted_version}-linux-x64.tar.xz -C /usr/local/7z/${z7Version} $(console_redirect_output)"
+    eval "sudo tar -xf /tmp/7z${converted_version}-linux-x64.tar.xz -C /usr/local/7z/${z7_version} $(console_redirect_output)"
     console_content_complete
 
     console_content_starting "Deleting 7z${converted_version}-linux-x64.tar.xz..."
@@ -76,7 +76,7 @@ else
     if [ -L /usr/bin/7zz ]; then
       eval "sudo rm -f /usr/bin/7zz $(console_redirect_output)"
     fi
-    eval "sudo ln -s \"/usr/local/7z/${z7Version}/7zz\" /usr/bin/7zz $(console_redirect_output)"
+    eval "sudo ln -s \"/usr/local/7z/${z7_version}/7zz\" /usr/bin/7zz $(console_redirect_output)"
     eval "sudo chmod +x /usr/bin/7zz $(console_redirect_output)"
     console_content_complete
     

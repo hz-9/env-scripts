@@ -9,7 +9,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -25,7 +24,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -41,7 +39,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -57,7 +54,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -73,7 +69,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -89,7 +84,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
     command: ["/app/tools/test-runner.sh", "--all"]
@@ -104,7 +98,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
     command: ["/app/tools/test-runner.sh", "--all"]
@@ -119,7 +112,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
     command: ["/app/tools/test-runner.sh", "--all"]
@@ -134,13 +126,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ..:/app
-      - test-results:/app/test-results
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
     stdin_open: true
     tty: true
     command: ["/bin/bash"]
-
-volumes:
-  test-results:

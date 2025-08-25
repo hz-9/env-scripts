@@ -49,6 +49,7 @@ fi
 XZ_VERSION=$(xz --version | head -n 1 | cut -d' ' -f4)
 checkpoint_staring "3" "Get and verify XZ version information"
 if [[ -n "$XZ_VERSION" ]]; then
+    checkpoint_content "Version" "$XZ_VERSION"
     checkpoint_complete
 else
     checkpoint_error

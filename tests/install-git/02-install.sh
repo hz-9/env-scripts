@@ -50,6 +50,7 @@ fi
 GIT_VERSION=$(git --version | awk '{print $3}')
 checkpoint_staring "3" "Get and verify Git version information"
 if [[ -n "$GIT_VERSION" ]]; then
+    checkpoint_content "Version" "$GIT_VERSION"
     checkpoint_complete
 else
     checkpoint_error

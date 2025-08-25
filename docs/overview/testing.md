@@ -76,7 +76,7 @@ make install-test-file ENV=ubuntu22 FILE=tests/install-docker/02-install.sh NETW
 # Test specific database sync script in all environments
 make syncdb-test-all-env SCRIPT=postgresql
 make syncdb-test-all-env SCRIPT=mysql
-make syncdb-test-all-env SCRIPT=mongodb
+make syncdb-test-all-env SCRIPT=mongo
 
 # Test in China network environment
 make syncdb-test-all-env SCRIPT=postgresql NETWORK=in-china
@@ -99,7 +99,7 @@ make syncdb-test-all-script ENV=ubuntu22 NETWORK=in-china
 # Test specific database sync script in specific environment
 make syncdb-test-single ENV=ubuntu22 SCRIPT=postgresql
 make syncdb-test-single ENV=debian12-2 SCRIPT=mysql NETWORK=in-china
-make syncdb-test-single ENV=ubuntu24 SCRIPT=mongodb NETWORK=in-china
+make syncdb-test-single ENV=ubuntu24 SCRIPT=mongo NETWORK=in-china
 ```
 
 #### Run Specific Sync Test File

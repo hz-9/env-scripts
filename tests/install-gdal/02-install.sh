@@ -46,10 +46,10 @@ else
     checkpoint_error
 fi
 
-
 GDAL_VERSION=$(gdalinfo --version | awk '{print $2}' | tr -d ',')
 checkpoint_staring "3" "Get and verify GDAL version information"
 if [[ -n "$GDAL_VERSION" ]]; then
+    checkpoint_content "Version" "$GDAL_VERSION"
     checkpoint_complete
 else
     checkpoint_error

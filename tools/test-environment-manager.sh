@@ -110,8 +110,9 @@ run_tests_in_environment() {
 }
 
 run_all_tests_in_environment() {
-  local env="$1"
-  local suffix_args="$2"
+  local scope="$1"
+  local env="$2"
+  local suffix_args="$3"
 
   local scan_dir="${root}/tests"
 
@@ -121,8 +122,8 @@ run_all_tests_in_environment() {
     log_error "Test script directory does not exist: $scan_dir"
   else
     for file in "$scan_dir"/*; do
-    # 循环遍历目录下的所有文件
-      if [ -d "$file" ]; then
+      # 如果 scope = install, 只运行 tests/install-* 目录下的测试
+      if [ -n "$scope" ] && [[ "$(basename "$file")" = "$scope"* ]]; then
         run_tests_in_environment "$env" "$(basename "$file")" "$suffix_args"
       fi
     done
@@ -140,11 +141,12 @@ run_tests_in_all_nvironment() {
 }
 
 run_all_tests_in_all_nvironment() {
-  local suffix_args="$1"
+  local scope="$1"
+  local suffix_args="$2"
 
   # 遍历 OS_ENVIRONMENTS数组
   for env in "${OS_ENVIRONMENTS[@]}"; do
-    run_all_tests_in_environment "$env" "$suffix_args --env=$env"
+    run_all_tests_in_environment "$scope" "$env" "$suffix_args --env=$env"
   done
 }
 
@@ -260,6 +262,8 @@ main() {
     internal_ip=$(ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | head -n 1)
     suffix_args="$suffix_args --internal-ip=$internal_ip "
 
+    scope="$(get_user_param '--scope')"
+
     log_info "Env Manager ARGS : $suffix_args"
     
     # Execute tests based on mode
@@ -267,7 +271,7 @@ main() {
 
         all)
             log_info "Suffix ARGS      : $suffix_args"
-            run_all_tests_in_all_nvironment "$suffix_args"
+            run_all_tests_in_all_nvironment "$scope" "$suffix_args"
             unit_test_console_summary
             ;;
         all-env)
@@ -277,7 +281,7 @@ main() {
             ;;
         all-script)
             log_info "Suffix ARGS      : $suffix_args"
-            run_all_tests_in_environment "$env" "$suffix_args"
+            run_all_tests_in_environment "$scope" "$env" "$suffix_args"
             unit_test_console_summary
             ;;
         single)

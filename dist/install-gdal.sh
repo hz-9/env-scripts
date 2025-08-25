@@ -1166,7 +1166,7 @@ EOF
 print_help_or_param
 
 network=$(get_param '--network')
-gdalVersion=$(get_param '--gdal-version')
+gdal_version=$(get_param '--gdal-version')
 
 # ------------------------------------------------------------
 
@@ -1184,7 +1184,7 @@ else
 
     local local="GDAL"
     local name="gdal-bin"
-    local version=$gdalVersion
+    local version=$gdal_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -1197,7 +1197,7 @@ else
 
     local local="GDAL"
     local name="gdal"
-    local version=$gdalVersion
+    local version=$gdal_version
     
     dnf_install "$local" "$name" "$version"
   }

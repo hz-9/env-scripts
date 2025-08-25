@@ -50,6 +50,7 @@ fi
 HTOP_VERSION=$(htop --version | head -1 | awk '{print $2}')
 checkpoint_staring "3" "Get and verify htop version information"
 if [[ -n "$HTOP_VERSION" ]]; then
+    checkpoint_content "Version" "$HTOP_VERSION"
     checkpoint_complete
 else
     checkpoint_error

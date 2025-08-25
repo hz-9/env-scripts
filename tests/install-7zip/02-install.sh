@@ -54,6 +54,7 @@ fi
 Z7_VERSION=$(7zz | head -n 2 | tail -n 1 | awk '{print $3}')
 checkpoint_staring "3" "Get and verify 7zip version information"
 if [[ -n "$Z7_VERSION" ]]; then
+    checkpoint_content "Version" "$Z7_VERSION"
     checkpoint_complete
 else
     checkpoint_error
