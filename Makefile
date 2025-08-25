@@ -90,7 +90,7 @@ install-test-all: build-scripts
 	printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 	echo "\033[0m"; \
 	\
-	ARGS="--mode=all"; \
+	ARGS="--mode=all --scope=install"; \
 	if [ -n "$(NETWORK)" ]; then \
 			echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 			ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -169,7 +169,7 @@ install-test-all-script: build-scripts
 		printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 		echo "\033[0m"; \
 		\
-		ARGS="--mode=all-script --env=$(ENV)"; \
+		ARGS="--mode=all-script --scope=install --env=$(ENV)"; \
 		if [ -n "$(NETWORK)" ]; then \
 				echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 				ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -285,7 +285,7 @@ syncdb-test-all: build-scripts
 	printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 	echo "\033[0m"; \
 	\
-	ARGS="--mode=all"; \
+	ARGS="--mode=all --scope=syncdb"; \
 	if [ -n "$(NETWORK)" ]; then \
 			echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 			ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -364,7 +364,7 @@ syncdb-test-all-script: build-scripts
 		printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 		echo "\033[0m"; \
 		\
-		ARGS="--mode=all-script --env=$(ENV)"; \
+		ARGS="--mode=all-script --scope=syncdb --env=$(ENV)"; \
 		if [ -n "$(NETWORK)" ]; then \
 				echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 				ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -490,9 +490,9 @@ logs:
 
 # Show test results
 results:
-	@if [ -d "test-results" ]; then \
+	@if [ -d "logs" ]; then \
 		echo "Test results:"; \
-		find test-results -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;; \
+		find logs -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;; \
 	else \
 		echo "No test results found"; \
 	fi

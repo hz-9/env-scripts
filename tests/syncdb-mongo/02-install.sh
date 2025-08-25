@@ -8,9 +8,9 @@ source "$(dirname "$0")/../__base.sh"
 # Test constants
 SCRIPT_PATH_PRE_1="$(dirname "$0")/../../dist/install-curl.sh"
 SCRIPT_PATH_PRE_2="$(dirname "$0")/../../dist/install-docker.sh"
-SCRIPT_PATH="$(dirname "$0")/../../dist/syncdb-mongodb.sh"
+SCRIPT_PATH="$(dirname "$0")/../../dist/syncdb-mongo.sh"
  
-unit_test_initing "$@" "--name=syncdb-mongodb"
+unit_test_initing "$@" "--name=syncdb-mongo"
 
 checkpoint_staring "0" "Check if current OS is supported"
 if unit_test_is_support_current_os "$SCRIPT_PATH"; then
@@ -20,10 +20,10 @@ else
     exit 2 # Skip the rest of the tests if OS is not supported
 fi
 
-containerName="hz_9_env_scripts_syncdb_mongodb_02_install"
+container_name="hz_9_env_scripts_syncdb_mongodb_02_install"
 
 db_version="4.0.28"
-dockerImage="mongo:$db_version"
+docker_image="mongo:$db_version"
 
 if [[ $(echo "$db_version" | cut -d. -f1) -ge 5 ]]; then
   shell_cmd="mongosh"
@@ -34,7 +34,7 @@ fi
 
 internal_ip="$(get_user_param '--internal-ip')"
 log_debug "Internal IP        : $internal_ip"
-log_debug "Docker Image       : $dockerImage"
+log_debug "Docker Image       : $docker_image"
 common_suffix_args=$(unit_test_common_suffix_args)
 log_debug "Common Suffix Args : $common_suffix_args"
 
@@ -77,8 +77,8 @@ log_debug "SyncDB Args        : $common_suffix_args"
 remove_docker_container() {
     # checkpoint_staring "9" "Remove Docker Container"
 
-    eval "sudo docker stop $containerName $(console_redirect_output)"
-    eval "sudo docker rm   $containerName $(console_redirect_output)"
+    eval "sudo docker stop $container_name $(console_redirect_output)"
+    eval "sudo docker rm   $container_name $(console_redirect_output)"
 
     # checkpoint_complete
 }
@@ -86,14 +86,14 @@ remove_docker_container() {
 # trap 'remove_docker_container && cleanup_test_env' EXIT
 
 pull_docker_image() {
-    checkpoint_staring "1" "Pull Docker Image ${dockerImage}"
+    checkpoint_staring "1" "Pull Docker Image ${docker_image}"
 
-    eval "sudo docker pull $dockerImage --platform linux/amd64 $(console_redirect_output)"
+    eval "sudo docker pull $docker_image --platform linux/amd64 $(console_redirect_output)"
     if [ $? -eq 0 ]; then
         checkpoint_complete
     else
         checkpoint_error
-        log_error "Failed to pull Docker image: $dockerImage"
+        log_error "Failed to pull Docker image: $docker_image"
         exit 1
     fi
 }
@@ -102,19 +102,19 @@ init_docker_container() {
     checkpoint_staring "2" "Init Docker Container"
 
     eval """
-    sudo docker run --name $containerName \
+    sudo docker run --name $container_name \
     --platform linux/amd64 \
     -p $from_port:27017 \
     -e 'MONGO_INITDB_ROOT_USERNAME=$from_username' \
     -e 'MONGO_INITDB_ROOT_PASSWORD=$from_password' \
-    -d '$dockerImage'
+    -d '$docker_image'
     """
 
     if [ $? -eq 0 ]; then
         checkpoint_complete
     else
         checkpoint_error
-        log_error "Failed to init Docker Container: $dockerImage"
+        log_error "Failed to init Docker Container: $docker_image"
         exit 1
     fi
 }
@@ -142,7 +142,7 @@ EOF
 )
 
     eval """
-    sudo docker exec $containerName \
+    sudo docker exec $container_name \
     bash -c \"$init_command\" $(console_redirect_output)
     """
 
@@ -150,7 +150,7 @@ EOF
         checkpoint_complete
     else
         checkpoint_error
-        log_error "Failed to init data: $dockerImage"
+        log_error "Failed to init data: $docker_image"
         exit 1
     fi
 }
@@ -162,14 +162,14 @@ wait_for_mongodb() {
     
     while [ $attempt -le $max_attempts ]; do
         # Try to ping the database to check if it's accepting connections
-        if sudo docker exec "$containerName" \
+        if sudo docker exec "$container_name" \
             $shell_cmd --host 127.0.0.1 --port 27017 \
             --username "$from_username" --password "$from_password" \
             --authenticationDatabase admin \
             --quiet --eval "db.adminCommand('ping').ok" | grep -q "1"; then
             
             # Additional verification - check if we can list databases
-            if sudo docker exec "$containerName" \
+            if sudo docker exec "$container_name" \
                 $shell_cmd --host 127.0.0.1 --port 27017 \
                 --username "$from_username" --password "$from_password" \
                 --authenticationDatabase admin \
@@ -192,7 +192,7 @@ wait_for_mongodb() {
 check_data() {
     checkpoint_staring "5" "Check Data"
 
-    exists=$(sudo docker exec $containerName \
+    exists=$(sudo docker exec $container_name \
       $shell_cmd --host 127.0.0.1 --port 27017 --username $from_username --password $from_password --authenticationDatabase admin --quiet --eval \
       "db.getSiblingDB('$from_database').getCollectionNames().includes('test_users_nonexistent')" | tr -d '\r'
     )
@@ -201,7 +201,7 @@ check_data() {
         checkpoint_complete
     else
         checkpoint_error
-        log_error "Failed to check data: $dockerImage"
+        log_error "Failed to check data: $docker_image"
         exit 1
     fi
 }

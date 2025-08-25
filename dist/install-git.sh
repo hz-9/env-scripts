@@ -1166,7 +1166,7 @@ EOF
 print_help_or_param
 
 network=$(get_param '--network')
-gitVersion=$(get_param '--git-version')
+git_version=$(get_param '--git-version')
 
 # ------------------------------------------------------------
 
@@ -1182,7 +1182,7 @@ else
 
     local local="Git"
     local name="git"
-    local version=$gitVersion
+    local version=$git_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -1195,7 +1195,7 @@ else
 
     local local="Git"
     local name="git"
-    local version=$gitVersion
+    local version=$git_version
     
     dnf_install "$local" "$name" "$version"
   }

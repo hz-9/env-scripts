@@ -1166,7 +1166,7 @@ EOF
 print_help_or_param
 
 network=$(get_param '--network')
-xzVersion=$(get_param '--xz-version')
+xz_version=$(get_param '--xz-version')
 
 # ------------------------------------------------------------
 
@@ -1182,7 +1182,7 @@ else
 
     local local="XZ Utils"
     local name="xz-utils"
-    local version=$xzVersion
+    local version=$xz_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -1195,7 +1195,7 @@ else
 
     local local="XZ"
     local name="xz"
-    local version=$xzVersion
+    local version=$xz_version
     
     dnf_install "$local" "$name" "$version"
   }

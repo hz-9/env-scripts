@@ -32,8 +32,8 @@ source ./__base.sh
 print_help_or_param
 
 network=$(get_param '--network')
-dockerVersion=$(get_param '--docker-version')
-composeVersion=$(get_param '--compose-version')
+docker_version=$(get_param '--docker-version')
+compose_version=$(get_param '--compose-version')
 
 # ------------------------------------------------------------
 
@@ -110,12 +110,13 @@ else
 
     local local="Docker CE"
     local name="docker-ce"
-    local version=$dockerVersion
+    local version=$docker_version
+    
     apt_get_install "$local" "$name" "$version"
 
     local="Docker CE Cli"
     name="docker-ce-cli"
-    version=$dockerVersion
+    version=$docker_version
     apt_get_install "$local" "$name" "$version"
 
     apt_get_install "containerd.io" "containerd.io"
@@ -159,12 +160,12 @@ else
     # Step 5: Install
     local local="Docker CE"
     local name="docker-ce"
-    local version=$dockerVersion
+    local version=$docker_version
     dnf_install "$local" "$name" "$version"
 
     local="Docker CE Cli"
     name="docker-ce-cli"
-    version=$dockerVersion
+    version=$docker_version
     dnf_install "$local" "$name" "$version"
 
     dnf_install "containerd.io" "containerd.io"

@@ -79,7 +79,7 @@ make install-test-file ENV=ubuntu22 FILE=tests/install-docker/02-install.sh NETW
 # 在所有环境中测试特定的数据库同步脚本
 make syncdb-test-all-env SCRIPT=postgresql
 make syncdb-test-all-env SCRIPT=mysql
-make syncdb-test-all-env SCRIPT=mongodb
+make syncdb-test-all-env SCRIPT=mongo
 
 # 在中国网络环境下测试
 make syncdb-test-all-env SCRIPT=postgresql NETWORK=in-china
@@ -102,7 +102,7 @@ make syncdb-test-all-script ENV=ubuntu22 NETWORK=in-china
 # 在特定环境中测试特定数据库同步脚本
 make syncdb-test-single ENV=ubuntu22 SCRIPT=postgresql
 make syncdb-test-single ENV=debian12-2 SCRIPT=mysql NETWORK=in-china
-make syncdb-test-single ENV=ubuntu24 SCRIPT=mongodb NETWORK=in-china
+make syncdb-test-single ENV=ubuntu24 SCRIPT=mongo NETWORK=in-china
 ```
 
 #### 运行特定同步测试文件

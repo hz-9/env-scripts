@@ -95,7 +95,6 @@ env-script/
 │   ├── syncdb-mysql.sh               # MySQL data sync script
 │   └── syncdb-postgresql.sh          # PostgreSQL data sync script
 ├── temp/                             # Temporary file directory
-├── test-results/                     # Test results directory
 └── tests/                            # Test directory
     ├── install-7zip/                 # 7zip installation test files
     ├── install-curl/                 # curl installation test files

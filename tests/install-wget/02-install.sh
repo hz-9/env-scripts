@@ -48,7 +48,8 @@ fi
 
 WGET_VERSION=$(wget --version | head -1 | awk '{print $3}')
 checkpoint_staring "3" "Get and verify wget version information"
-if [[ -n "$WGET_VERSION" ]] && [[ "$WGET_VERSION" == GNU\ Wget* ]]; then
+if [[ -n "$WGET_VERSION" ]]; then
+    checkpoint_content "Version" "$WGET_VERSION"
     checkpoint_complete
 else
     checkpoint_error

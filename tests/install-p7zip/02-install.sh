@@ -55,6 +55,7 @@ fi
 
 checkpoint_staring "3" "Get and verify p7zip version information"
 if [[ -n "$P7ZIP_VERSION" ]]; then
+    checkpoint_content "Version" "$P7ZIP_VERSION"
     checkpoint_complete
 else
     checkpoint_error

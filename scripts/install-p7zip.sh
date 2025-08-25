@@ -32,7 +32,7 @@ source ./__base.sh
 print_help_or_param
 
 network=$(get_param '--network')
-p7zipVersion=$(get_param '--p7zip-version')
+p7zip_version=$(get_param '--p7zip-version')
 
 # ------------------------------------------------------------
 
@@ -48,7 +48,7 @@ else
 
     local local="p7zip"
     local name="p7zip-full"
-    local version=$p7zipVersion
+    local version=$p7zip_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -60,7 +60,7 @@ else
 
     local local="p7zip"
     local name="p7zip"
-    local version=$p7zipVersion
+    local version=$p7zip_version
     
     dnf_install "$local" "$name" "$version"
   }

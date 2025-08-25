@@ -50,6 +50,7 @@ fi
 CURL_VERSION=$(curl --version | head -1 | awk '{print $2}')
 checkpoint_staring "3" "Get and verify curl version information"
 if [[ -n "$CURL_VERSION" ]]; then
+    checkpoint_content "Version" "$CURL_VERSION"
     checkpoint_complete
 else
     checkpoint_error

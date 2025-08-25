@@ -48,7 +48,8 @@ fi
 
 TREE_VERSION=$(tree --version | head -1 | awk '{print $2}')
 checkpoint_staring "3" "Get and verify tree version information"
-if [[ -n "$TREE_VERSION" ]] && [[ "$TREE_VERSION" == tree* ]]; then
+if [[ -n "$TREE_VERSION" ]]; then
+    checkpoint_content "Version" "$TREE_VERSION"
     checkpoint_complete
 else
     checkpoint_error

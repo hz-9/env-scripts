@@ -1166,7 +1166,7 @@ EOF
 print_help_or_param
 
 network=$(get_param '--network')
-curlVersion=$(get_param '--curl-version')
+curl_version=$(get_param '--curl-version')
 
 # ------------------------------------------------------------
 
@@ -1182,7 +1182,7 @@ else
 
     local local="Curl"
     local name="curl"
-    local version=$curlVersion
+    local version=$curl_version
 
     apt_get_install "$local" "$name" "$version"
   }
@@ -1194,7 +1194,7 @@ else
 
     local local="Curl"
     local name="curl"
-    local version=$curlVersion
+    local version=$curl_version
     
     dnf_install "$local" "$name" "$version"
   }

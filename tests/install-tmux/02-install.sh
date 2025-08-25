@@ -48,7 +48,8 @@ fi
 
 TMUX_VERSION=$(tmux -V | awk '{print $2}')
 checkpoint_staring "3" "Get and verify tmux version information"
-if [[ -n "$TMUX_VERSION" ]] && [[ "$TMUX_VERSION" == tmux* ]]; then
+if [[ -n "$TMUX_VERSION" ]]; then
+    checkpoint_content "Version" "$TMUX_VERSION"
     checkpoint_complete
 else
     checkpoint_error

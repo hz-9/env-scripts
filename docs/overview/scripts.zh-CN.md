@@ -311,7 +311,7 @@ curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-m
   --network=in-china
 ```
 
-#### **syncdb-mongodb.sh** - MongoDB 数据同步
+#### **syncdb-mongo.sh** - MongoDB 数据同步
 
 用于在不同 MongoDB 数据库实例之间同步数据的工具。
 
@@ -319,13 +319,13 @@ curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-m
 
 ```bash
 # 使用 curl
-curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongo.sh | bash
 
 # 使用 wget
-wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash
+wget -qO- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongo.sh | bash
 
 # 带参数使用（从一个数据库同步到另一个）
-curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongodb.sh | bash -s -- \
+curl -o- https://raw.githubusercontent.com/hz-9/env-scripts/master/dist/syncdb-mongo.sh | bash -s -- \
   --from-hostname=source-db.example.com --from-port=27017 --from-username=root --from-password=password --from-database=source_db \
   --to-hostname=target-db.example.com --to-port=27017 --to-username=root --to-password=password --to-database=target_db \
   --db-version=4.4 --network=in-china

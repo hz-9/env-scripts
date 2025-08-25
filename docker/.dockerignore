@@ -9,7 +9,6 @@
 # 临时文件
 *.tmp
 *.log
-test-results/
 
 # IDE相关
 .vscode/

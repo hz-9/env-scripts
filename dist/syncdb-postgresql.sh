@@ -6,8 +6,8 @@
 # import from syncdb-postgresql.sh
 _m_='♥'
 
-SHELL_NAME="PostgreSQL Syncer"
-SHELL_DESC="Sync PostgreSQL database."
+SHELL_NAME="PostgreSQL Database Synchronizer"
+SHELL_DESC="Efficiently synchronize PostgreSQL databases between remote and local environments, supporting backup and restore operations."
 
 PARAMTERS=(
   "--help${_m_}-h${_m_}Print help message.${_m_}false"
@@ -1182,29 +1182,29 @@ print_help_or_param
 
 network=$(get_param '--network')
 
-dbVersion=$(get_param '--db-version')
+db_version=$(get_param '--db-version')
 
-fromHostname=$(get_param '--from-hostname')
-fromPort=$(get_param '--from-port')
-fromUsername=$(get_param '--from-username')
-fromPassword=$(get_param '--from-password')
-fromDatabase=$(get_param '--from-database')
+from_hostname=$(get_param '--from-hostname')
+from_port=$(get_param '--from-port')
+from_username=$(get_param '--from-username')
+from_password=$(get_param '--from-password')
+from_database=$(get_param '--from-database')
 
-toHostname=$(get_param '--to-hostname')
-toPort=$(get_param '--to-port')
-toUsername=$(get_param '--to-username')
-toPassword=$(get_param '--to-password')
-toDatabase=$(get_param '--to-database')
+to_hostname=$(get_param '--to-hostname')
+to_port=$(get_param '--to-port')
+to_username=$(get_param '--to-username')
+to_password=$(get_param '--to-password')
+to_database=$(get_param '--to-database')
 
 # ------------------------------------------------------------
 
 console_module_title "Temp Directory"
 
 temp=$(get_param '--temp')
-syncFile="dump.postgresql.$(date +"%Y-%m-%dT%H:%M:%S").sql"
+sync_file="dump.postgresql.$(date +"%Y-%m-%dT%H:%M:%S").sql"
 
 console_key_value "Temp Dir" "$temp"
-console_key_value "Sync File" "$syncFile"
+console_key_value "Sync File" "$sync_file"
 
 if [[ ! -d "$temp" ]]; then
   console_content "Create temp directory."
@@ -1234,13 +1234,13 @@ console_empty_line
 
 console_module_title "Pull Docker Image"
 
-dockerImage="postgres:$dbVersion-alpine"
-console_key_value "Docker image" "$dockerImage"
+docker_image="postgres:$db_version-alpine"
+console_key_value "Docker image" "$docker_image"
 
-console_content_starting "Image $dockerImage is pulling..."
+console_content_starting "Image $docker_image is pulling..."
 
 # docker pull $dockerImage --platform linux/amd64
-eval "sudo docker pull $dockerImage --platform linux/amd64 $(console_redirect_output)"
+eval "sudo docker pull $docker_image --platform linux/amd64 $(console_redirect_output)"
 
 console_content_complete
 console_empty_line
@@ -1249,17 +1249,18 @@ console_empty_line
 
 console_module_title "Sync by $dockerImage"
 
-console_content_starting "Syncing data from $fromHostname to $toHostname..."
+console_content_starting "Syncing data from $from_hostname to $to_hostname..."
 
-syncCommand="""
-export PGPASSWORD=$fromPassword
-pg_dump -h $fromHostname -p $fromPort -U $fromUsername -d $fromDatabase   -f '/data-backup/$syncFile'
+sync_command=$(cat <<EOF
+export PGPASSWORD=$from_password
+pg_dump -h $from_hostname -p $from_port -U $from_username -d $from_database   -f '/data-backup/$sync_file'
 
-export PGPASSWORD=$toPassword
-psql    -h $toHostname   -p $toPort   -U $toUsername                      -c 'DROP   DATABASE IF EXISTS $toDatabase;'
-psql    -h $toHostname   -p $toPort   -U $toUsername                      -c 'CREATE DATABASE $toDatabase;'
-psql    -h $toHostname   -p $toPort   -U $toUsername   -d $toDatabase      < '/data-backup/$syncFile'
-"""
+export PGPASSWORD=$to_password
+psql    -h $to_hostname   -p $to_port   -U $to_username                      -c 'DROP   DATABASE IF EXISTS $to_database;'
+psql    -h $to_hostname   -p $to_port   -U $to_username                      -c 'CREATE DATABASE $to_database;'
+psql    -h $to_hostname   -p $to_port   -U $to_username   -d $to_database      < '/data-backup/$sync_file'
+EOF
+)
 
 eval """
 sudo docker run --rm \
@@ -1268,8 +1269,8 @@ sudo docker run --rm \
   -e 'POSTGRES_USER=postgres' \
   -e 'POSTGRES_PASSWORD=12345678' \
   -v '$temp/backup:/data-backup' \
-  '$dockerImage' \
-  bash -c \"$syncCommand\" $(console_redirect_output)
+  '$docker_image' \
+  bash -c \"$sync_command\" $(console_redirect_output)
 """
 
 # ------------------------------------------------------------

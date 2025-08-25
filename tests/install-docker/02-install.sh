@@ -52,6 +52,7 @@ fi
 DOCKER_VERSION=$(docker --version | awk '{print $3}' | sed 's/,//')
 checkpoint_staring "3" "Get and verify Docker version information"
 if [[ -n "$DOCKER_VERSION" ]]; then
+    checkpoint_content "Version" "$DOCKER_VERSION"
     checkpoint_complete
 else
     checkpoint_error
@@ -60,6 +61,7 @@ fi
 DOCKER_COMPOSE_VERSION=$(docker compose version | awk '{print $4}')
 checkpoint_staring "3" "Get and verify Docker Compose version information"
 if [[ -n "$DOCKER_COMPOSE_VERSION" ]]; then
+    checkpoint_content "Version" "$DOCKER_COMPOSE_VERSION"
     checkpoint_complete
 else
     checkpoint_error

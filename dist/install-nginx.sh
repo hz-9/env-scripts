@@ -1166,7 +1166,8 @@ EOF
 print_help_or_param
 
 network=$(get_param '--network')
-nginxVersion=$(get_param '--nginx-version')
+nginx_version=$(get_param '--nginx-version')
+skip_firewall=$(get_param '--skip-firewall')
 
 # ------------------------------------------------------------
 

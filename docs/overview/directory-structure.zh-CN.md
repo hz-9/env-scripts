@@ -95,7 +95,6 @@ env-script/
 │   ├── syncdb-mysql.sh               # MySQL 数据同步脚本
 │   └── syncdb-postgresql.sh          # PostgreSQL 数据同步脚本
 ├── temp/                             # 临时文件目录
-├── test-results/                     # 测试结果目录
 ├── tests/                            # 测试脚本目录
 │   ├── __base.sh                     # 测试工具函数库
 │   ├── install-7zip/                 # 7zip 安装测试
