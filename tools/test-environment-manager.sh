@@ -13,9 +13,9 @@ root=$(cd "$(dirname "$0")" || exit; dirname "$(pwd)")
 
 # OS environments to test
 OS_ENVIRONMENTS=(
-    "ubuntu20"
-    "ubuntu22"
-    "ubuntu24"
+    "ubuntu20-04"
+    "ubuntu22-04"
+    "ubuntu24-04"
     "debian11-9"
     "debian12-2"
     "fedora41"
@@ -96,7 +96,7 @@ run_tests_in_environment() {
   if [ ! -d "$scan_dir" ]; then
     log_error "Test script directory does not exist: $scan_dir"
   else
-    # 循环遍历目录下的所有文件
+    # Loop through all files in the directory
     for file in "$scan_dir"/*; do
       if [[ -f "$file" ]] && [[ "$(basename "$file")" != _* ]]; then
         local test_file="${test_dir_name}/$(basename "$file")"
@@ -122,7 +122,7 @@ run_all_tests_in_environment() {
     log_error "Test script directory does not exist: $scan_dir"
   else
     for file in "$scan_dir"/*; do
-      # 如果 scope = install, 只运行 tests/install-* 目录下的测试
+      # If scope = install, only run tests under tests/install-* directories
       if [ -n "$scope" ] && [[ "$(basename "$file")" = "$scope"* ]]; then
         run_tests_in_environment "$env" "$(basename "$file")" "$suffix_args"
       fi
@@ -134,7 +134,7 @@ run_tests_in_all_nvironment() {
   local test_script="$1"
   local suffix_args="$2"
 
-  # 遍历 OS_ENVIRONMENTS数组
+  # Iterate through OS_ENVIRONMENTS array
   for env in "${OS_ENVIRONMENTS[@]}"; do
     run_tests_in_environment "$env" "$test_script" "$suffix_args --env=$env"
   done
@@ -144,7 +144,7 @@ run_all_tests_in_all_nvironment() {
   local scope="$1"
   local suffix_args="$2"
 
-  # 遍历 OS_ENVIRONMENTS数组
+  # Iterate through OS_ENVIRONMENTS array
   for env in "${OS_ENVIRONMENTS[@]}"; do
     run_all_tests_in_environment "$scope" "$env" "$suffix_args --env=$env"
   done
@@ -168,9 +168,9 @@ show_help() {
     echo "Examples:"
     echo "  $0 -m all -t tests/install-*                  # Run all install tests in all environments"
     echo "  $0 -m all-sys -t tests/install-* -s git       # Run git tests in all environments"
-    echo "  $0 -m all-script -t tests/install-* -e ubuntu22  # Run all tests in Ubuntu 22.04"
-    echo "  $0 -m single -t tests/install-* -e ubuntu22 -s git  # Run git tests in Ubuntu 22.04"
-    echo "  $0 -m single -f tests/install-git/01-ok.sh -e ubuntu22  # Run specific test"
+    echo "  $0 -m all-script -t tests/install-* -e ubuntu22-04  # Run all tests in Ubuntu 22.04"
+    echo "  $0 -m single -t tests/install-* -e ubuntu22-04 -s git  # Run git tests in Ubuntu 22.04"
+    echo "  $0 -m single -f tests/install-git/01-ok.sh -e ubuntu22-04  # Run specific test"
 }
 
 unit_test_console_summary() {

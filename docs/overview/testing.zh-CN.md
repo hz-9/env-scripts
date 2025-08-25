@@ -47,19 +47,19 @@ make install-test-all-script ENV=debian12-2
 make install-test-all-script ENV=fedora41
 make install-test-all-script ENV=redhat8-10
 make install-test-all-script ENV=redhat9-6
-make install-test-all-script ENV=ubuntu20
-make install-test-all-script ENV=ubuntu22
-make install-test-all-script ENV=ubuntu24
+make install-test-all-script ENV=ubuntu20-04
+make install-test-all-script ENV=ubuntu22-04
+make install-test-all-script ENV=ubuntu24-04
 
 # 使用中国网络
-make install-test-all-script ENV=ubuntu22 NETWORK=in-china
+make install-test-all-script ENV=ubuntu22-04 NETWORK=in-china
 ```
 
 #### 在特定环境中测试特定脚本
 
 ```bash
 # 在特定环境中测试特定安装脚本
-make install-test-single ENV=ubuntu22 SCRIPT=git
+make install-test-single ENV=ubuntu22-04 SCRIPT=git
 make install-test-single ENV=debian12-2 SCRIPT=docker NETWORK=in-china
 ```
 
@@ -68,7 +68,7 @@ make install-test-single ENV=debian12-2 SCRIPT=docker NETWORK=in-china
 ```bash
 # 在特定环境中运行特定测试文件
 make install-test-file ENV=debian11-9 FILE=tests/install-git/01-ok.sh
-make install-test-file ENV=ubuntu22 FILE=tests/install-docker/02-install.sh NETWORK=in-china
+make install-test-file ENV=ubuntu22-04 FILE=tests/install-docker/02-install.sh NETWORK=in-china
 ```
 
 ### 数据库同步脚本测试
@@ -90,17 +90,17 @@ make syncdb-test-all-env SCRIPT=postgresql NETWORK=in-china
 ```bash
 # 在指定环境中运行所有数据库同步脚本测试
 make syncdb-test-all-script ENV=debian11-9
-make syncdb-test-all-script ENV=ubuntu22
+make syncdb-test-all-script ENV=ubuntu22-04
 
 # 使用中国网络
-make syncdb-test-all-script ENV=ubuntu22 NETWORK=in-china
+make syncdb-test-all-script ENV=ubuntu22-04 NETWORK=in-china
 ```
 
 #### 在特定环境中测试特定同步脚本
 
 ```bash
 # 在特定环境中测试特定数据库同步脚本
-make syncdb-test-single ENV=ubuntu22 SCRIPT=postgresql
+make syncdb-test-single ENV=ubuntu22-04 SCRIPT=postgresql
 make syncdb-test-single ENV=debian12-2 SCRIPT=mysql NETWORK=in-china
 make syncdb-test-single ENV=ubuntu24 SCRIPT=mongo NETWORK=in-china
 ```
@@ -110,7 +110,7 @@ make syncdb-test-single ENV=ubuntu24 SCRIPT=mongo NETWORK=in-china
 ```bash
 # 在特定环境中运行特定同步测试文件
 make syncdb-test-file ENV=debian11-9 FILE=tests/syncdb-postgresql/01-ok.sh
-make syncdb-test-file ENV=ubuntu22 FILE=tests/syncdb-mysql/02-install.sh NETWORK=in-china
+make syncdb-test-file ENV=ubuntu22-04 FILE=tests/syncdb-mysql/02-install.sh NETWORK=in-china
 ```
 
 ## 🛠️ 其他命令
