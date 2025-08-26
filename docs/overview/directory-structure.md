@@ -19,9 +19,15 @@ env-script/
 │   │   ├── shell-format.instructions.md
 │   │   ├── tests-install.instructions.md
 │   │   └── tests-syncdb.instructions.md
-│   └── prompts/                      # Prompt and guidance documents
-│       ├── sync-docs.prompt.md       # Document synchronization guide
-│       └── translate-docs.md         # Document translation guide
+│   ├── prompts/                      # Prompt and guidance documents
+│   │   ├── sync-docs.prompt.md       # Document synchronization guide
+│   │   └── translate-docs.md         # Document translation guide
+│   └── workflows/                    # GitHub Actions workflows
+│       └── generate-pages.yml        # Page generation workflow
+├── .gitignore                        # Git ignore file configuration
+├── .markdownlint.json                # Markdown format check configuration
+├── .nvmrc                            # Node.js version specification
+├── .shellcheckrc                     # ShellCheck configuration
 ├── LICENSE                           # Open source license file
 ├── Makefile                          # Make build configuration
 ├── package.json                      # Node.js project configuration
@@ -42,19 +48,32 @@ env-script/
 │   ├── install-wget.sh               # Built wget installation script
 │   ├── install-xz.sh                 # Built xz installation script
 │   ├── install-zip.sh                # Built zip installation script
-│   ├── syncdb-mongodb.sh             # Built MongoDB data sync script
+│   ├── syncdb-mongo.sh               # Built MongoDB data sync script
 │   ├── syncdb-mysql.sh               # Built MySQL data sync script
 │   └── syncdb-postgresql.sh          # Built PostgreSQL data sync script
 ├── docker/                           # Docker testing environment configuration
+│   ├── .dockerignore                 # Docker ignore file configuration
 │   ├── docker-compose.yml            # Docker Compose orchestration file
 │   ├── Dockerfile.debian11-9         # Debian 11.9 testing image
+│   ├── Dockerfile.debian11-9.docker  # Debian 11.9 Docker image build file
 │   ├── Dockerfile.debian12-2         # Debian 12.2 testing image
+│   ├── Dockerfile.debian12-2.docker  # Debian 12.2 Docker image build file
 │   ├── Dockerfile.fedora41           # Fedora 41 testing image
+│   ├── Dockerfile.fedora41.docker    # Fedora 41 Docker image build file
 │   ├── Dockerfile.redhat8-10         # Red Hat 8.10 testing image
+│   ├── Dockerfile.redhat8-10.docker  # Red Hat 8.10 Docker image build file
+│   ├── Dockerfile.redhat8-10.mirrors/   # Red Hat 8.10 mirror configuration directory
+│   │   └── epel.repo                 # EPEL mirror configuration
 │   ├── Dockerfile.redhat9-6          # Red Hat 9.6 testing image
+│   ├── Dockerfile.redhat9-6.docker   # Red Hat 9.6 Docker image build file
+│   ├── Dockerfile.redhat9-6.mirrors/    # Red Hat 9.6 mirror configuration directory
+│   │   └── epel.repo                 # EPEL mirror configuration
 │   ├── Dockerfile.ubuntu20-04        # Ubuntu 20.04 testing image
+│   ├── Dockerfile.ubuntu20-04.docker # Ubuntu 20.04 Docker image build file
 │   ├── Dockerfile.ubuntu22-04        # Ubuntu 22.04 testing image
-│   └── Dockerfile.ubuntu24-04        # Ubuntu 24.04 testing image
+│   ├── Dockerfile.ubuntu22-04.docker # Ubuntu 22.04 Docker image build file
+│   ├── Dockerfile.ubuntu24-04        # Ubuntu 24.04 testing image
+│   └── Dockerfile.ubuntu24-04.docker # Ubuntu 24.04 Docker image build file
 ├── docs/                             # Documentation directory
 │   ├── README.md                     # Project documentation (English)
 │   ├── README.zh-CN.md               # Project documentation (Chinese)
@@ -65,7 +84,6 @@ env-script/
 │       ├── scripts.zh-CN.md          # Script list (Chinese)
 │       ├── testing.md                # Testing guide (English)
 │       └── testing.zh-CN.md          # Testing guide (Chinese)
-├── echo/                             # Echo script directory
 ├── logs/                             # Log directory
 │   ├── install-test-all-env.*.log    # Installation test logs (all environments)
 │   ├── install-test-all.*.log        # Installation test logs (all)
@@ -75,7 +93,7 @@ env-script/
 │   ├── syncdb-test-file.*.log        # Database sync test logs (file)
 │   └── syncdb-test-single.*.log      # Database sync test logs (single)
 ├── scripts/                          # Script source directory
-│   ├── __base.sh                     # Base script with common functions
+│   ├── __base.sh                     # Base utility function library
 │   ├── install-7zip.sh               # 7zip installation script
 │   ├── install-curl.sh               # curl installation script
 │   ├── install-docker.sh             # Docker installation script
@@ -90,34 +108,71 @@ env-script/
 │   ├── install-tree.sh               # tree installation script
 │   ├── install-wget.sh               # wget installation script
 │   ├── install-xz.sh                 # xz installation script
-│   ├── install-zip.sh                # zip installation script
-│   ├── syncdb-mongodb.sh             # MongoDB data sync script
+│   ├── install-zip.sh                # zip/unzip installation script
+│   ├── syncdb-mongo.sh               # MongoDB data sync script
 │   ├── syncdb-mysql.sh               # MySQL data sync script
 │   └── syncdb-postgresql.sh          # PostgreSQL data sync script
 ├── temp/                             # Temporary file directory
-└── tests/                            # Test directory
-    ├── install-7zip/                 # 7zip installation test files
-    ├── install-curl/                 # curl installation test files
-    ├── install-docker/               # Docker installation test files
-    ├── install-gdal/                 # GDAL installation test files
-    ├── install-git/                  # Git installation test files
-    ├── install-htop/                 # htop installation test files
-    ├── install-jq/                   # jq installation test files
-    ├── install-nginx/                # nginx installation test files
-    ├── install-node/                 # Node.js installation test files
-    ├── install-p7zip/                # p7zip installation test files
-    ├── install-tmux/                 # tmux installation test files
-    ├── install-tree/                 # tree installation test files
-    ├── install-wget/                 # wget installation test files
-    ├── install-xz/                   # xz installation test files
-    ├── install-zip/                  # zip installation test files
-    ├── syncdb-mongodb/               # MongoDB data sync test files
-    │   ├── 01-ok.sh                  # Basic functionality test
-    │   └── 02-install.sh             # Installation test
-    ├── syncdb-mysql/                 # MySQL data sync test files
-    │   ├── 01-ok.sh                  # Basic functionality test
-    │   └── 02-install.sh             # Installation test
-    └── syncdb-postgresql/            # PostgreSQL data sync test files
-        ├── 01-ok.sh                  # Basic functionality test
-        └── 02-install.sh             # Installation test
+├── tests/                            # Test script directory
+│   ├── __base.sh                     # Test utility function library
+│   ├── install-7zip/                 # 7zip installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-curl/                 # curl installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-docker/               # Docker installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-gdal/                 # GDAL installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-git/                  # Git installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-htop/                 # htop installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-jq/                   # jq installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-nginx/                # nginx installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-node/                 # Node.js installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-p7zip/                # p7zip installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-tmux/                 # tmux installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-tree/                 # tree installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-wget/                 # wget installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-xz/                   # xz installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── install-zip/                  # zip/unzip installation tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── syncdb-mongo/                 # MongoDB data sync tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   ├── syncdb-mysql/                 # MySQL data sync tests
+│   │   ├── 01-ok.sh                  # Basic functionality test
+│   │   └── 02-install.sh             # Installation integration test
+│   └── syncdb-postgresql/            # PostgreSQL data sync tests
+│       ├── 01-ok.sh                  # Basic functionality test
+│       └── 02-install.sh             # Installation integration test
+└── tools/                            # Tool script directory
+    ├── __base.sh                     # Tool base function library
+    ├── build.sh                      # Script build tool
+    ├── demo.sh                       # Demo script
+    ├── test-environment-manager.sh   # Test environment manager
+    └── test-runner.sh                # Test runner
 ```

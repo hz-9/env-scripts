@@ -6,6 +6,9 @@
 # Build scripts
 make build-scripts
 
+# Build Docker images and scripts
+make build
+
 # Run all installation script tests
 make install-test-all
 
@@ -106,6 +109,7 @@ make syncdb-test-single ENV=ubuntu24-04 SCRIPT=mongo NETWORK=in-china
 
 ```bash
 # Run specific sync test file in specific environment
+make syncdb-test-file ENV=debian11-9 FILE=tests/syncdb-postgresql/01-ok.sh
 make syncdb-test-file ENV=ubuntu22-04 FILE=tests/syncdb-mysql/02-install.sh NETWORK=in-china
 ```
 

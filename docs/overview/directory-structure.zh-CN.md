@@ -19,9 +19,15 @@ env-script/
 │   │   ├── shell-format.instructions.md
 │   │   ├── tests-install.instructions.md
 │   │   └── tests-syncdb.instructions.md
-│   └── prompts/                      # 提示和指导文档
-│       ├── sync-docs.prompt.md       # 文档同步指南
-│       └── translate-docs.md         # 文档翻译指南
+│   ├── prompts/                      # 提示和指导文档
+│   │   ├── sync-docs.prompt.md       # 文档同步指南
+│   │   └── translate-docs.md         # 文档翻译指南
+│   └── workflows/                    # GitHub Actions 工作流
+│       └── generate-pages.yml        # 页面生成工作流
+├── .gitignore                        # Git 忽略文件配置
+├── .markdownlint.json                # Markdown 格式检查配置
+├── .nvmrc                            # Node.js 版本指定
+├── .shellcheckrc                     # ShellCheck 检查配置
 ├── LICENSE                           # 开源许可证文件
 ├── Makefile                          # Make 构建配置
 ├── package.json                      # Node.js 项目配置
@@ -42,19 +48,32 @@ env-script/
 │   ├── install-wget.sh               # 构建后的wget安装脚本
 │   ├── install-xz.sh                 # 构建后的xz安装脚本
 │   ├── install-zip.sh                # 构建后的zip安装脚本
-│   ├── syncdb-mongodb.sh             # 构建后的MongoDB数据同步脚本
+│   ├── syncdb-mongo.sh               # 构建后的MongoDB数据同步脚本
 │   ├── syncdb-mysql.sh               # 构建后的MySQL数据同步脚本
 │   └── syncdb-postgresql.sh          # 构建后的PostgreSQL数据同步脚本
 ├── docker/                           # Docker 测试环境配置
+│   ├── .dockerignore                 # Docker 忽略文件配置
 │   ├── docker-compose.yml            # Docker Compose 编排文件
 │   ├── Dockerfile.debian11-9         # Debian 11.9 测试镜像
+│   ├── Dockerfile.debian11-9.docker  # Debian 11.9 Docker 镜像构建文件
 │   ├── Dockerfile.debian12-2         # Debian 12.2 测试镜像
+│   ├── Dockerfile.debian12-2.docker  # Debian 12.2 Docker 镜像构建文件
 │   ├── Dockerfile.fedora41           # Fedora 41 测试镜像
+│   ├── Dockerfile.fedora41.docker    # Fedora 41 Docker 镜像构建文件
 │   ├── Dockerfile.redhat8-10         # Red Hat 8.10 测试镜像
+│   ├── Dockerfile.redhat8-10.docker  # Red Hat 8.10 Docker 镜像构建文件
+│   ├── Dockerfile.redhat8-10.mirrors/   # Red Hat 8.10 镜像源配置目录
+│   │   └── epel.repo                 # EPEL 镜像源配置
 │   ├── Dockerfile.redhat9-6          # Red Hat 9.6 测试镜像
+│   ├── Dockerfile.redhat9-6.docker   # Red Hat 9.6 Docker 镜像构建文件
+│   ├── Dockerfile.redhat9-6.mirrors/    # Red Hat 9.6 镜像源配置目录
+│   │   └── epel.repo                 # EPEL 镜像源配置
 │   ├── Dockerfile.ubuntu20-04        # Ubuntu 20.04 测试镜像
+│   ├── Dockerfile.ubuntu20-04.docker # Ubuntu 20.04 Docker 镜像构建文件
 │   ├── Dockerfile.ubuntu22-04        # Ubuntu 22.04 测试镜像
-│   └── Dockerfile.ubuntu24-04        # Ubuntu 24.04 测试镜像
+│   ├── Dockerfile.ubuntu22-04.docker # Ubuntu 22.04 Docker 镜像构建文件
+│   ├── Dockerfile.ubuntu24-04        # Ubuntu 24.04 测试镜像
+│   └── Dockerfile.ubuntu24-04.docker # Ubuntu 24.04 Docker 镜像构建文件
 ├── docs/                             # 文档目录
 │   ├── README.md                     # 项目文档（英文）
 │   ├── README.zh-CN.md               # 项目文档（中文）
@@ -65,7 +84,6 @@ env-script/
 │       ├── scripts.zh-CN.md          # 脚本清单（中文）
 │       ├── testing.md                # 测试指南（英文）
 │       └── testing.zh-CN.md          # 测试指南（中文）
-├── echo/                             # 回显脚本目录
 ├── logs/                             # 日志目录
 │   ├── install-test-all-env.*.log    # 安装测试日志（全环境）
 │   ├── install-test-all.*.log        # 安装测试日志（全部）
@@ -91,7 +109,7 @@ env-script/
 │   ├── install-wget.sh               # wget 安装脚本
 │   ├── install-xz.sh                 # xz 安装脚本
 │   ├── install-zip.sh                # zip/unzip 安装脚本
-│   ├── syncdb-mongodb.sh             # MongoDB 数据同步脚本
+│   ├── syncdb-mongo.sh               # MongoDB 数据同步脚本
 │   ├── syncdb-mysql.sh               # MySQL 数据同步脚本
 │   └── syncdb-postgresql.sh          # PostgreSQL 数据同步脚本
 ├── temp/                             # 临时文件目录
@@ -142,7 +160,7 @@ env-script/
 │   ├── install-zip/                  # zip/unzip 安装测试
 │   │   ├── 01-ok.sh                  # 基础功能测试
 │   │   └── 02-install.sh             # 安装集成测试
-│   ├── syncdb-mongodb/               # MongoDB 数据同步测试
+│   ├── syncdb-mongo/                 # MongoDB 数据同步测试
 │   │   ├── 01-ok.sh                  # 基础功能测试
 │   │   └── 02-install.sh             # 安装集成测试
 │   ├── syncdb-mysql/                 # MySQL 数据同步测试

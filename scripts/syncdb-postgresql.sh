@@ -139,6 +139,9 @@ sudo docker run --rm \
   bash -c \"$sync_command\" $(console_redirect_output)
 """
 
+console_content_complete
+console_empty_line
+
 # ------------------------------------------------------------
 
 console_script_end "Install complete."

@@ -193,7 +193,7 @@ unit_test_console_summary() {
     printf "| %-76s |\n" "Passed          : $passed_unit_tests"
     printf "| %-76s |\n" "Skipped         : $skipped_unit_tests"
     printf "| %-76s |\n" "Failed          : $failed_unit_tests"
-    printf "| %-76s |\n" "TIME            : $failed_unit_tests"
+    printf "| %-76s |\n" "TIME            : $timeDiff seconds"
     printf '+%s+' "$(printf '%0.s-' {1..78})"
     echo -e "\033[0m"
 
