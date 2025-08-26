@@ -1,0 +1,50 @@
+# RedHat Enterprise Linux 8.10 (UBI8) test environment with Docker CE and Docker Compose
+FROM redhat/ubi8:8.10
+
+# Install epel-release to get access to extra packages
+RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+
+# Copy project files
+COPY ./docker/Dockerfile.redhat8-10.mirrors/epel.repo /etc/yum.repos.d/
+
+# Install basic dependencies
+RUN dnf update -y && dnf install -y \
+    sudo \
+    ca-certificates \
+    which \
+    dnf-plugins-core \
+    && dnf clean all
+
+# Add Docker repository
+RUN dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+
+# Install Docker CE
+RUN dnf install -y \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin \
+    && dnf clean all
+
+# Create test user and add to docker group
+RUN useradd -m -s /bin/bash testuser && \
+    echo "testuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+    usermod -aG docker testuser
+
+# Set working directory
+WORKDIR /app
+
+# Copy project files
+COPY . /app/
+
+# Ensure scripts are executable
+RUN chmod +x /app/dist/*.sh
+RUN chmod +x /app/tests/**/*.sh
+RUN chmod +x /app/tools/test-runner.sh
+
+# Switch to test user
+USER testuser
+
+# Set default command
+CMD ["/app/tools/test-runner.sh"]

@@ -1261,6 +1261,13 @@ else
   install_by_dnf() {
     dnf_setup_mirrors "$network"
 
+    if ! rpm -q "ca-certificates" &>/dev/null; then
+      console_content "ca-certificates is not installed. Please install ca-certificates first."
+      exit 1
+    else
+      console_content "ca-certificates is already installed."
+    fi
+
     local docker_mirror_url
 
     if [[ "$network" == "in-china" ]]; then

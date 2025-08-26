@@ -128,7 +128,7 @@ install-test-all-env: build-scripts
 		printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 		echo "\033[0m"; \
 		\
-		ARGS="--mode=all-env --script=install-$(SCRIPT)"; \
+		ARGS="--mode=all-env --scope=install --script=install-$(SCRIPT)"; \
 		if [ -n "$(NETWORK)" ]; then \
 				echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 				ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -210,7 +210,7 @@ install-test-single: build-scripts
 		printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 		echo "\033[0m"; \
 		\
-		ARGS="--mode=single --env=$(ENV) --script=install-$(SCRIPT)"; \
+		ARGS="--mode=single --scope=install --env=$(ENV) --script=install-$(SCRIPT)"; \
 		if [ -n "$(NETWORK)" ]; then \
 				echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 				ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -251,7 +251,7 @@ install-test-file: build-scripts
 		printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 		echo "\033[0m"; \
 		\
-		ARGS="--mode=single --env=$(ENV) --file=$(FILE)"; \
+		ARGS="--mode=single --scope=install --env=$(ENV) --file=$(FILE)"; \
 		if [ -n "$(NETWORK)" ]; then \
 				echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 				ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -323,7 +323,7 @@ syncdb-test-all-env: build-scripts
 		printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 		echo "\033[0m"; \
 		\
-		ARGS="--mode=all-env --script=syncdb-$(SCRIPT)"; \
+		ARGS="--mode=all-env --scope=syncdb --script=syncdb-$(SCRIPT)"; \
 		if [ -n "$(NETWORK)" ]; then \
 				echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 				ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -405,7 +405,7 @@ syncdb-test-single: build-scripts
 		printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 		echo "\033[0m"; \
 		\
-		ARGS="--mode=single --env=$(ENV) --script=syncdb-$(SCRIPT)"; \
+		ARGS="--mode=single --scope=syncdb --env=$(ENV) --script=syncdb-$(SCRIPT)"; \
 		if [ -n "$(NETWORK)" ]; then \
 				echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 				ARGS="$$ARGS --network=$(NETWORK)"; \
@@ -446,7 +446,7 @@ syncdb-test-file: build-scripts
 		printf '%*s\n' "$$(tput cols)" '' | tr ' ' '='; \
 		echo "\033[0m"; \
 		\
-		ARGS="--mode=single --env=$(ENV) --file=$(FILE)"; \
+		ARGS="--mode=single --scope=syncdb --env=$(ENV) --file=$(FILE)"; \
 		if [ -n "$(NETWORK)" ]; then \
 				echo "Makefile Add ARGS   : NETWORK=$(NETWORK)"; \
 				ARGS="$$ARGS --network=$(NETWORK)"; \

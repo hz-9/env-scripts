@@ -48,8 +48,14 @@ failed_environments=()
 
 # Run tests in a specific environment
 run_test_in_environment() {
-  local env="$1"
-  local runner_args="$2"
+  local scope="$1"
+  local env="$2"
+  local runner_args="$3"
+
+  # If scope = 'syncdb' then env = '${scope}-docker'
+  if [ "$scope" = "syncdb" ]; then
+      env="${env}-docker"
+  fi
 
   # local display_name=$(get_os_display_name "$env")
   
@@ -85,9 +91,10 @@ run_test_in_environment() {
 }
 
 run_tests_in_environment() {
-  local env="$1"
-  local test_script="$2"
-  local suffix_args="$3"
+  local scope="$1"
+  local env="$2"
+  local test_script="$3"
+  local suffix_args="$4"
 
   local scan_dir="${root}/tests/$test_script"
   local test_dir_name="tests/$test_script"
@@ -103,7 +110,7 @@ run_tests_in_environment() {
         local runner_args="--file=$test_file $suffix_args"
         log_info "Runner ARGS      : $runner_args"
         # Run specific test file
-        run_test_in_environment "$env" "$runner_args"
+        run_test_in_environment "$scope" "$env" "$runner_args"
       fi
     done
   fi
@@ -124,19 +131,20 @@ run_all_tests_in_environment() {
     for file in "$scan_dir"/*; do
       # If scope = install, only run tests under tests/install-* directories
       if [ -n "$scope" ] && [[ "$(basename "$file")" = "$scope"* ]]; then
-        run_tests_in_environment "$env" "$(basename "$file")" "$suffix_args"
+        run_tests_in_environment "$scope" "$env" "$(basename "$file")" "$suffix_args"
       fi
     done
   fi
 }
 
 run_tests_in_all_nvironment() {
-  local test_script="$1"
-  local suffix_args="$2"
+  local scope="$1"
+  local test_script="$2"
+  local suffix_args="$3"
 
   # Iterate through OS_ENVIRONMENTS array
   for env in "${OS_ENVIRONMENTS[@]}"; do
-    run_tests_in_environment "$env" "$test_script" "$suffix_args --env=$env"
+    run_tests_in_environment "$scope" "$env" "$test_script" "$suffix_args --env=$env"
   done
 }
 
@@ -276,7 +284,7 @@ main() {
             ;;
         all-env)
             log_info "Suffix ARGS      : $suffix_args"
-            run_tests_in_all_nvironment "$test_script" "$suffix_args"
+            run_tests_in_all_nvironment "$scope" "$test_script" "$suffix_args"
             unit_test_console_summary
             ;;
         all-script)
@@ -288,10 +296,10 @@ main() {
             if [ -n "$test_file" ]; then
                 local runner_args="--file=$test_file $suffix_args"
                 log_info "Runner ARGS      : $runner_args"
-                run_test_in_environment "$env" "$runner_args"
+                run_test_in_environment "$scope" "$env" "$runner_args"
             elif [ -n "$test_script" ]; then
                 log_info "Suffix ARGS      : $suffix_args"
-                run_tests_in_environment "$env" "$test_script" "$suffix_args"
+                run_tests_in_environment "$scope" "$env" "$test_script" "$suffix_args"
                 unit_test_console_summary
             else
                 log_error "Either test script (--test-script) or test file (--test-file) is required"

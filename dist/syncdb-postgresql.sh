@@ -1247,7 +1247,7 @@ console_empty_line
 
 # ------------------------------------------------------------
 
-console_module_title "Sync by $dockerImage"
+console_module_title "Sync by $docker_image"
 
 console_content_starting "Syncing data from $from_hostname to $to_hostname..."
 

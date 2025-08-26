@@ -1,30 +1,30 @@
-# RedHat Enterprise Linux 8.10 (UBI8) 测试环境
+# RedHat Enterprise Linux 8.10 (UBI8) test environment
 FROM redhat/ubi8:8.10
 
-# 安装基础依赖包
+# Install basic dependencies
 RUN dnf update -y && dnf install -y \
     sudo \
     ca-certificates \
     which \
     && dnf clean all
 
-# 创建测试用户
+# Create test user
 RUN useradd -m -s /bin/bash testuser && \
     echo "testuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# 设置工作目录
+# Set working directory
 WORKDIR /app
 
-# 复制项目文件
+# Copy project files
 COPY . /app/
 
-# 确保脚本可执行
+# Ensure scripts are executable
 RUN chmod +x /app/dist/*.sh
 RUN chmod +x /app/tests/**/*.sh
 RUN chmod +x /app/tools/test-runner.sh
 
-# 切换到测试用户
+# Switch to test user
 USER testuser
 
-# 设置默认命令
+# Set default command
 CMD ["/app/tools/test-runner.sh"]

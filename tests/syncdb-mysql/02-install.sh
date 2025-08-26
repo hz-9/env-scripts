@@ -6,8 +6,6 @@
 source "$(dirname "$0")/../__base.sh"
 
 # Test constants
-SCRIPT_PATH_PRE_1="$(dirname "$0")/../../dist/install-curl.sh"
-SCRIPT_PATH_PRE_2="$(dirname "$0")/../../dist/install-docker.sh"
 SCRIPT_PATH="$(dirname "$0")/../../dist/syncdb-mysql.sh"
  
 unit_test_initing "$@" "--name=syncdb-mysql"
@@ -187,9 +185,6 @@ check_data() {
         exit 1
     fi
 }
-
-bash "$SCRIPT_PATH_PRE_1" $common_suffix_args
-bash "$SCRIPT_PATH_PRE_2" $common_suffix_args
 
 pull_docker_image
 
