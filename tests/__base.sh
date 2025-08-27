@@ -1,20 +1,11 @@
 #!/bin/bash
 _m_='♥'
 
-source "$(dirname "$0")/../../tools/__base.sh"
+source scripts/__base.sh
 
 TEST_COUNT=0
 PASSED_COUNT=0
 FAILED_COUNT=0
-
-{
-  # Print current time (seconds)
-  console_time_s() {
-    local seconds
-    seconds=$(date +%s)
-    echo $((seconds * 1))
-  }
-}
 
 checkpoint_time=$(console_time_s)
 
@@ -146,10 +137,73 @@ checkpoint_time=$(console_time_s)
 }
 
 {
+  clean_docker_images_display_cache_by_ubuntu() {
+    # 直接禁用 docker-clean 文件（最有效的方法）
+    if [[ -f /etc/apt/apt.conf.d/docker-clean ]]; then
+        sudo mv /etc/apt/apt.conf.d/docker-clean /etc/apt/apt.conf.d/docker-clean.disabled
+    fi
+  }
+
+  clean_docker_images_display_cache_by_debian() {
+    # 直接禁用 docker-clean 文件（最有效的方法）
+    if [[ -f /etc/apt/apt.conf.d/docker-clean ]]; then
+        sudo mv /etc/apt/apt.conf.d/docker-clean /etc/apt/apt.conf.d/docker-clean.disabled
+    fi
+  }
+
+  clean_docker_images_display_cache_by_fedora() {
+    # 配置 DNF 保留缓存
+    # 检查当前 dnf.conf 配置
+    if ! grep -q "keepcache=1" /etc/dnf/dnf.conf 2>/dev/null; then
+        # 如果没有 keepcache 配置，则添加
+        echo "" | sudo tee -a /etc/dnf/dnf.conf > /dev/null
+        echo "# Enable cache retention" | sudo tee -a /etc/dnf/dnf.conf > /dev/null
+        echo "keepcache=1" | sudo tee -a /etc/dnf/dnf.conf > /dev/null
+        echo "keep_cache=True" | sudo tee -a /etc/dnf/dnf.conf > /dev/null
+    fi
+  }
+
+  clean_docker_images_display_cache_by_redhat() {
+    # 配置 DNF 保留缓存
+    # 检查当前 dnf.conf 配置
+    if ! grep -q "keepcache=1" /etc/dnf/dnf.conf 2>/dev/null; then
+        # 如果没有 keepcache 配置，则添加
+        echo "" | sudo tee -a /etc/dnf/dnf.conf > /dev/null
+        echo "# Enable cache retention" | sudo tee -a /etc/dnf/dnf.conf > /dev/null
+        echo "keepcache=1" | sudo tee -a /etc/dnf/dnf.conf > /dev/null
+        echo "keep_cache=True" | sudo tee -a /etc/dnf/dnf.conf > /dev/null
+    fi
+  }
+
+  clean_docker_images_display_cache() {
+    if [[ "$USE_APT_GET_INSTALL" == true ]]; then
+      if [[ "$OS_NAME" == "Ubuntu" ]]; then
+        clean_docker_images_display_cache_by_ubuntu
+      elif [[ "$OS_NAME" == "Debian" ]]; then
+        clean_docker_images_display_cache_by_debian
+      else
+        console_error_line "Unsupported operating system: $OS_NAME"
+        exit 1
+      fi
+    elif [[ "$USE_DNF_INSTALL" == true ]]; then
+      if [[ "$OS_NAME" == "Fedora" ]]; then
+        clean_docker_images_display_cache_by_fedora
+      elif [[ "$OS_NAME" == "RedHat" ]]; then
+        clean_docker_images_display_cache_by_redhat
+      else
+        console_error_line "Unsupported operating system: $OS_NAME"
+        exit 1
+      fi
+    else
+        console_error_line "Unsupported operating system: $OS_NAME"
+        exit 1
+    fi
+  }
+
   # Clean up test environment
   cleanup_test_env() {
       if [ -n "${TEST_TMP_DIR:-}" ] && [ -d "$TEST_TMP_DIR" ]; then
-          log_debug "Cleaning up test environment: $TEST_TMP_DIR"
+          console_debug_line "Cleaning up test environment: $TEST_TMP_DIR"
           rm -rf "$TEST_TMP_DIR"
       fi
   }
@@ -157,6 +211,10 @@ checkpoint_time=$(console_time_s)
   # Set up test environment
   unit_test_initing() {
     parse_user_param "$@"
+
+    os_parse_info_with_after
+
+    clean_docker_images_display_cache
 
     # local name="$1"
 
@@ -175,7 +233,7 @@ checkpoint_time=$(console_time_s)
     local debug="false"
 
     if [ -z "$(get_user_param '--name')" ]; then
-        log_error "Test name (--name) is required"
+        console_error_line "Test name (--name) is required"
         show_help
         exit 1
     else
@@ -183,7 +241,7 @@ checkpoint_time=$(console_time_s)
     fi
 
     if [ -z "$(get_user_param '--env')" ]; then
-        log_error "Test env (--env) is required"
+        console_error_line "Test env (--env) is required"
         show_help
         exit 1
     else

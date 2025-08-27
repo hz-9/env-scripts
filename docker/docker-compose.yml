@@ -8,7 +8,12 @@ services:
     container_name: env-script-ubuntu20
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/app
+      - ../temp/.docker/ubuntu20-04/apt-lists:/var/lib/apt/lists/
+      - ../temp/.docker/ubuntu20-04/apt-cache:/var/cache/apt/
+      - ../dist:/app/dist
+      - ../scripts:/app/scripts
+      - ../tests:/app/tests
+      - ../tools:/app/tools
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -23,7 +28,12 @@ services:
     container_name: env-script-ubuntu22
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/app
+      - ../temp/.docker/ubuntu22-04/apt-lists:/var/lib/apt/lists/
+      - ../temp/.docker/ubuntu22-04/apt-cache:/var/cache/apt/
+      - ../dist:/app/dist
+      - ../scripts:/app/scripts
+      - ../tests:/app/tests
+      - ../tools:/app/tools
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -38,7 +48,12 @@ services:
     container_name: env-script-ubuntu24
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/app
+      - ../temp/.docker/ubuntu24-04/apt-lists:/var/lib/apt/lists/
+      - ../temp/.docker/ubuntu24-04/apt-cache:/var/cache/apt/
+      - ../dist:/app/dist
+      - ../scripts:/app/scripts
+      - ../tests:/app/tests
+      - ../tools:/app/tools
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -53,7 +68,12 @@ services:
     container_name: env-script-debian11-9
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/app
+      - ../temp/.docker/debian11-9/apt-lists:/var/lib/apt/lists/
+      - ../temp/.docker/debian11-9/apt-cache:/var/cache/apt/
+      - ../dist:/app/dist
+      - ../scripts:/app/scripts
+      - ../tests:/app/tests
+      - ../tools:/app/tools
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -68,7 +88,12 @@ services:
     container_name: env-script-debian12-2
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/app
+      - ../temp/.docker/debian12-2/apt-lists:/var/lib/apt/lists/
+      - ../temp/.docker/debian12-2/apt-cache:/var/cache/apt/
+      - ../dist:/app/dist
+      - ../scripts:/app/scripts
+      - ../tests:/app/tests
+      - ../tools:/app/tools
     environment:
       - TEST_ENV=docker
       - DEBIAN_FRONTEND=noninteractive
@@ -83,7 +108,11 @@ services:
     container_name: env-script-fedora41
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/app
+      - ../temp/.docker/fedora41/dnf-cache:/var/cache/libdnf5/
+      - ../dist:/app/dist
+      - ../scripts:/app/scripts
+      - ../tests:/app/tests
+      - ../tools:/app/tools
     environment:
       - TEST_ENV=docker
     command: ["/app/tools/test-runner.sh", "--all"]
@@ -97,7 +126,11 @@ services:
     container_name: env-script-redhat8-10
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/app
+      - ../temp/.docker/redhat8-10/dnf-cache:/var/cache/dnf/
+      - ../dist:/app/dist
+      - ../scripts:/app/scripts
+      - ../tests:/app/tests
+      - ../tools:/app/tools
     environment:
       - TEST_ENV=docker
     command: ["/app/tools/test-runner.sh", "--all"]
@@ -111,7 +144,11 @@ services:
     container_name: env-script-redhat9-6
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/app
+      - ../temp/.docker/redhat9-6/dnf-cache:/var/cache/dnf/
+      - ../dist:/app/dist
+      - ../scripts:/app/scripts
+      - ../tests:/app/tests
+      - ../tools:/app/tools
     environment:
       - TEST_ENV=docker
     command: ["/app/tools/test-runner.sh", "--all"]

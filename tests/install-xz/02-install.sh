@@ -13,7 +13,7 @@ unit_test_initing "$@" "--name=install-xz"
 checkpoint_check_current_os_is_supported
 
 common_suffix_args=$(unit_test_common_suffix_args)
-log_debug "Common Suffix Args : $common_suffix_args"
+console_debug_line "Common Suffix Args : $common_suffix_args"
 
 # Run main install script using new common function
 checkpoint_with_run_install_script "$SCRIPT_PATH" "$common_suffix_args"

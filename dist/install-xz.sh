@@ -124,6 +124,9 @@ _m_='♥'
   OS_IS_MACOS=false
   OS_IS_SUPPORT=false
 
+  USE_APT_GET_INSTALL=false
+  USE_DNF_INSTALL=false
+
   # Parse current operating system information
   os_parse_info() {
     # Raw operating system information before formatting
@@ -269,8 +272,6 @@ _m_='♥'
     fi
   }
 
-  os_parse_info
-
   print_system_info() {
     echo "OS_NAME    : $OS_NAME"
     echo "OS_VERSION : $OS_VERS"
@@ -285,14 +286,15 @@ _m_='♥'
     echo "IS_MACOS   : $IS_MACOS"
   }
 
-  USE_APT_GET_INSTALL=false
-  USE_DNF_INSTALL=false
+  os_parse_info_with_after() {
+    os_parse_info
 
-  if [[ "$OS_NAME" == "Ubuntu" ]] || [[ "$OS_NAME" == "Debian" ]]; then
-    USE_APT_GET_INSTALL=true
-  elif [[ "$OS_NAME" == "Fedora" ]] || [[ "$OS_NAME" == "RedHat" ]] || [[ "$OS_NAME" == "AlibabaCloudLinux" ]]; then
-    USE_DNF_INSTALL=true
-  fi
+    if [[ "$OS_NAME" == "Ubuntu" ]] || [[ "$OS_NAME" == "Debian" ]]; then
+      USE_APT_GET_INSTALL=true
+    elif [[ "$OS_NAME" == "Fedora" ]] || [[ "$OS_NAME" == "RedHat" ]] || [[ "$OS_NAME" == "AlibabaCloudLinux" ]]; then
+      USE_DNF_INSTALL=true
+    fi
+  }
 }
 
 # Console Module
@@ -486,6 +488,26 @@ _m_='♥'
       echo ""
     fi
   }
+
+  console_info_line() {
+      echo -e "${BLUE}[INFO]${NC} $1"
+  }
+
+  console_success_line() {
+      echo -e "${GREEN}[SUCCESS]${NC} $1"
+  }
+
+  console_warning_line() {
+      echo -e "${YELLOW}[WARNING]${NC} $1"
+  }
+
+  console_error_line() {
+      echo -e "${RED}[ERROR]${NC} $1"
+  }
+
+  console_debug_line() {
+      echo -e "[DEBUG] $1"
+  }
 }
 
 # Parse User Paramters
@@ -515,6 +537,32 @@ _m_='♥'
         USER_PARAMTERS+=("$key${_m_}$value")
         ;;
       -*)
+        key="$1"
+        if [[ -n "$2" && "$2" != --* ]]; then
+          USER_PARAMTERS+=("$key${_m_}$2")
+          shift
+        else
+          USER_PARAMTERS+=("$key${_m_}true")
+        fi
+        ;;
+      *)
+        echo "Unknown option: $1"
+        exit 1
+        ;;
+      esac
+      shift
+    done
+  }
+
+  parse_user_param_for_short_params() {
+    while [[ "$#" -gt 0 ]]; do
+      case $1 in
+      --*=*)
+        key="${1%%=*}"
+        value="${1#*=}"
+        USER_PARAMTERS+=("$key${_m_}$value")
+        ;;
+      --*)
         key="$1"
         if [[ -n "$2" && "$2" != --* ]]; then
           USER_PARAMTERS+=("$key${_m_}$2")
@@ -588,8 +636,6 @@ _m_='♥'
     done
     return
   }
-
-  parse_user_param "$@"
 }
 
 # Parse Paramters
@@ -695,6 +741,10 @@ _m_='♥'
   }
 
   print_help_or_param() {
+    os_parse_info_with_after
+
+    parse_user_param "$@"
+
     if [[ $(get_param '--help') == "true" ]]; then      
       console_script_name
 
@@ -832,11 +882,7 @@ EOF
       elif [[ "$OS_NAME" == "Debian" ]]; then
         apt_setup_debian_mirrors_set_china_mirrors
       fi
-      
-      # Clean cache and rebuild package lists
-      sudo apt-get clean
-      sudo rm -rf /var/lib/apt/lists/*
-      
+
       console_content_complete
     else
       console_content_starting "Using default apt mirrors..."
@@ -845,6 +891,11 @@ EOF
   }
 
   apt_get_update() {
+    # TODO 穿透参数进入，是否强制更新。
+    # # Clean cache and rebuild package lists
+    # sudo apt-get clean
+    # sudo rm -rf /var/lib/apt/lists/*
+      
     console_content_starting "Package list is updating..."
     
     eval "sudo apt-get -y update $(console_redirect_output)"
@@ -876,6 +927,7 @@ EOF
         exit 1
       fi
     fi
+
     console_content_complete
   }
 
@@ -891,7 +943,9 @@ EOF
   }
 
   dnf_setup_fedora_mirrors_set_china_mirrors() {
-    # Configure Fedora USTC mirror sources
+    # Configure Fedora China mirror sources (华为云镜像源)
+    
+    # 1. 配置主要的 Fedora 仓库
     sudo tee /etc/yum.repos.d/fedora.repo > /dev/null <<EOF
 [fedora]
 name=Fedora \$releasever - \$basearch
@@ -927,7 +981,8 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-\$releasever-\$basearch
 skip_if_unavailable=False
 EOF
 
-        sudo tee /etc/yum.repos.d/fedora-updates.repo > /dev/null <<EOF
+    # 2. 配置 Fedora 更新仓库
+    sudo tee /etc/yum.repos.d/fedora-updates.repo > /dev/null <<EOF
 [updates]
 name=Fedora \$releasever - \$basearch - Updates
 baseurl=http://mirrors.huaweicloud.com/fedora/updates/\$releasever/Everything/\$basearch/
@@ -961,6 +1016,48 @@ metadata_expire=6h
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-\$releasever-\$basearch
 skip_if_unavailable=False
 EOF
+
+    # 3. 配置 Fedora 测试更新仓库（禁用测试仓库，避免不稳定包）
+    sudo tee /etc/yum.repos.d/fedora-updates-testing.repo > /dev/null <<EOF
+[updates-testing]
+name=Fedora \$releasever - \$basearch - Test Updates
+baseurl=http://mirrors.huaweicloud.com/fedora/updates/testing/\$releasever/Everything/\$basearch/
+enabled=0
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+metadata_expire=6h
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-\$releasever-\$basearch
+skip_if_unavailable=False
+
+[updates-testing-debuginfo]
+name=Fedora \$releasever - \$basearch - Test Updates Debug
+baseurl=http://mirrors.huaweicloud.com/fedora/updates/testing/\$releasever/Everything/\$basearch/debug/tree/
+enabled=0
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+metadata_expire=6h
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-\$releasever-\$basearch
+skip_if_unavailable=False
+
+[updates-testing-source]
+name=Fedora \$releasever - Test Updates Source
+baseurl=http://mirrors.huaweicloud.com/fedora/updates/testing/\$releasever/Everything/source/tree/
+enabled=0
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+metadata_expire=6h
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-\$releasever-\$basearch
+skip_if_unavailable=False
+EOF
+
+    # 4. 保留并禁用 Cisco OpenH264 仓库（因为华为云可能不提供此仓库）
+    # 注意：这个仓库包含 H.264 编解码器，由于专利问题，通常保持官方源
+    if [[ -f /etc/yum.repos.d/fedora-cisco-openh264.repo ]]; then
+      sudo sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-cisco-openh264.repo 2>/dev/null || true
+    fi
   }
 
   dnf_setup_redhat_mirrors() {
@@ -993,17 +1090,6 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-\$releasever
 skip_if_unavailable=False
 EOF
 
-#       sudo tee /etc/yum.repos.d/epel.repo > /dev/null <<EOF
-# [epel]
-# name=Extra Packages for Enterprise Linux \$releasever - \$basearch
-# baseurl=https://mirrors.ustc.edu.cn/epel/\$releasever/Everything/\$basearch/
-# enabled=1
-# gpgcheck=1
-# repo_gpgcheck=0
-# gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-\$releasever
-# skip_if_unavailable=False
-# EOF
-
     else
       console_content_starting "Setting up Fedora Offical EPEL mirrors..."
 
@@ -1031,9 +1117,6 @@ EOF
         console_content_starting "Setting up China DNF mirrors..."
 
         dnf_setup_fedora_mirrors_set_china_mirrors
-
-        # Clean DNF cache
-        eval "sudo dnf clean all $(console_redirect_output)"
       else
         console_content_starting "Using default DNF sources..."
       fi
@@ -1091,6 +1174,9 @@ EOF
   }
 
   dnf_update() {
+    # # Clean DNF cache
+    # eval "sudo dnf clean all $(console_redirect_output)"
+
     console_content_starting "Package list is updating..."
 
     eval "sudo dnf makecache $(console_redirect_output)"
@@ -1199,7 +1285,7 @@ EOF
 
 # echo $default
 
-print_help_or_param
+print_help_or_param "$@"
 
 network=$(get_param '--network')
 xz_version=$(get_param '--xz-version')

@@ -4,7 +4,7 @@
 # We don't set -x here, we only pass the DEBUG parameter to the actual test scripts
 set -e
 
-source tools/__base.sh
+source scripts/__base.sh
 
 startTime=$(console_time_s)
 
@@ -98,17 +98,17 @@ run_tests_in_environment() {
 
   local scan_dir="${root}/tests/$test_script"
   local test_dir_name="tests/$test_script"
-  log_info "Scan Dir         : $scan_dir"
+  console_info_line "Scan Dir         : $scan_dir"
 
   if [ ! -d "$scan_dir" ]; then
-    log_error "Test script directory does not exist: $scan_dir"
+    console_error_line "Test script directory does not exist: $scan_dir"
   else
     # Loop through all files in the directory
     for file in "$scan_dir"/*; do
       if [[ -f "$file" ]] && [[ "$(basename "$file")" != _* ]]; then
         local test_file="${test_dir_name}/$(basename "$file")"
         local runner_args="--file=$test_file $suffix_args"
-        log_info "Runner ARGS      : $runner_args"
+        console_info_line "Runner ARGS      : $runner_args"
         # Run specific test file
         run_test_in_environment "$scope" "$env" "$runner_args"
       fi
@@ -123,10 +123,10 @@ run_all_tests_in_environment() {
 
   local scan_dir="${root}/tests"
 
-  log_info "Scan Dir         : $scan_dir"
+  console_info_line "Scan Dir         : $scan_dir"
 
   if [ ! -d "$scan_dir" ]; then
-    log_error "Test script directory does not exist: $scan_dir"
+    console_error_line "Test script directory does not exist: $scan_dir"
   else
     for file in "$scan_dir"/*; do
       # If scope = install, only run tests under tests/install-* directories
@@ -229,7 +229,7 @@ main() {
     # local network_option=""
     # local debug_option="false"
 
-    parse_user_param "$@"
+    parse_user_param_for_short_params "$@"
 
     # Check required parameters and parse arguments
     if [ "$(get_user_param '--help')" == 'true' ]; then
@@ -238,7 +238,7 @@ main() {
     fi
 
     if [ -z "$(get_user_param '--mode')" ]; then
-        log_error "Test mode (--mode) is required"
+        console_error_line "Test mode (--mode) is required"
         show_help
         exit 1
     else
@@ -280,45 +280,45 @@ main() {
 
     scope="$(get_user_param '--scope')"
 
-    log_info "Env Manager ARGS : $suffix_args"
+    console_info_line "Env Manager ARGS : $suffix_args"
     
     # Execute tests based on mode
     case "$mode" in
 
         all)
-            log_info "Suffix ARGS      : $suffix_args"
+            console_info_line "Suffix ARGS      : $suffix_args"
             run_all_tests_in_all_nvironment "$scope" "$suffix_args"
             unit_test_console_summary
             ;;
         all-env)
-            log_info "Suffix ARGS      : $suffix_args"
+            console_info_line "Suffix ARGS      : $suffix_args"
             run_tests_in_all_nvironment "$scope" "$test_script" "$suffix_args"
             unit_test_console_summary
             ;;
         all-script)
-            log_info "Suffix ARGS      : $suffix_args"
+            console_info_line "Suffix ARGS      : $suffix_args"
             run_all_tests_in_environment "$scope" "$env" "$suffix_args"
             unit_test_console_summary
             ;;
         single)
             if [ -n "$test_file" ]; then
                 local runner_args="--file=$test_file $suffix_args"
-                log_info "Runner ARGS      : $runner_args"
+                console_info_line "Runner ARGS      : $runner_args"
                 run_test_in_environment "$scope" "$env" "$runner_args"
             elif [ -n "$test_script" ]; then
-                log_info "Suffix ARGS      : $suffix_args"
+                console_info_line "Suffix ARGS      : $suffix_args"
                 run_tests_in_environment "$scope" "$env" "$test_script" "$suffix_args"
                 unit_test_console_summary
             else
-                log_error "Either test script (--test-script) or test file (--test-file) is required"
+                console_error_line "Either test script (--test-script) or test file (--test-file) is required"
                 show_help
                 exit 1
             fi
             ;;
         *)
-            log_error "Unknown test mode: $mode"
-            log_error "Unknown test mode 1: $test_file"
-            log_error "Unknown test mode 2: $suffix_args"
+            console_error_line "Unknown test mode: $mode"
+            console_error_line "Unknown test mode - Test File: $test_file"
+            console_error_line "Unknown test mode - Suffix Args: $suffix_args"
             show_help
             exit 1
             ;;

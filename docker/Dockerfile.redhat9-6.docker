@@ -5,7 +5,7 @@ FROM redhat/ubi9:9.6
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
 # Copy project files
-COPY ./docker/Dockerfile.redhat9-6.mirrors/epel.repo /etc/yum.repos.d/
+COPY ./docker/Dockerfile.redhat9-6.docker.configs/epel.repo /etc/yum.repos.d/
 
 # Install basic dependencies
 RUN dnf update -y && dnf install -y \

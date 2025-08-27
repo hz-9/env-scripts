@@ -5,7 +5,7 @@ FROM redhat/ubi8:8.10
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
 # Copy project files
-COPY ./docker/Dockerfile.redhat8-10.mirrors/epel.repo /etc/yum.repos.d/
+COPY ./docker/Dockerfile.redhat8-10.docker.configs/epel.repo /etc/yum.repos.d/
 
 # Install basic dependencies
 RUN dnf update -y && dnf install -y \

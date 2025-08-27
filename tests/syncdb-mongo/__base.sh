@@ -11,11 +11,11 @@ else
 fi
 
 internal_ip="$(get_user_param '--internal-ip')"
-log_debug "Internal IP        : $internal_ip"
-log_debug "Docker Image       : $docker_image"
-log_debug "Shell Command      : $shell_cmd"
+console_debug_line "Internal IP        : $internal_ip"
+console_debug_line "Docker Image       : $docker_image"
+console_debug_line "Shell Command      : $shell_cmd"
 common_suffix_args=$(unit_test_common_suffix_args)
-log_debug "Common Suffix Args : $common_suffix_args"
+console_debug_line "Common Suffix Args : $common_suffix_args"
 
 from_hostname=$internal_ip
 from_port=27017
@@ -51,7 +51,7 @@ for arg in "${sync_args[@]}"; do
     sync_args_str+="$arg "
 done
 final_args="${sync_args_str}${common_suffix_args}"
-log_debug "SyncDB Args        : $common_suffix_args"
+console_debug_line "SyncDB Args        : $common_suffix_args"
 
 checkpoint_init_container() {
     checkpoint_staring "Init Docker Container"
@@ -70,7 +70,7 @@ checkpoint_init_container() {
         checkpoint_complete
     else
         checkpoint_error
-        log_error "Failed to init Docker Container: $docker_image"
+        console_error_line "Failed to init Docker Container: $docker_image"
         exit 1
     fi
 }
@@ -78,7 +78,7 @@ checkpoint_init_container() {
 checkpoint_wait_for_mongodb() {
     local max_attempts=30
     local attempt=1
-    log_debug "Waiting for MongoDB to be ready..."
+    console_debug_line "Waiting for MongoDB to be ready..."
     
     while [ $attempt -le $max_attempts ]; do
         # Try to ping the database to check if it's accepting connections
@@ -95,7 +95,7 @@ checkpoint_wait_for_mongodb() {
                 --authenticationDatabase admin \
                 --quiet --eval "db.adminCommand('listDatabases')" 2>/dev/null | grep -q "databases"; then
                 
-                log_debug "MongoDB is ready after $attempt attempts."
+                console_debug_line "MongoDB is ready after $attempt attempts."
                 return 0
             fi
         fi
@@ -104,6 +104,6 @@ checkpoint_wait_for_mongodb() {
         attempt=$((attempt + 1))
     done
     
-    log_error "MongoDB did not become ready in time."
+    console_error_line "MongoDB did not become ready in time."
     return 1
 }

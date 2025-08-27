@@ -12,7 +12,7 @@ checkpoint_pull_image_from_docker_hub() {
       checkpoint_complete
   else
       checkpoint_error
-      log_error "Failed to pull Docker image: $docker_image"
+      console_error_line "Failed to pull Docker image: $docker_image"
       exit 1
   fi
 }

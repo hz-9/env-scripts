@@ -3,7 +3,7 @@
 # Test Runner - Executes test files with proper environment and reporting
 set -e
 
-source tools/__base.sh
+source scripts/__base.sh
 
 # Run a single test script
 run_test() {
@@ -52,13 +52,13 @@ run_test() {
     
     # Check if test was skipped
     if [ $test_exit_code -eq 2 ]; then
-        log_warning "The unit test is skipped."
+        console_warning_line "The unit test is skipped."
         return 2
     elif [ $test_exit_code -eq 0 ]; then
-        log_success "The unit test is passed."
+        console_success_line "The unit test is passed."
         return 0
     else
-        log_error "The unit test is failed."
+        console_error_line "The unit test is failed."
         return 1
     fi
 }
@@ -101,7 +101,7 @@ main() {
     fi
 
     if [ -z "$(get_user_param '--env')" ]; then
-        log_error "Test env (--env) is required"
+        console_error_line "Test env (--env) is required"
         show_help
         exit 1
     else
@@ -133,7 +133,7 @@ main() {
     if [ -n "$test_file" ]; then
         # Run a specific test file
         if [ ! -f "$test_file" ]; then
-            log_error "Test file not found: $test_file"
+            console_error_line "Test file not found: $test_file"
             return 1
         fi
 

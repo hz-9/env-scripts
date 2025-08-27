@@ -43,7 +43,7 @@ SUPPORT_OS_LIST=(
 
 source ./__base.sh
 
-print_help_or_param
+print_help_or_param "$@"
 
 network=$(get_param '--network')
 

@@ -58,7 +58,7 @@ EOF
         checkpoint_complete
     else
         checkpoint_error
-        log_error "Failed to init data: $docker_image"
+        console_error_line "Failed to init data: $docker_image"
         exit 1
     fi
 }
@@ -75,7 +75,7 @@ checkpoint_check_data() {
         checkpoint_complete
     else
         checkpoint_error
-        log_error "Failed to check data: $docker_image"
+        console_error_line "Failed to check data: $docker_image"
         exit 1
     fi
 }
