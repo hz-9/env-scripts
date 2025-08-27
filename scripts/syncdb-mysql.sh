@@ -11,6 +11,7 @@ PARAMTERS=(
   "--network${_m_}${_m_}Specify network environment (e.g., 'in-china').${_m_}default"
 
   "--db-version${_m_}${_m_}The version of the database.${_m_}8.0"
+  "--docker-image-quick-check${_m_}${_m_}Is there a local quick detection of the docker image.${_m_}false"
 
   "--from-hostname${_m_}${_m_}The hostname of the source database.${_m_}127.0.0.1"
   "--from-port${_m_}${_m_}The port of the source database.${_m_}3306"
@@ -98,19 +99,13 @@ console_empty_line
 
 console_module_title "Pull Docker Image"
 
-dockerImage="mysql:$db_version"
-console_key_value "Docker image" "$dockerImage"
-
-console_content_starting "Image $dockerImage is pulling..."
-
-eval "sudo docker pull $dockerImage --platform linux/amd64 $(console_redirect_output)"
-
-console_content_complete
+docker_image="mysql:$db_version"
+pull_docker_image $docker_image
 console_empty_line
 
 # ------------------------------------------------------------
 
-console_module_title "Sync by $dockerImage"
+console_module_title "Sync by $docker_image"
 
 console_content_starting "Syncing data from $from_hostname to $to_hostname..."
 
@@ -129,7 +124,7 @@ sudo docker run --rm \
   --platform linux/amd64 \
   -e 'MYSQL_ROOT_PASSWORD=12345678' \
   -v '$temp/backup:/data-backup' \
-  '$dockerImage' \
+  '$docker_image' \
   bash -c \"$syncCommand\" $(console_redirect_output)
 """
 

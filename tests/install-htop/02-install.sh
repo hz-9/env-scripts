@@ -4,57 +4,30 @@
 
 # Import test utility functions
 source "$(dirname "$0")/../__base.sh"
+source "$(dirname "$0")/../__install.sh"
 
 # Test constants
 SCRIPT_PATH="$(dirname "$0")/../../dist/install-htop.sh"
  
 unit_test_initing "$@" "--name=install-htop"
-
-checkpoint_staring "0" "Check if current OS is supported"
-if unit_test_is_support_current_os "$SCRIPT_PATH"; then
-    checkpoint_complete
-else
-    checkpoint_skip
-    exit 2 # Skip the rest of the tests if OS is not supported
-fi
+checkpoint_check_current_os_is_supported
 
 common_suffix_args=$(unit_test_common_suffix_args)
-
 log_debug "Common Suffix Args : $common_suffix_args"
 
-bash "$SCRIPT_PATH" $common_suffix_args
-INSTALL_EXIT_CODE=$?
-
-checkpoint_staring "1" "Check if htop is successfully installed"
-if [ $INSTALL_EXIT_CODE -eq 0 ]; then
-    checkpoint_complete
-elif [ $INSTALL_EXIT_CODE -eq 2 ]; then
-    checkpoint_skip
-    exit 2 # Skip the rest of the tests if OS is not supported
-else
-    checkpoint_error
-fi
+# Run main install script using new common function
+checkpoint_with_run_install_script "$SCRIPT_PATH" "$common_suffix_args"
 
 # Need to reload environment variables and PATH
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$PATH"
 hash -r  # Recalculate executable file locations
 
-checkpoint_staring "2" "Install script execution result"
-if command -v htop >/dev/null 2>&1; then
-    checkpoint_complete
-else
-    checkpoint_error
-fi
+# Check if command is available using new common function
+checkpoint_check_command_available "htop"
 
-
+# Get and verify version information using new common function
 HTOP_VERSION=$(htop --version | head -1 | awk '{print $2}')
-checkpoint_staring "3" "Get and verify htop version information"
-if [[ -n "$HTOP_VERSION" ]]; then
-    checkpoint_content "Version" "$HTOP_VERSION"
-    checkpoint_complete
-else
-    checkpoint_error
-fi
+checkpoint_check_software_version "htop" "$HTOP_VERSION"
 
 # Display test results
 unit_test_console_summary

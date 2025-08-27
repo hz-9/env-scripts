@@ -8,6 +8,17 @@ PASSED_COUNT=0
 FAILED_COUNT=0
 
 {
+  # Print current time (seconds)
+  console_time_s() {
+    local seconds
+    seconds=$(date +%s)
+    echo $((seconds * 1))
+  }
+}
+
+checkpoint_time=$(console_time_s)
+
+{
   # # Assert command executes successfully
   assert_success() {
       local command="$1"
@@ -158,6 +169,8 @@ FAILED_COUNT=0
 
     local name=""
     local env=""
+    local output="false"
+
     local network="default"
     local debug="false"
 
@@ -185,12 +198,17 @@ FAILED_COUNT=0
         debug="$(get_user_param '--debug')"
     fi
 
+    if [ -n "$(get_user_param '--output')" ]; then
+        output="$(get_user_param '--output')"
+    fi
+
     # echo -e "\033[0;34m"
     printf '+%s+\n' "$(printf '%0.s-' {1..78})"
     printf "| %-76s |\n" "The unit test is initing..."
     printf "| %-76s |\n" "NAME      : ${name}"
     printf "| %-76s |\n" "TEMP DIR  : ${TEST_TMP_DIR}"
     printf "| %-76s |\n" "ENV       : ${env}"
+    printf "| %-76s |\n" "OUTPUT    : ${output}"
     printf "| %-76s |\n" "--network : ${network}"
     printf "| %-76s |\n" "--debug   : ${debug}"
     printf '+%s+\n' "$(printf '%0.s-' {1..78})"
@@ -213,6 +231,10 @@ FAILED_COUNT=0
     #     args="$args --internal-ip=$(get_user_param --internal-ip)"
     # fi
 
+    if [ -n "$(get_user_param '--docker-image-quick-check')" ]; then
+        args="$args --docker-image-quick-check"
+    fi
+
     echo "$args"
   }
 
@@ -232,11 +254,12 @@ FAILED_COUNT=0
   }
 
   unit_test_console_help_message() {
-    local help_content="$1"
-
-    printf '\n%s\n' "$(printf '%0.s-' {1..80})"
-    echo "$script_help_output"
-    printf '%s\n' "$(printf '%0.s-' {1..80})"
+    if [ -n "$(get_user_param '--output')" ]; then
+        local help_content="$1"
+        printf '\n%s\n' "$(printf '%0.s-' {1..80})"
+        echo "$script_help_output"
+        printf '%s\n' "$(printf '%0.s-' {1..80})"
+    fi
   }
 
   unit_test_console_summary() {
@@ -256,13 +279,13 @@ FAILED_COUNT=0
   }
 
   checkpoint_staring() {
-    local checkpoint_index="$1"
-    local checkpoint_desc="$2"
+    checkpoint_time=$(console_time_s)
+    local checkpoint_desc="$1"
 
     TEST_COUNT=$((TEST_COUNT + 1))
     
     printf '+%s+\n' "$(printf '%0.s-' {1..78})"
-    printf "| %-76s |\n" "Check     : ${checkpoint_index} - ${checkpoint_desc}"
+    printf "| %-76s |\n" "Check     : ${checkpoint_desc}"
   }
 
   checkpoint_content() {
@@ -275,15 +298,15 @@ FAILED_COUNT=0
   }
 
   checkpoint_complete() {
-    # local checkpoint_index="$1"
-    # local checkpoint_desc="$2"
+    checkpoint_current_time=$(console_time_s)
+    timeDiff=$((checkpoint_current_time - checkpoint_time))
 
     PASSED_COUNT=$((PASSED_COUNT + 1))
 
     printf "| Result    : "
     # shellcheck disable=SC2059
     printf "${GREEN}"
-    printf "%-65s" "Success"
+    printf "%-65s" "Success (${timeDiff} seconds)"
     # shellcheck disable=SC2059
     printf "${NC}"
     printf "|\n"
@@ -291,9 +314,6 @@ FAILED_COUNT=0
   }
 
   checkpoint_skip() {
-    # local checkpoint_index="$1"
-    # local checkpoint_desc="$2"
-
     printf "| Result    : "
     # shellcheck disable=SC2059
     printf "${YELLOW}"
@@ -305,9 +325,6 @@ FAILED_COUNT=0
   }
 
   checkpoint_error() {
-    # local checkpoint_index="$1"
-    # local checkpoint_desc="$2"
-
     FAILED_COUNT=$((FAILED_COUNT + 1))
 
     printf "| Result    : "
@@ -334,5 +351,56 @@ FAILED_COUNT=0
     trap cleanup_test_env EXIT
     
     test_info "Test temporary directory: $TEST_TMP_DIR"
+  }
+
+  checkpoint_check_script_file_exists() {
+    local script_path="$1"
+    checkpoint_staring "Check if script file exists"
+    if assert_file_exists "$script_path"; then
+        checkpoint_complete
+    else
+        checkpoint_error
+    fi
+  }
+
+  checkpoint_check_script_is_executable() {
+    local script_path="$1"
+    checkpoint_staring "Check if script is executable"
+    if assert_success "test -x '$script_path'"; then
+        checkpoint_complete
+    else
+        checkpoint_error
+    fi
+  }
+
+  checkpoint_check_script_syntax() {
+    local script_path="$1"
+    checkpoint_staring "Check script syntax"
+    if assert_success "test -n '$script_path'"; then
+        checkpoint_complete
+    else
+        checkpoint_error
+    fi
+  }
+
+  checkpoint_check_script_help_output() {
+    local script_path="$1"
+    checkpoint_staring "Test --help can output normally"
+    script_help_output=$(bash "$script_path" --help 2>&1 || echo "No help option")
+    if [[ "$script_help_output" != "No help option" ]] && [[ "$script_help_output" == *"--help,-h"* && "$script_help_output" == *"Print help message"* ]]; then
+        checkpoint_complete
+    else
+        checkpoint_error
+    fi
+  }
+
+  checkpoint_check_current_os_is_supported() {
+    checkpoint_staring "Check if current OS is supported"
+    if unit_test_is_support_current_os "$SCRIPT_PATH"; then
+        checkpoint_complete
+    else
+        checkpoint_skip
+        exit 2 # Skip the rest of the tests if OS is not supported
+    fi
   }
 }

@@ -11,6 +11,7 @@ PARAMTERS=(
   "--network${_m_}${_m_}Specify network environment (e.g., 'in-china').${_m_}default"
 
   "--db-version${_m_}${_m_}The version of the database.${_m_}15.4"
+  "--docker-image-quick-check${_m_}${_m_}Is there a local quick detection of the docker image.${_m_}false"
 
   "--from-hostname${_m_}${_m_}The hostname of the source database.${_m_}127.0.0.1"
   "--from-port${_m_}${_m_}The port of the source database.${_m_}5432"
@@ -101,14 +102,7 @@ console_empty_line
 console_module_title "Pull Docker Image"
 
 docker_image="postgres:$db_version-alpine"
-console_key_value "Docker image" "$docker_image"
-
-console_content_starting "Image $docker_image is pulling..."
-
-# docker pull $dockerImage --platform linux/amd64
-eval "sudo docker pull $docker_image --platform linux/amd64 $(console_redirect_output)"
-
-console_content_complete
+pull_docker_image $docker_image
 console_empty_line
 
 # ------------------------------------------------------------

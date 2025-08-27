@@ -258,6 +258,14 @@ main() {
         suffix_args="$suffix_args--debug "
     fi
 
+    if [ -n "$(get_user_param '--output')" ]; then
+        suffix_args="$suffix_args--output "
+    fi
+
+    if [ -n "$(get_user_param '--docker-image-quick-check')" ]; then
+        suffix_args="$suffix_args--docker-image-quick-check "
+    fi
+
     if [ -n "$(get_user_param '--file')" ]; then
         test_file="$(get_user_param --file)"
     fi
@@ -268,7 +276,7 @@ main() {
 
     # Add internal IP to suffix_args
     internal_ip=$(ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | head -n 1)
-    suffix_args="$suffix_args --internal-ip=$internal_ip "
+    suffix_args="$suffix_args--internal-ip=$internal_ip "
 
     scope="$(get_user_param '--scope')"
 

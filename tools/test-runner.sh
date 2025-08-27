@@ -117,6 +117,14 @@ main() {
         suffix_args="$suffix_args--debug "
     fi
 
+    if [ -n "$(get_user_param '--output')" ]; then
+        suffix_args="$suffix_args--output "
+    fi
+
+    if [ -n "$(get_user_param '--docker-image-quick-check')" ]; then
+        suffix_args="$suffix_args--docker-image-quick-check "
+    fi
+
     if [ -n "$(get_user_param '--internal-ip')" ]; then
         suffix_args="$suffix_args--internal-ip=$(get_user_param --internal-ip) "
     fi

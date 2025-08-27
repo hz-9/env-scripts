@@ -18,6 +18,7 @@ PARAMTERS=(
   "--network${_m_}${_m_}Specify network environment (e.g., 'in-china').${_m_}default"
 
   "--db-version${_m_}${_m_}The version of the database.${_m_}6.0"
+  "--docker-image-quick-check${_m_}${_m_}Is there a local quick detection of the docker image.${_m_}false"
 
   "--from-hostname${_m_}${_m_}The hostname of the source database.${_m_}127.0.0.1"
   "--from-port${_m_}${_m_}The port of the source database.${_m_}27017"
@@ -1162,6 +1163,42 @@ EOF
 
     console_content_complete
   }
+
+  pull_docker_image_from_remote() {
+    local docker_image="$1"
+
+    console_content_starting "Image $docker_image is pulling..."
+    eval "sudo docker pull $docker_image --platform linux/amd64 $(console_redirect_output)"
+    console_content_complete
+  }
+
+  pull_docker_image() {
+    local docker_image="$1"
+
+    console_key_value "Docker image" "$docker_image"
+
+    if [ "$(get_param '--docker-image-quick-check')" == 'true' ]; then
+      local image_exists=$(sudo docker images --format "table {{.Repository}}:{{.Tag}}\t{{.ID}}" | grep "^$docker_image" | wc -l)
+      if [ "$image_exists" -gt 0 ]; then
+          console_key_value "Local" "Exists"
+
+          # 进一步检查平台架构是否匹配
+          local platform_match=$(sudo docker image inspect "$docker_image" --format '{{.Architecture}}' 2>/dev/null | grep -c "amd64")
+          
+          if [ "$platform_match" -gt 0 ]; then
+            console_key_value "Platform" "Match"
+          else
+            console_key_value "Platform" "Not Match"
+            pull_docker_image_from_remote "$docker_image"
+          fi
+      else
+        console_key_value "Local" "Not Exists"
+        pull_docker_image_from_remote "$docker_image"
+      fi
+    else
+      pull_docker_image_from_remote "$docker_image"
+    fi
+  }
 }
 
 # Debugger
@@ -1235,13 +1272,7 @@ console_empty_line
 console_module_title "Pull Docker Image"
 
 docker_image="mongo:$db_version"
-console_key_value "Docker image" "$docker_image"
-
-console_content_starting "Image $docker_image is pulling..."
-
-eval "sudo docker pull $docker_image --platform linux/amd64 $(console_redirect_output)"
-
-console_content_complete
+pull_docker_image $docker_image
 console_empty_line
 
 # ------------------------------------------------------------

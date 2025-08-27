@@ -34,6 +34,10 @@ help:
 	@echo "Common options for all test commands:"
 	@echo "  NETWORK=in-china    - Use China network configuration"
 	@echo "  DEBUG=true          - Enable debug mode"
+	@echo "  OUTPUT=path         - Specify output directory or file"
+	@echo ""
+	@echo "Additional options for syncdb test commands:"
+	@echo "  DOCKER_IMAGE_QUICK_CHECK=true - Enable quick Docker image check"
 	@echo ""
 	@echo "Available environments:"
 	@echo "  ubuntu20-04, ubuntu22-04, ubuntu24-04"
@@ -99,6 +103,10 @@ install-test-all: build-scripts
 			echo "Makefile Add ARGS   : DEBUG"; \
 			ARGS="$$ARGS --debug"; \
 	fi; \
+	if [ -n "$(OUTPUT)" ]; then \
+			echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+			ARGS="$$ARGS --output=$(OUTPUT)"; \
+	fi; \
 	echo "Makefile Final ARGS : $$ARGS" 2>&1 | tee $$LOG_FILE ;\
 	echo ""; \
 	./tools/test-environment-manager.sh $$ARGS 2>&1 | tee $$LOG_FILE ;\
@@ -136,6 +144,10 @@ install-test-all-env: build-scripts
 		if [ -n "$(DEBUG)" ]; then \
 				echo "Makefile Add ARGS   : DEBUG"; \
 				ARGS="$$ARGS --debug"; \
+		fi; \
+		if [ -n "$(OUTPUT)" ]; then \
+				echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+				ARGS="$$ARGS --output=$(OUTPUT)"; \
 		fi; \
 		echo "Makefile Final ARGS : $$ARGS"; \
 		echo ""; \
@@ -178,6 +190,10 @@ install-test-all-script: build-scripts
 				echo "Makefile Add ARGS   : DEBUG"; \
 				ARGS="$$ARGS --debug"; \
 		fi; \
+		if [ -n "$(OUTPUT)" ]; then \
+				echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+				ARGS="$$ARGS --output=$(OUTPUT)"; \
+		fi; \
 		echo "Makefile Final ARGS : $$ARGS"; \
 		echo ""; \
 		./tools/test-environment-manager.sh $$ARGS 2>&1 | tee $$LOG_FILE ;\
@@ -218,6 +234,10 @@ install-test-single: build-scripts
 		if [ -n "$(DEBUG)" ]; then \
 				echo "Makefile Add ARGS   : DEBUG"; \
 				ARGS="$$ARGS --debug"; \
+		fi; \
+		if [ -n "$(OUTPUT)" ]; then \
+				echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+				ARGS="$$ARGS --output=$(OUTPUT)"; \
 		fi; \
 		echo "Makefile Final ARGS : $$ARGS"; \
 		echo ""; \
@@ -260,6 +280,10 @@ install-test-file: build-scripts
 				echo "Makefile Add ARGS   : DEBUG"; \
 				ARGS="$$ARGS --debug"; \
 		fi; \
+		if [ -n "$(OUTPUT)" ]; then \
+				echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+				ARGS="$$ARGS --output=$(OUTPUT)"; \
+		fi; \
 		echo "Makefile Final ARGS : $$ARGS"; \
 		echo ""; \
 		./tools/test-environment-manager.sh $$ARGS 2>&1 | tee $$LOG_FILE ;\
@@ -293,6 +317,14 @@ syncdb-test-all: build-scripts
 	if [ -n "$(DEBUG)" ]; then \
 			echo "Makefile Add ARGS   : DEBUG"; \
 			ARGS="$$ARGS --debug"; \
+	fi; \
+	if [ -n "$(DOCKER_IMAGE_QUICK_CHECK)" ]; then \
+			echo "Makefile Add ARGS   : DOCKER_IMAGE_QUICK_CHECK=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+			ARGS="$$ARGS --docker-image-quick-check=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+	fi; \
+	if [ -n "$(OUTPUT)" ]; then \
+			echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+			ARGS="$$ARGS --output=$(OUTPUT)"; \
 	fi; \
 	echo "Makefile Final ARGS : $$ARGS" 2>&1 | tee $$LOG_FILE ;\
 	echo ""; \
@@ -331,6 +363,14 @@ syncdb-test-all-env: build-scripts
 		if [ -n "$(DEBUG)" ]; then \
 				echo "Makefile Add ARGS   : DEBUG"; \
 				ARGS="$$ARGS --debug"; \
+		fi; \
+		if [ -n "$(DOCKER_IMAGE_QUICK_CHECK)" ]; then \
+				echo "Makefile Add ARGS   : DOCKER_IMAGE_QUICK_CHECK=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+				ARGS="$$ARGS --docker-image-quick-check=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+		fi; \
+		if [ -n "$(OUTPUT)" ]; then \
+				echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+				ARGS="$$ARGS --output=$(OUTPUT)"; \
 		fi; \
 		echo "Makefile Final ARGS : $$ARGS"; \
 		echo ""; \
@@ -373,6 +413,14 @@ syncdb-test-all-script: build-scripts
 				echo "Makefile Add ARGS   : DEBUG"; \
 				ARGS="$$ARGS --debug"; \
 		fi; \
+		if [ -n "$(DOCKER_IMAGE_QUICK_CHECK)" ]; then \
+				echo "Makefile Add ARGS   : DOCKER_IMAGE_QUICK_CHECK=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+				ARGS="$$ARGS --docker-image-quick-check=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+		fi; \
+		if [ -n "$(OUTPUT)" ]; then \
+				echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+				ARGS="$$ARGS --output=$(OUTPUT)"; \
+		fi; \
 		echo "Makefile Final ARGS : $$ARGS"; \
 		echo ""; \
 		./tools/test-environment-manager.sh $$ARGS 2>&1 | tee $$LOG_FILE ;\
@@ -414,6 +462,14 @@ syncdb-test-single: build-scripts
 				echo "Makefile Add ARGS   : DEBUG"; \
 				ARGS="$$ARGS --debug"; \
 		fi; \
+		if [ -n "$(DOCKER_IMAGE_QUICK_CHECK)" ]; then \
+				echo "Makefile Add ARGS   : DOCKER_IMAGE_QUICK_CHECK=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+				ARGS="$$ARGS --docker-image-quick-check=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+		fi; \
+		if [ -n "$(OUTPUT)" ]; then \
+				echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+				ARGS="$$ARGS --output=$(OUTPUT)"; \
+		fi; \
 		echo "Makefile Final ARGS : $$ARGS"; \
 		echo ""; \
 		./tools/test-environment-manager.sh $$ARGS 2>&1 | tee $$LOG_FILE ;\
@@ -454,6 +510,14 @@ syncdb-test-file: build-scripts
 		if [ -n "$(DEBUG)" ]; then \
 				echo "Makefile Add ARGS   : DEBUG"; \
 				ARGS="$$ARGS --debug"; \
+		fi; \
+		if [ -n "$(DOCKER_IMAGE_QUICK_CHECK)" ]; then \
+				echo "Makefile Add ARGS   : DOCKER_IMAGE_QUICK_CHECK=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+				ARGS="$$ARGS --docker-image-quick-check=$(DOCKER_IMAGE_QUICK_CHECK)"; \
+		fi; \
+		if [ -n "$(OUTPUT)" ]; then \
+				echo "Makefile Add ARGS   : OUTPUT=$(OUTPUT)"; \
+				ARGS="$$ARGS --output=$(OUTPUT)"; \
 		fi; \
 		echo "Makefile Final ARGS : $$ARGS"; \
 		echo ""; \
