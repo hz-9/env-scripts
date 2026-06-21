@@ -1,0 +1,13 @@
+schema_version: 1
+module_path: build_system
+title: 基于 Docker 的多发行版环境构建与测试系统
+scope: []
+source_files:
+    - Makefile
+    - tools/build.sh
+    - tools/test-environment-manager.sh
+    - tools/test-runner.sh
+    - docker/docker-compose.yml
+    - .github/workflows/generate-pages.yml
+depends_on: []
+related_to: []

@@ -1,0 +1,12 @@
+schema_version: 1
+module_path: configuration_system
+title: 配置系统：基于 Shell 参数、Docker Compose 与 Makefile 的环境驱动配置
+scope: []
+source_files:
+    - Makefile
+    - docker/docker-compose.yml
+    - scripts/__base.sh
+    - tools/test-environment-manager.sh
+    - docs-build.config.json
+depends_on: []
+related_to: []

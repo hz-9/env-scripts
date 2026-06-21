@@ -1,0 +1,12 @@
+schema_version: 1
+module_path: error_handling
+title: Shell 脚本错误处理与退出码规范
+scope: []
+source_files:
+    - scripts/__base.sh
+    - tests/__base.sh
+    - tools/test-runner.sh
+    - scripts/install-docker.sh
+    - Makefile
+depends_on: []
+related_to: []
