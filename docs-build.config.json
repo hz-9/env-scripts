@@ -1,0 +1,166 @@
+{
+  "baseSourceDir": "docs",
+  "site": {
+    "base": "/env-scripts/",
+    "lang": "en-US",
+    "title": "env-scripts",
+    "description": "A collection of ready-to-use development environment installation scripts for different systems."
+  },
+  "locales": {
+    "languages": ["en-US", "zh-CN"]
+  },
+  "output": "docs/.vuepress",
+  "navigation": {
+    "navbar": [
+      {
+        "text": {
+          "en-US": "Home",
+          "zh-CN": "首页"
+        },
+        "link": "README.md",
+        "icon": "home"
+      },
+      {
+        "text": {
+          "en-US": "Overview",
+          "zh-CN": "概述"
+        },
+        "link": "overview/directory-structure.md",
+        "icon": "book",
+        "children": [
+          {
+            "text": {
+              "en-US": "Directory Structure",
+              "zh-CN": "目录结构"
+            },
+            "link": "overview/directory-structure.md",
+            "icon": "folder"
+          },
+          {
+            "text": {
+              "en-US": "Scripts",
+              "zh-CN": "脚本"
+            },
+            "link": "overview/scripts.md",
+            "icon": "code"
+          },
+          {
+            "text": {
+              "en-US": "Testing",
+              "zh-CN": "测试"
+            },
+            "link": "overview/testing.md",
+            "icon": "vial"
+          }
+        ]
+      }
+    ],
+    "sidebar": {
+      "/": false,
+      "/overview/": [
+        {
+          "text": {
+            "en-US": "Directory Structure",
+            "zh-CN": "目录结构"
+          },
+          "link": "overview/directory-structure.md",
+          "icon": "folder"
+        },
+        {
+          "text": {
+            "en-US": "Scripts",
+            "zh-CN": "脚本"
+          },
+          "link": "overview/scripts.md",
+          "icon": "code"
+        },
+        {
+          "text": {
+            "en-US": "Testing",
+            "zh-CN": "测试"
+          },
+          "link": "overview/testing.md",
+          "icon": "vial"
+        }
+      ],
+      "/overview/directory-structure": [
+        {
+          "text": {
+            "en-US": "Directory Structure",
+            "zh-CN": "目录结构"
+          },
+          "link": "overview/directory-structure.md",
+          "icon": "folder"
+        },
+        {
+          "text": {
+            "en-US": "Scripts",
+            "zh-CN": "脚本"
+          },
+          "link": "overview/scripts.md",
+          "icon": "code"
+        },
+        {
+          "text": {
+            "en-US": "Testing",
+            "zh-CN": "测试"
+          },
+          "link": "overview/testing.md",
+          "icon": "vial"
+        }
+      ],
+      "/overview/scripts": [
+        {
+          "text": {
+            "en-US": "Directory Structure",
+            "zh-CN": "目录结构"
+          },
+          "link": "overview/directory-structure.md",
+          "icon": "folder"
+        },
+        {
+          "text": {
+            "en-US": "Scripts",
+            "zh-CN": "脚本"
+          },
+          "link": "overview/scripts.md",
+          "icon": "code"
+        },
+        {
+          "text": {
+            "en-US": "Testing",
+            "zh-CN": "测试"
+          },
+          "link": "overview/testing.md",
+          "icon": "vial"
+        }
+      ],
+      "/overview/testing": [
+        {
+          "text": {
+            "en-US": "Directory Structure",
+            "zh-CN": "目录结构"
+          },
+          "link": "overview/directory-structure.md",
+          "icon": "folder"
+        },
+        {
+          "text": {
+            "en-US": "Scripts",
+            "zh-CN": "脚本"
+          },
+          "link": "overview/scripts.md",
+          "icon": "code"
+        },
+        {
+          "text": {
+            "en-US": "Testing",
+            "zh-CN": "测试"
+          },
+          "link": "overview/testing.md",
+          "icon": "vial"
+        }
+      ]
+    }
+  }
+}
